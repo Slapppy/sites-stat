@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "itis-django2k-11100-site-statistics"
+version = "0.1.0"
+description = ""
+authors = ["linar <chevianchik@gmail.com>"]
+readme = "README.md"
+packages = [{include = "itis_django2k_11100_site_statistics"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+django = ">=4.1.2,<4.2.0"
+psycopg2-binary = ">=2.9.3,<2.10.0"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^22.12.0"
+pre-commit = "^2.20.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 120
