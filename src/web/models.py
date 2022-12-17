@@ -32,3 +32,8 @@ class User(BaseModel, AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
+
+class Counter(BaseModel):
+    name = models.CharField(max_length=128, unique=True)
+    link = models.CharField(max_length=255, unique=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
