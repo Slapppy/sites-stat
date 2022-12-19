@@ -11,4 +11,4 @@ def profile_view(request):
     if search:
         counters = counters.filter(name__icontains=search)
 
-    return render(request, "web/profile.html", {"counters": counters})
+    return render(request, "web/profile.html", {"counters": counters, "search": search})

@@ -54,6 +54,10 @@ th {
     font-size: 16px;
 }
 
+.delete-counter {
+    width: 14%;
+}
+
 .link-counter {
     color: #1B1212;
     text-decoration: none;
@@ -61,6 +65,15 @@ th {
 
 .link-counter:hover {
     color: #79cc02;
+}
+
+.line {
+    border-bottom: 1px solid #DCDCDC;
+}
+
+.not-founded-text {
+    font-size: 16px;
+    color: 	#6c757d;
 }
 
 

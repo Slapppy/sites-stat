@@ -19,7 +19,7 @@
                 <form role="search" class="d-flex">
                     <div class="input-group input-group-sm mb-3">
                         <input class="form-control form-control-sm input-search" type="search"
-                               placeholder="Найти счетчик" name="search">
+                               placeholder="Найти счетчик" name="search" value="{{ search|default_if_none:'' }}">
                         <button class="btn-search" type="submit">
                             <i class="bi bi-search"></i>
                         </button>
@@ -27,14 +27,16 @@
                 </form>
             </div>
         </div>
+    {% if counters %}
         <table class="table">
             <thead>
             <tr>
                 <th scope="col">Счетчик</th>
                 <th scope="col">Адрес сайта</th>
-                <th scope="col">Просмотр</th>
-                <th scope="col">Визиты</th>
+                <th scope="col" class="pe-4">Просмотр</th>
+                <th scope="col" class="pe-4">Визиты</th>
                 <th scope="col">Посетитель</th>
+                <th scope="col" class="delete-counter"></th>
             </tr>
             </thead>
             <tbody>
@@ -45,10 +47,17 @@
                     <td>0</td>
                     <td>0</td>
                     <td>0</td>
+                    <td><a class="link-counter" href="#">Удалить счетчик</a></td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
+    {% else %}
+        <div class="line mb-4"></div>
+        <div class="d-flex justify-content-center">
+            <span class="not-founded-text">Не найдено ни одного счетчика</span>
+        </div>
+    {% endif %}
     </div>
 </div>
 </body>
