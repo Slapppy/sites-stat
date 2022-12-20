@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Registration</title>
+	<link href="{% static 'web/css/style.css' %}" rel="stylesheet">
+</head>
+
+<body>
+	<main class="main-wrapper">
+		<div class="container">
+			<div class="auth-form">
+				<h1>Регистрация</h1>
+				<div class="form-inputs">
+					<form method="POST">
+						<div class="user-input">
+							<label>Имя пользователя или E-mail</label>
+							<input type="text" name="" id="username">
+						</div>
+						<div class="user-input">
+							<label>Пароль</label>
+							<input type="password" id="password">
+						</div>
+						<div class="user-input">
+							<label>Повторите пароль</label>
+							<input type="password" id="password">
+						</div>
+
+						<div class="button-send-wrap">
+							<button type="submit" class="button-send">Зарегистрироваться</button>
+						</div>
+						<div class="register">
+							<span>Есть учетная запись? </span><a href={% url 'auth' %}>Войти</a>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</main>
+</body>
+
+</html>
