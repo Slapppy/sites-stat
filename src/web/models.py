@@ -1,8 +1,8 @@
 from django.db import models
 from django.contrib.auth.base_user import AbstractBaseUser
-from django.contrib.auth.models import PermissionsMixin
+from django.contrib.auth.models import PermissionsMixin, UserManager
 
-from app.enums import Role
+from .enums import Role
 
 
 class BaseModel(models.Model):
@@ -27,6 +27,11 @@ class User(BaseModel, AbstractBaseUser, PermissionsMixin):
     EMAIL_FIELD = "email"
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
+
+    objects = UserManager()
+
+    class Meta:
+        db_table = "web_user"
 
 
 class Counter(BaseModel):
