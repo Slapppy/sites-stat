@@ -27,37 +27,45 @@
                 </form>
             </div>
         </div>
-    {% if counters %}
-        <table class="table">
-            <thead>
-            <tr>
-                <th scope="col">Счетчик</th>
-                <th scope="col">Адрес сайта</th>
-                <th scope="col" class="pe-4">Просмотр</th>
-                <th scope="col" class="pe-4">Визиты</th>
-                <th scope="col">Посетитель</th>
-                <th scope="col" class="delete-counter"></th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for counter in counters %}
+        {% if counter_list %}
+            <table class="table">
+                <thead>
                 <tr>
-                    <td><a class="link-counter" href="#">{{ counter.name }}</a></td>
-                    <td><a class="link-counter" href="http://{{ counter.link }}">{{ counter.link }}</a></td>    {# TODO syte's address #}
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td><a class="link-counter" href="#">Удалить счетчик</a></td>
+                    <th scope="col" class="th-name pe-5" title="Счетчик">Счетчик</th>
+                    <th scope="col" class="th-name pe-5" title="Адрес сайта">Адрес сайта</th>
+                    <th scope="col" class="th-widget" title="Просмотр">Просмотр</th>
+                    <th scope="col" class="th-widget" title="Визиты">Визиты</th>
+                    <th scope="col" class="th-widget" title="Посетитель">Посетитель</th>
+                    <th scope="col" class="action-counter"></th>
                 </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <div class="line mb-4"></div>
-        <div class="d-flex justify-content-center">
-            <span class="not-founded-text">Не найдено ни одного счетчика</span>
-        </div>
-    {% endif %}
+                </thead>
+                <tbody>
+                {% for counter in counter_list %}
+                    <tr>
+                        <td class="pe-5 td-name"><a class="link-counter" href="#"
+                                            title="{{ counter.name }}">{{ counter.name }}</a></td>
+                        <td class="pe-5 td-link"><a class="link-counter" href="http://{{ counter.link }}"
+                                            title="{{ counter.title }}">{{ counter.link }}</a></td>
+                        {# TODO syte's address #}
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td class="d-flex justify-content-end">
+                            <a class="link-counter" href="#" title="Редактировать счетчик"><i
+                                    class="bi bi-gear"></i></a>
+                            <a class="link-counter ms-4" href="#" title="Удалить счетчик"><i
+                                    class="bi bi-trash3"></i></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="line mb-4"></div>
+            <div class="d-flex justify-content-center">
+                <span class="not-founded-text">Не найдено ни одного счетчика</span>
+            </div>
+        {% endif %}
     </div>
 </div>
 </body>
