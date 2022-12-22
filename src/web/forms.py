@@ -6,12 +6,9 @@ from .models import User
 
 
 class AddCounterForm(forms.ModelForm):
-
     class Meta:
         model = Counter
-        fields = ['name', 'link']
-
-
+        fields = ["name", "link"]
 
 
 class CreateUserForm(UserCreationForm):
@@ -23,4 +20,4 @@ class CreateUserForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ['name', 'surname', 'email'  ]
+        fields = ["name", "surname", "email"]
