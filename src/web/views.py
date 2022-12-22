@@ -66,3 +66,7 @@ def auth_page(request):
 
     context = {}
     return render(request, "web/auth.html", context)
+
+
+def main_page(request):
+    return render(request, "web/main.html")
