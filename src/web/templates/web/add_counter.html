@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Counter</title>
+	<link href="{% static 'web/css/style_counter.css' %}" rel="stylesheet">
+</head>
+
+
+<body>
+	<main class="main-wrapper">
+		<div class="new-counter">
+			<h1 class="container">Новый счетчик</h1>
+		</div>
+		<form class="fields container" action="add" method="POST">
+			{% csrf_token %}
+			<div class="field">
+				<label for="name_counter">Имя счетчика</label>
+				{{ form.name }}
+			</div>
+			<div class="field">
+				<label for="site_adress">Адрес сайта</label>
+				{{ form.link }}
+			</div>
+			<div class="submit_btn-wrap">
+				<button>Отправить</button>
+			</div>
+		</form>
+		</div>
+	</main>
+</body>
+
+</html>
