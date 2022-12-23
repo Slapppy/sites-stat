@@ -3,9 +3,11 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.utils.decorators import method_decorator
+from django.views.generic import ListView
 from django.views.generic.edit import CreateView
 from .forms import CreateUserForm
 from .forms import AddCounterForm
+from .models import Counter
 
 
 class CountersListView(ListView):
@@ -82,3 +84,7 @@ class CounterCreate(CreateView):
         if self.request.user.is_authenticated:
             form.instance.user = self.request.user
             return super(CounterCreate, self).form_valid(form)
+
+
+def main_page(request):
+    return render(request, "web/main.html")

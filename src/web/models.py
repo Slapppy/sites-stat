@@ -31,7 +31,7 @@ class User(BaseModel, AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     class Meta:
-        db_table = u"web_user"
+        db_table = "web_user"
 
 
 class Counter(BaseModel):
