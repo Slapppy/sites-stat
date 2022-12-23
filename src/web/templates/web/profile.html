@@ -1,0 +1,72 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Личный кабинет</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{% static "web/css/bootstrap.min.css" %}">
+    <link rel="stylesheet" href="{% static "web/css/profile.css" %}">
+</head>
+<body>
+<div class="content mt-4">
+    <div class="container-fluid">
+        <div class="row mb-4">
+            <div class="add-counter col">
+                <button class="btn-counter"><a href='#' class="btn-link">Добавить счетчик</a></button>
+            </div>
+            <div class="search col">
+                <form role="search" class="d-flex">
+                    <div class="input-group input-group-sm mb-3">
+                        <input class="form-control form-control-sm input-search" type="search"
+                               placeholder="Найти счетчик" name="search" value="{{ search|default_if_none:'' }}">
+                        <button class="btn-search" type="submit">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        {% if counter_list %}
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col" class="th-name pe-5" title="Счетчик">Счетчик</th>
+                    <th scope="col" class="th-name pe-5" title="Адрес сайта">Адрес сайта</th>
+                    <th scope="col" class="th-widget" title="Просмотр">Просмотр</th>
+                    <th scope="col" class="th-widget" title="Визиты">Визиты</th>
+                    <th scope="col" class="th-widget" title="Посетитель">Посетитель</th>
+                    <th scope="col" class="action-counter"></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for counter in counter_list %}
+                    <tr>
+                        <td class="pe-5 td-name"><a class="link-counter" href="#"
+                                            title="{{ counter.name }}">{{ counter.name }}</a></td>
+                        <td class="pe-5 td-link"><a class="link-counter" href="http://{{ counter.link }}"
+                                            title="{{ counter.title }}">{{ counter.link }}</a></td>
+                        {# TODO syte's address #}
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td class="d-flex justify-content-end">
+                            <a class="link-counter" href="#" title="Редактировать счетчик"><i
+                                    class="bi bi-gear"></i></a>
+                            <a class="link-counter ms-4" href="#" title="Удалить счетчик"><i
+                                    class="bi bi-trash3"></i></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="line mb-4"></div>
+            <div class="d-flex justify-content-center">
+                <span class="not-founded-text">Не найдено ни одного счетчика</span>
+            </div>
+        {% endif %}
+    </div>
+</div>
+</body>
+</html>
