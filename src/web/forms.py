@@ -1,8 +1,14 @@
 from django import forms
+from .models import Counter
 from django.contrib.auth.forms import UserCreationForm
 from django.forms import ModelForm
-
 from .models import User
+
+
+class AddCounterForm(forms.ModelForm):
+    class Meta:
+        model = Counter
+        fields = ["name", "link"]
 
 
 class CreateUserForm(UserCreationForm):
@@ -14,8 +20,4 @@ class CreateUserForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = [
-            "name",
-            "surname",
-            "email",
-        ]
+        fields = ["name", "surname", "email"]
