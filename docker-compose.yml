@@ -12,5 +12,22 @@ services:
     volumes:
       - "db:/var/lib/postgresql/data"
 
+  clickhouse:
+    image: clickhouse/clickhouse-server:22.9.7.34-alpine
+    ports:
+      - 8123:8123
+      - 9000:9000
+    ulimits:
+      nofile:
+        soft: 262114
+        hard: 262114
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse
+      - clickhouse_logs:/var/lib/clickhouse-server
+
+
+
 volumes:
   db:
+  clickhouse_data:
+  clickhouse_logs:
