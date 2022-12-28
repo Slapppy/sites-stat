@@ -88,6 +88,15 @@ DATABASES = {
     }
 }
 
+
+CLICKHOUSE_DATABASE = {
+    "db_url": os.environ.get("CLICKHOUSE_DB_URL", "http://localhost:8123/"),
+    "username": os.environ.get("CLICKHOUSE_DB_URL", "default"),
+    "db_name": os.environ.get("CLICKHOUSE_DB_URL", "django"),
+    "password": os.environ.get("CLICKHOUSE_DB_URL", "")
+}
+
+
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
