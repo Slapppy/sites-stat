@@ -33,9 +33,9 @@
                 <tr>
                     <th scope="col" class="th-name pe-5" title="Счетчик">Счетчик</th>
                     <th scope="col" class="th-name pe-5" title="Адрес сайта">Адрес сайта</th>
-                    <th scope="col" class="th-widget" title="Просмотр">Просмотр</th>
+                    <th scope="col" class="th-widget" title="Просмотр">Просмотры</th>
                     <th scope="col" class="th-widget" title="Визиты">Визиты</th>
-                    <th scope="col" class="th-widget" title="Посетитель">Посетитель</th>
+                    <th scope="col" class="th-widget" title="Посетитель">Посетители</th>
                     <th scope="col" class="action-counter"></th>
                 </tr>
                 </thead>
@@ -43,9 +43,9 @@
                 {% for counter in counter_list %}
                     <tr>
                         <td class="pe-5 td-name"><a class="link-counter" href="#"
-                                            title="{{ counter.name }}">{{ counter.name }}</a></td>
+                                                    title="{{ counter.name }}">{{ counter.name }}</a></td>
                         <td class="pe-5 td-link"><a class="link-counter" href="http://{{ counter.link }}"
-                                            title="{{ counter.title }}">{{ counter.link }}</a></td>
+                                                    title="{{ counter.title }}">{{ counter.link }}</a></td>
                         {# TODO syte's address #}
                         <td>0</td>
                         <td>0</td>
