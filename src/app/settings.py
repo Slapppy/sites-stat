@@ -93,7 +93,7 @@ CLICKHOUSE_DATABASE = {
     "db_url": os.environ.get("CLICKHOUSE_DB_URL", "http://localhost:8123/"),
     "username": os.environ.get("CLICKHOUSE_DB_URL", "default"),
     "db_name": os.environ.get("CLICKHOUSE_DB_URL", "django"),
-    "password": os.environ.get("CLICKHOUSE_DB_URL", "")
+    "password": os.environ.get("CLICKHOUSE_DB_URL", ""),
 }
 
 

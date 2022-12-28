@@ -1,5 +1,13 @@
-from infi.clickhouse_orm import Database, Model, DateTimeField, UInt16Field, UUIDField, StringField, FixedStringField, \
-    MergeTree
+from infi.clickhouse_orm import (
+    Database,
+    Model,
+    DateTimeField,
+    UInt16Field,
+    UUIDField,
+    StringField,
+    FixedStringField,
+    MergeTree,
+)
 
 
 class Views(Model):
