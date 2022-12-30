@@ -1,4 +1,4 @@
-from api.views import status_view, counter_views
+from api.views import StatCounterView
 from django.urls import path
 
-urlpatterns = [path("", status_view, name="status"), path("view_stat", counter_views, name="view_stat")]
+urlpatterns = [path("view_stat/", StatCounterView.as_view(), name="view_stat")]
