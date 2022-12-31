@@ -24,6 +24,7 @@ class StatCounterView(APIView):
             start_date = datetime.strptime(date1, "%Y-%m-%d")
             if not date2:
                 end_date = datetime.now()
+                date2 = end_date.strftime("%Y-%m-%d")
             else:
                 end_date = datetime.strptime(date2, "%Y-%m-%d") + timedelta(milliseconds=-1)
 
