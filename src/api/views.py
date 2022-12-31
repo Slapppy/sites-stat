@@ -8,6 +8,7 @@ from web.clickhouse_models import Views
 
 
 class StatCounterView(APIView):
+    # пример запроса: http://127.0.0.1:8000/api/view_stat/data?id=5&start-date=2022-12-29&end-date=2022-12-31
     @staticmethod
     def get_data(counter_id, start_date, end_date):
         db = create_connection()
@@ -15,12 +16,20 @@ class StatCounterView(APIView):
         return views
 
     def get(self, request):
-        counter_id, date = request.GET.get("id", None), request.GET.get("date", None)
+        counter_id = request.GET.get("id", None)
+        date1, date2 = request.GET.get("start-date", None), request.GET.get("end-date", None)
 
-        if counter_id and date:
-            start_date = datetime.strptime(date, "%Y-%m-%d")
-            end_date = start_date + timedelta(days=1, milliseconds=-1)
+        if counter_id and date1:
+
+            start_date = datetime.strptime(date1, "%Y-%m-%d")
+            if not date2:
+                end_date = datetime.now()
+            else:
+                end_date = datetime.strptime(date2, "%Y-%m-%d") + timedelta(milliseconds=-1)
+
             views = self.get_data(counter_id, start_date, end_date)
-            return Response({"counter_id": int(counter_id), "date": date, "count_views": views.count()})
+            return Response(
+                {"counter_id": int(counter_id), "start-date": date1, "end-date": date2, "count_views": views.count()}
+            )
 
         return Response({"error": [{"code": 400, "reason": "invalidParameter"}]}, status=status.HTTP_400_BAD_REQUEST)
