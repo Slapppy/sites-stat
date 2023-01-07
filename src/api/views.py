@@ -53,4 +53,22 @@ class GetMetaDataView(APIView):
         ip_address = request.META['REMOTE_ADDR']
         language = request.META['HTTP_ACCEPT_LANGUAGE'].split(',')[0][:2]
 
+        db = create_connection()
+        notes = [
+            Views(
+                counter_id=id,
+                referer=referer,
+                view_id=uuid.uuid4(),
+                visitor_unique_key=uuid.uuid4(),
+                device_type=device_type,
+                browser_type=browser,
+                user_agent=metadata,
+                os_type=os_type,
+                ip=ip_address,
+                language=language,
+                created_at=datetime.now()
+            )
+        ]
+        db.insert(notes)
+
         return HttpResponse(TRANSPARENT_1_PIXEL_GIF, content_type='image/gif')
