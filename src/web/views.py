@@ -86,5 +86,16 @@ class CounterCreate(CreateView):
             return super(CounterCreate, self).form_valid(form)
 
 
+def counter_page(request, id):
+    counter = get_object_or_404(Counter, id=id)
+
+    if not counter.user == request.user:
+        return redirect("web/main.html")
+
+    return render(request, "web/counter.html", {
+        "counter": counter,
+    })
+
+
 def main_page(request):
     return render(request, "web/main.html")
