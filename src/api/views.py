@@ -45,6 +45,7 @@ class GetMetaDataView(APIView):
 
     # пример <img src="http://127.0.0.1:8000/api/getmetadata/15"/>
 
+
     def get(self, request, id):
         db = create_connection()
         metadata = request.headers["User-Agent"]
