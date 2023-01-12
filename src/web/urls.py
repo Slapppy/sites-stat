@@ -8,5 +8,6 @@ urlpatterns = [
     path("registration", views.registration_page, name="registration"),
     path("profile", views.CountersListView.as_view(), name="profile"),
     path("add", CounterCreate.as_view(), name="add"),
+    path("profile/counter/<int:id>", views.counter_page(), name="counter"),
     path("", views.main_page, name="main"),
 ]

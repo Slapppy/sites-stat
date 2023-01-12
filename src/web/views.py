@@ -1,13 +1,12 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login
 from django.utils.decorators import method_decorator
-from django.views.generic import ListView
-from django.views.generic.edit import CreateView
-from .forms import CreateUserForm
-from .forms import AddCounterForm
+from django.views.generic import ListView, CreateView
+
 from .models import Counter
+from .forms import CreateUserForm, AddCounterForm
 
 
 class CountersListView(ListView):
@@ -84,6 +83,17 @@ class CounterCreate(CreateView):
         if self.request.user.is_authenticated:
             form.instance.user = self.request.user
             return super(CounterCreate, self).form_valid(form)
+
+
+def counter_page(request, id):
+    counter = get_object_or_404(Counter, id=id)
+
+    if not counter.user == request.user:
+        return redirect("web/main.html")
+
+    return render(request, "web/counter.html", {
+        "counter": counter,
+    })
 
 
 def main_page(request):
