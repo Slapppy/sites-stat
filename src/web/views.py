@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.utils.decorators import method_decorator
-from django.views.generic import ListView, CreateView
+from django.views.generic import ListView, CreateView, View
 
 from .models import Counter
 from .forms import CreateUserForm, AddCounterForm
@@ -40,9 +40,12 @@ class CountersListView(ListView):
         }
 
 
-def registration_page(request):
-    form = CreateUserForm()
-    if request.method == "POST":
+class RegistrationView(View):
+    def get(self, request):
+        form = CreateUserForm()
+        return render(request, 'web/registration.html', {'form': form})
+
+    def post(self, request):
         form = CreateUserForm(request.POST)
         if form.is_valid():
             form.save()
@@ -50,8 +53,8 @@ def registration_page(request):
             return redirect("auth")
         else:
             messages.error(request, "Ошибка регистрации")
-    context = {"form": form}
-    return render(request, "web/registration.html", context)
+        context = {"form": form}
+        return render(request, "web/registration.html", context)
 
 
 def auth_page(request):
@@ -83,6 +86,9 @@ class CounterCreate(CreateView):
         if self.request.user.is_authenticated:
             form.instance.user = self.request.user
             return super(CounterCreate, self).form_valid(form)
+
+
+
 
 
 def main_page(request):
