@@ -58,13 +58,12 @@ class GetMetaDataView(APIView):
         language = request.META["HTTP_ACCEPT_LANGUAGE"].split(",")[0][:2]
         ip_uuid = "".join(ip_address.split("."))
 
-        db = create_connection()
         notes = [
             Views(
                 counter_id=id,
                 referer=referer,
-                view_id=uuid.uuid1(int(ip_uuid)),
-                visitor_unique_key=uuid.uuid4(),
+                view_id=uuid.uuid4(),
+                visitor_unique_key=uuid.uuid1(int(ip_uuid)),
                 device_type=device_type,
                 browser_type=browser,
                 user_agent=metadata,
