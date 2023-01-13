@@ -45,10 +45,9 @@ class GetMetaDataView(APIView):
 
     # пример <img src="http://127.0.0.1:8000/api/getmetadata/15"/>
 
-
-
     def get(self, request, id):
         db = create_connection()
+
         metadata = request.headers["User-Agent"]
         data_split = httpagentparser.detect(metadata, "os")
         referer = request.META.get("HTTP_REFERER")
@@ -57,13 +56,14 @@ class GetMetaDataView(APIView):
         device_type = data_split["os"]["name"]
         ip_address = request.META["REMOTE_ADDR"]
         language = request.META["HTTP_ACCEPT_LANGUAGE"].split(",")[0][:2]
+        ip_uuid = ''.join(ip_address.split('.'))
 
         db = create_connection()
         notes = [
             Views(
                 counter_id=id,
                 referer=referer,
-                view_id=uuid.uuid4(),
+                view_id=uuid.uuid1(int(ip_uuid)),
                 visitor_unique_key=uuid.uuid4(),
                 device_type=device_type,
                 browser_type=browser,
@@ -77,3 +77,7 @@ class GetMetaDataView(APIView):
         db.insert(notes)
 
         return HttpResponse(TRANSPARENT_1_PIXEL_GIF, content_type="image/gif")
+
+
+
+
