@@ -42,7 +42,7 @@
                 <tbody>
                 {% for counter in counter_list %}
                     <tr>
-                        <td class="pe-5 td-name"><a class="link-counter" href="#"
+                        <td class="pe-5 td-name"><a class="link-counter" href="{% url "counter" counter.id %}"
                                                     title="{{ counter.name }}">{{ counter.name }}</a></td>
                         <td class="pe-5 td-link"><a class="link-counter" href="http://{{ counter.link }}"
                                                     title="{{ counter.title }}">{{ counter.link }}</a></td>
