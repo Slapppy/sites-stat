@@ -56,7 +56,7 @@ class GetMetaDataView(APIView):
         device_type = data_split["os"]["name"]
         ip_address = request.META["REMOTE_ADDR"]
         language = request.META["HTTP_ACCEPT_LANGUAGE"].split(",")[0][:2]
-        ip_uuid = ''.join(ip_address.split('.'))
+        ip_uuid = "".join(ip_address.split("."))
 
         db = create_connection()
         notes = [
@@ -77,7 +77,3 @@ class GetMetaDataView(APIView):
         db.insert(notes)
 
         return HttpResponse(TRANSPARENT_1_PIXEL_GIF, content_type="image/gif")
-
-
-
-
