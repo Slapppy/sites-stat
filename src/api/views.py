@@ -8,6 +8,8 @@ import httpagentparser
 from app.clickhouse import create_connection
 from web.clickhouse_models import Views
 
+from src.web.models import Counter
+
 
 class StatCounterView(APIView):
     # пример запроса: http://127.0.0.1:8000/api/view_stat/data?id=5&start-date=2022-12-29&end-date=2022-12-31
@@ -23,17 +25,29 @@ class StatCounterView(APIView):
 
         if counter_id and date1:
 
-            start_date = datetime.strptime(date1, "%Y-%m-%d")
-            if not date2:
-                end_date = datetime.now()
-                date2 = end_date.strftime("%Y-%m-%d")
-            else:
-                end_date = datetime.strptime(date2, "%Y-%m-%d") + timedelta(milliseconds=-1)
+            # Проверка пользователя
+            if (
+                    Counter.objects.all().filter(user_id=request.user.id, id=counter_id).count() != 0
+                    or request.user.is_superuser
+            ):
+                start_date = datetime.strptime(date1, "%Y-%m-%d")
+                if not date2:
+                    end_date = datetime.now()
+                    date2 = end_date.strftime("%Y-%m-%d")
+                else:
+                    end_date = datetime.strptime(date2, "%Y-%m-%d") + timedelta(milliseconds=-1)
 
-            views = self.get_data(counter_id, start_date, end_date)
-            return Response(
-                {"counter_id": int(counter_id), "start-date": date1, "end-date": date2, "count_views": views.count()}
-            )
+                views = self.get_data(counter_id, start_date, end_date)
+                return Response(
+                    {
+                        "counter_id": int(counter_id),
+                        "start-date": date1,
+                        "end-date": date2,
+                        "count_views": views.count(),
+                    }
+                )
+
+            return Response({"error": [{"code": 403, "reason": "AccessError"}]}, status=status.HTTP_403_FORBIDDEN)
 
         return Response({"error": [{"code": 400, "reason": "invalidParameter"}]}, status=status.HTTP_400_BAD_REQUEST)
 
