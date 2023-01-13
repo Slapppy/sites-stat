@@ -21,7 +21,8 @@
                 <i class="fa fa-bar-chart" aria-hidden="true"></i>
             </div>
             <div class="d-flex align-items-center">
-                <a class="navbar-profile dropdown-toggle d-flex align-items-center hidden-arrow" href="{% url 'profile' %}"
+                <a class="navbar-profile dropdown-toggle d-flex align-items-center hidden-arrow"
+                   href="{% url 'profile' %}"
                    role="button"
                    aria-expanded="false">Profile</a>
             </div>
@@ -33,7 +34,7 @@
 
 <div>
     <p>
-        Название счетчика: {{ counter.name }}
+        Название счетчика: {{ object.name }}
     </p>
 </div>
 
