@@ -43,7 +43,7 @@ class CountersListView(ListView):
 class RegistrationView(View):
     def get(self, request):
         form = CreateUserForm()
-        return render(request, 'web/registration.html', {'form': form})
+        return render(request, "web/registration.html", {"form": form})
 
     def post(self, request):
         form = CreateUserForm(request.POST)
