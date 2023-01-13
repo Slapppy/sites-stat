@@ -43,18 +43,28 @@ class CountersListView(ListView):
 class RegistrationView(View):
     def get(self, request):
         form = CreateUserForm()
-        return render(request, 'web/registration.html', {'form': form})
+        return render(request, "web/registration.html", {"form": form})
 
     def post(self, request):
         form = CreateUserForm(request.POST)
         if form.is_valid():
             form.save()
+            storage = messages.get_messages(request)
+            self.clear_messages(storage)
             messages.success(request, "Вы успешно зарегистрировались")
             return redirect("auth")
         else:
+            storage = messages.get_messages(request)
+            self.clear_messages(storage)
             messages.error(request, "Ошибка регистрации")
         context = {"form": form}
         return render(request, "web/registration.html", context)
+
+    def clear_messages(self, storage):
+        for _ in storage:
+            pass
+        if len(storage._loaded_messages) == 1:
+            del storage._loaded_messages[0]
 
 
 def auth_page(request):
@@ -86,9 +96,6 @@ class CounterCreate(CreateView):
         if self.request.user.is_authenticated:
             form.instance.user = self.request.user
             return super(CounterCreate, self).form_valid(form)
-
-
-
 
 
 def main_page(request):
