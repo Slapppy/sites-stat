@@ -142,6 +142,17 @@ django = ">=3.0"
 pytz = "*"
 
 [[package]]
+name = "httpagentparser"
+version = "1.9.5"
+description = "Extracts OS Browser etc information from http user agent string"
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "httpagentparser-1.9.5.tar.gz", hash = "sha256:53cefd9d65990f6fe59c0378cad8ea1b9df8f770d2e8bd9d8762edae033be80a"},
+]
+
+[[package]]
 name = "idna"
 version = "3.4"
 description = "Internationalized Domain Names in Applications (IDNA)"
@@ -411,4 +422,4 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "7d03570b809626f3da4728fdac69186a9b59c68d2bed40a881643d2e2d246fc8"
+content-hash = "00c5e09b22e452674eeba3ba6fa63e40204436fd1d5fd55e6c2f4750b05015e1"
