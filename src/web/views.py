@@ -107,6 +107,5 @@ class CounterDetailView(DetailView):
         return Counter.objects.filter(user=self.request.user)
 
 
-
 def main_page(request):
     return render(request, "web/main.html")

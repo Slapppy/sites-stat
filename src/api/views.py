@@ -8,7 +8,7 @@ import httpagentparser
 from app.clickhouse import create_connection
 from web.clickhouse_models import Views
 
-from src.web.models import Counter
+# from src.web.models import Counter
 
 
 class StatCounterView(APIView):
@@ -27,8 +27,8 @@ class StatCounterView(APIView):
 
             # Проверка пользователя
             if (
-                    Counter.objects.all().filter(user_id=request.user.id, id=counter_id).count() != 0
-                    or request.user.is_superuser
+                Counter.objects.all().filter(user_id=request.user.id, id=counter_id).count() != 0
+                or request.user.is_superuser
             ):
                 start_date = datetime.strptime(date1, "%Y-%m-%d")
                 if not date2:
