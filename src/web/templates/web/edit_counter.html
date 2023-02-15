@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Настройка счетчика</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{% static "web/css/bootstrap.min.css" %}">
+</head>
+<body>
+<div class="content mt-4">
+    <div class="container-fluid">
+        <div class="title">
+            <h1>Настройка счетчика</h1>
+        </div>
+        <div class="main">
+            <form class="fields container" action="" method="POST">
+			{% csrf_token %}
+			<div class="field">
+				<label for="name_counter">Имя счетчика</label>
+				{{ form.name }}
+			</div>
+			<div class="field">
+				<label for="site_adress">Адрес сайта</label>
+				{{ form.link }}
+			</div>
+			<div class="submit_btn-wrap">
+				<button>Сохранить</button>
+			</div>
+		</form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
