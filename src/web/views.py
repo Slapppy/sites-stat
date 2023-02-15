@@ -1,9 +1,9 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.contrib.auth import authenticate, login
 from django.utils.decorators import method_decorator
-from django.views.generic import ListView, CreateView, View, DetailView
+from django.views.generic import ListView, CreateView, View, DetailView, UpdateView
 
 from .models import Counter
 from .forms import CreateUserForm, AddCounterForm
@@ -111,19 +111,22 @@ def main_page(request):
     return render(request, "web/main.html")
 
 
-def edit_view(request, id):
-    counter = get_object_or_404(Counter, user=request.user, id=id)
-    form = AddCounterForm(instance=counter)
-    if request.method == "POST":
-        form = AddCounterForm(request.POST, instance=counter, initial={"user": request.user})
-        if form.is_valid():
-            form.save()
-            return redirect("profile")
-    return render(
-        request,
-        "web/edit_counter.html",
-        {
-            "form": form,
-            "id": id,
-        },
-    )
+class CounterEditView(UpdateView):
+    template_name = "web/edit_counter.html"
+    slug_field = "id"
+    slug_url_kwarg = "id"
+    form_class = AddCounterForm
+
+    def get_queryset(self):
+        if not self.request.user.is_authenticated:
+            return Counter.objects.none()
+        return Counter.objects.filter(user=self.request.user)
+
+    def get_success_url(self):
+        return reverse("profile")
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        return {
+            **super(CounterEditView, self).get_context_data(**kwargs),
+            "id": self.kwargs[self.slug_url_kwarg],
+        }

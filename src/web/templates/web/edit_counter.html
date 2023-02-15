@@ -6,27 +6,28 @@
     <title>Настройка счетчика</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
     <link rel="stylesheet" href="{% static "web/css/bootstrap.min.css" %}">
+    <link href="{% static 'web/css/style_counter.css' %}" rel="stylesheet">
 </head>
 <body>
 <div class="content mt-4">
-    <div class="container-fluid">
+    <div class="container">
         <div class="title">
-            <h1>Настройка счетчика</h1>
+            <h2 class="pb-4">Настройка счетчика</h2>
         </div>
         <div class="main">
-            <form class="fields container" action="" method="POST">
+            <form action="" method="POST">
 			{% csrf_token %}
-			<div class="field">
+			<div class="field pb-3">
 				<label for="name_counter">Имя счетчика</label>
 				{{ form.name }}
 			</div>
-			<div class="field">
+			<div class="field pb-3">
 				<label for="site_adress">Адрес сайта</label>
 				{{ form.link }}
 			</div>
-			<div class="submit_btn-wrap">
-				<button>Сохранить</button>
-			</div>
+                <div class="text-center pt-4" style="width:50%;">
+				<button class="btn btn-success">Сохранить</button>
+                </div>
 		</form>
         </div>
     </div>
