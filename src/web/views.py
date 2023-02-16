@@ -2,8 +2,9 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
+from django.urls import reverse
 from django.utils.decorators import method_decorator
-from django.views.generic import ListView, CreateView, View, DetailView
+from django.views.generic import ListView, CreateView, View, DetailView, UpdateView
 
 from .models import Counter
 from .forms import CreateUserForm, AddCounterForm
@@ -109,3 +110,24 @@ class CounterDetailView(DetailView):
 
 def main_page(request):
     return render(request, "web/main.html")
+
+
+class CounterEditView(UpdateView):
+    template_name = "web/edit_counter.html"
+    slug_field = "id"
+    slug_url_kwarg = "id"
+    form_class = AddCounterForm
+
+    def get_queryset(self):
+        if not self.request.user.is_authenticated:
+            return Counter.objects.none()
+        return Counter.objects.filter(user=self.request.user)
+
+    def get_success_url(self):
+        return reverse("profile")
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        return {
+            **super(CounterEditView, self).get_context_data(**kwargs),
+            "id": self.kwargs[self.slug_url_kwarg],
+        }
