@@ -134,7 +134,6 @@ class CounterEditView(UpdateView):
 
 
 class CounterDeleteView(View):
-
     def get(self, request, pk):
         obj = get_object_or_404(Counter, pk=pk)
         if obj in Counter.objects.filter(user=request.user):
