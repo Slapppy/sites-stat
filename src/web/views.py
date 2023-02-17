@@ -133,8 +133,12 @@ class CounterEditView(UpdateView):
         }
 
 
-class CounterDelete(View):
+class CounterDeleteView(View):
     def get(self, request, pk):
         obj = get_object_or_404(Counter, pk=pk)
-        obj.delete()
-        return redirect("profile")
+        if obj in Counter.objects.filter(user=request.user):
+            obj.delete()
+            return redirect("profile")
+        else:
+            """TODO сделать ридерект на страницу ошибки"""
+            return redirect("profile")
