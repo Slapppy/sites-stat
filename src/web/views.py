@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.urls import reverse
 from django.utils.decorators import method_decorator
@@ -131,3 +131,10 @@ class CounterEditView(UpdateView):
             **super(CounterEditView, self).get_context_data(**kwargs),
             "id": self.kwargs[self.slug_url_kwarg],
         }
+
+
+class CounterDelete(View):
+    def get(self, request, pk):
+        obj = get_object_or_404(Counter, pk=pk)
+        obj.delete()
+        return redirect("profile")
