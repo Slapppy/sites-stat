@@ -7,6 +7,8 @@ from datetime import datetime, timedelta
 import httpagentparser
 from app.clickhouse import create_connection
 from web.clickhouse_models import Views
+from django.utils import timezone
+
 
 # from src.web.models import Counter
 
@@ -84,9 +86,11 @@ class GetMetaDataView(APIView):
                 os_type=os_type,
                 ip=ip_address,
                 language=language,
-                created_at=datetime.now(),
+                created_at= timezone.now(),
+
+
             )
         ]
+        print( timezone.now())
         db.insert(notes)
-
         return HttpResponse(TRANSPARENT_1_PIXEL_GIF, content_type="image/gif")
