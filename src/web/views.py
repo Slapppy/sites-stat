@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.urls import reverse
 from django.utils.decorators import method_decorator
-from django.views.generic import ListView, CreateView, View, DetailView, UpdateView
+from django.views.generic import ListView, CreateView, View, DetailView, UpdateView, TemplateView
 
 from .models import Counter
 from .forms import CreateUserForm, AddCounterForm
@@ -108,8 +108,8 @@ class CounterDetailView(DetailView):
         return Counter.objects.filter(user=self.request.user)
 
 
-def main_page(request):
-    return render(request, "web/main.html")
+class MainView(TemplateView):
+    template_name = 'web/main.html'
 
 
 class CounterEditView(UpdateView):

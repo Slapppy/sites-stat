@@ -12,5 +12,5 @@ urlpatterns = [
     path("profile/counter/<int:pk>", CounterDetailView.as_view(), name="counter"),
     path("counter/<int:pk>/delete/", CounterDeleteView.as_view(), name="counter_delete"),
     path("logout/", LogoutView.as_view(next_page=reverse_lazy("main")), name="logout"),
-    path("", views.main_page, name="main"),
+    path("", views.MainView.as_view(), name="main"),
 ]
