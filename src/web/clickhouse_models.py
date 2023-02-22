@@ -2,11 +2,14 @@ from infi.clickhouse_orm import (
     Database,
     Model,
     DateTimeField,
+    DateField,
     UInt16Field,
+    UInt64Field,
     UUIDField,
     StringField,
     FixedStringField,
     MergeTree,
+    SummingMergeTree,
 )
 
 
@@ -24,3 +27,21 @@ class Views(Model):
     created_at = DateTimeField()
 
     engine = MergeTree("created_at", ("created_at",))
+
+
+class VisitsInDay(Model):
+    counter_id = UInt16Field()
+    count_visit = UInt64Field()
+    created_at = DateField()
+
+    engine = SummingMergeTree(
+        "created_at",
+        (
+            "counter_id",
+            "created_at",
+        ),
+        summing_cols=(
+            "count_visit",
+            "created_at",
+        ),
+    )
