@@ -3,6 +3,8 @@
 3. `poetry install` - установка зависимостей
 4. `python src/manage.py migrate` - выполнить миграции
 5. `python src/manage.py clickhouse_migrate` - выполнить миграции в clickhouse
-6. `python src/manage.py runserver` - запуск сервера для разработки на http://localhost:8000
-7. `pre-commit install` - установить pre commit hook
-8. `pre-commit run -a` - запуск линтеров вручную
+6. `python src/manage.py create_mview` - создать материализованное представление для подсчета количества посетителей
+   счетчика по дням
+7. `python src/manage.py runserver` - запуск сервера для разработки на http://localhost:8000
+8. `pre-commit install` - установить pre commit hook
+9. `pre-commit run -a` - запуск линтеров вручную
