@@ -76,7 +76,7 @@ def auth_page(request):
 
         if user is not None:
             login(request, user)
-            return redirect("profile")
+            return redirect("counters")
         else:
             messages.info(request, "Неверный Логин или Пароль")
 
@@ -87,7 +87,7 @@ def auth_page(request):
 class CounterCreate(CreateView):
     form_class = AddCounterForm
     template_name = "web/add_counter.html"
-    success_url = "/profile"
+    success_url = "/counters"
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
@@ -124,7 +124,7 @@ class CounterEditView(UpdateView):
         return Counter.objects.filter(user=self.request.user)
 
     def get_success_url(self):
-        return reverse("profile")
+        return reverse("counters")
 
     def get_context_data(self, *, object_list=None, **kwargs):
         return {
@@ -138,7 +138,7 @@ class CounterDeleteView(View):
         obj = get_object_or_404(Counter, pk=pk)
         if obj in Counter.objects.filter(user=request.user):
             obj.delete()
-            return redirect("profile")
+            return redirect("counters")
         else:
             """TODO сделать ридерект на страницу ошибки"""
-            return redirect("profile")
+            return redirect("counters")
