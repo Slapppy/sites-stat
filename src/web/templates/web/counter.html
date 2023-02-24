@@ -32,6 +32,15 @@
 
 <nav class="line"></nav>
 
+<div class="breadcrumbs">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'counters' %}">Список счетчиков</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ object.name }}</li>
+        </ol>
+    </nav>
+</div>
+
 <div>
     <p>
         Название счетчика: {{ object.name }}

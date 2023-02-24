@@ -8,12 +8,21 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Counter</title>
 	<link href="{% static 'web/css/style_counter.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static "web/css/bootstrap.min.css" %}">
 </head>
 
 
 <body>
 	<main class="main-wrapper">
 		<div class="new-counter">
+            <div class="breadcrumbs container">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'counters' %}">Список счетчиков</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Настройка {{ object.name }}</li>
+                    </ol>
+                </nav>
+            </div>
 			<h1 class="container">Новый счетчик</h1>
 		</div>
 		<form class="fields container" action="add" method="POST">
