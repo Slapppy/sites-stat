@@ -4,7 +4,14 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.urls import reverse
 from django.utils.decorators import method_decorator
-from django.views.generic import ListView, CreateView, View, DetailView, UpdateView, TemplateView
+from django.views.generic import (
+    ListView,
+    CreateView,
+    View,
+    DetailView,
+    UpdateView,
+    TemplateView,
+)
 
 from .models import Counter
 from .forms import CreateUserForm, AddCounterForm
@@ -17,7 +24,9 @@ class CountersListView(ListView):
     def get_queryset(self):
         if not self.request.user.is_authenticated:
             return Counter.objects.none()
-        queryset = Counter.objects.filter(user=self.request.user).order_by("-created_at")
+        queryset = Counter.objects.filter(user=self.request.user).order_by(
+            "-created_at"
+        )
         return self.filter_queryset(queryset)
 
     def filter_queryset(self, counters):
@@ -109,7 +118,7 @@ class CounterDetailView(DetailView):
 
 
 class MainView(TemplateView):
-    template_name = 'web/main.html'
+    template_name = "web/main.html"
 
 
 class CounterEditView(UpdateView):
