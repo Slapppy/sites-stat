@@ -1,7 +1,8 @@
-from api.views import StatCounterView, GetMetaDataView
+from api.views import StatCounterView, GetMetaDataView, StatCounterVisit
 from django.urls import path
 
 urlpatterns = [
     path("view_stat/data", StatCounterView.as_view(), name="view_stat"),
+    path("visit_stat/data", StatCounterVisit.as_view(), name="visit_stat"),
     path("getmetadata/<int:id>", GetMetaDataView.as_view(), name="getmetadata"),
 ]
