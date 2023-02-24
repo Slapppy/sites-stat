@@ -1,7 +1,13 @@
 from django.urls import path, include, reverse_lazy
 from django.contrib.auth.views import LogoutView
 from . import views
-from .views import CounterCreate, RegistrationView, CounterDetailView, CounterEditView, CounterDeleteView
+from .views import (
+    CounterCreate,
+    RegistrationView,
+    CounterDetailView,
+    CounterEditView,
+    CounterDeleteView,
+)
 
 urlpatterns = [
     path("", views.MainView.as_view(), name="main"),
