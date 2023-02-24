@@ -7,6 +7,8 @@ from datetime import datetime, timedelta
 import httpagentparser
 from app.clickhouse import create_connection
 from web.clickhouse_models import Views
+import requests
+
 
 # from src.web.models import Counter
 
@@ -27,8 +29,8 @@ class StatCounterView(APIView):
 
             # Проверка пользователя
             if (
-                Counter.objects.all().filter(user_id=request.user.id, id=counter_id).count() != 0
-                or request.user.is_superuser
+                    Counter.objects.all().filter(user_id=request.user.id, id=counter_id).count() != 0
+                    or request.user.is_superuser
             ):
                 start_date = datetime.strptime(date1, "%Y-%m-%d")
                 if not date2:
@@ -56,11 +58,49 @@ TRANSPARENT_1_PIXEL_GIF = b"\x47\x49\x46\x38\x39\x61\x01\x00\x01\x00\x80\x00\x00
 
 
 class GetMetaDataView(APIView):
-
     # пример <img src="http://127.0.0.1:8000/api/getmetadata/15"/>
+    # unique_key = None
+    #
+    # def generate_key(self, request):
+    #     if GetMetaDataView.unique_key is None:
+    #         GetMetaDataView.unique_key = uuid.uuid4()
+    #     request.META['unique'] = GetMetaDataView.unique_key
+    #     # request.META['unique'] = None
+    #     # unique_key = request.META('unique')
+    #     print(request.META['unique'])
+    #     db = create_connection()
+    #     print(Views.objects_in(db).filter(visitor_unique_key=request.META['unique']))
+    #     if Views.objects_in(db).filter(visitor_unique_key=request.META['unique']):
+    #         return request.META['unique']
+    #     else:
+    #         visitor_key = uuid.uuid4()
+    #         GetMetaDataView.unique_key = visitor_key
+    #         print(request.META['unique'])
+    #         return visitor_key
+
+    # def generate_key(self, request):
+    #     # request.META['unique'] = None
+    #     visitor_unique_key = request.META('unique')
+    #     db = create_connection()
+    #     print(request.headers)
+    #     if 'unique' in request.headers:
+    #         #            if Views.objects_in(db).get(visitor_unique_key=response.headers['unique']):
+    #         return response.headers['unique']
+    #     else:
+    #         visitor_key = uuid.uuid4()
+    #         response.headers['unique'] = visitor_key
+    #         return visitor_key
 
     def get(self, request, id):
         db = create_connection()
+
+        visitor_unique_key = request.COOKIES.get('visitor_unique_key', None)
+        if not visitor_unique_key:
+            visitor_unique_key = str(uuid.uuid4())
+            response = Response(content_type='application/json')
+            response.set_cookie('visitor_unique_key', visitor_unique_key)
+        else:
+            response = Response()
 
         metadata = request.headers["User-Agent"]
         data_split = httpagentparser.detect(metadata, "os")
@@ -70,14 +110,13 @@ class GetMetaDataView(APIView):
         device_type = data_split["os"]["name"]
         ip_address = request.META["REMOTE_ADDR"]
         language = request.META["HTTP_ACCEPT_LANGUAGE"].split(",")[0][:2]
-        ip_uuid = "".join(ip_address.split("."))
 
         notes = [
             Views(
                 counter_id=id,
                 referer=referer,
                 view_id=uuid.uuid4(),
-                visitor_unique_key=uuid.uuid1(int(ip_uuid)),
+                visitor_unique_key=visitor_unique_key,
                 device_type=device_type,
                 browser_type=browser,
                 user_agent=metadata,
@@ -87,6 +126,9 @@ class GetMetaDataView(APIView):
                 created_at=datetime.now(),
             )
         ]
+
         db.insert(notes)
 
-        return HttpResponse(TRANSPARENT_1_PIXEL_GIF, content_type="image/gif")
+        response_data = {'key': visitor_unique_key}
+        response.data = response_data
+        return response
