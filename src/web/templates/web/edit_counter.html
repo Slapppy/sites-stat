@@ -12,6 +12,14 @@
 <div class="content mt-4">
     <div class="container">
         <div class="title">
+            <div class="breadcrumbs">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'counters' %}">Список счетчиков</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Настройка {{ object.name }}</li>
+                    </ol>
+                </nav>
+            </div>
             <h2 class="pb-4">Настройка счетчика</h2>
         </div>
         <div class="main">
