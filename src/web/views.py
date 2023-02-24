@@ -109,7 +109,7 @@ class CounterDetailView(DetailView):
 
 
 class MainView(TemplateView):
-    template_name = 'web/main.html'
+    template_name = "web/main.html"
 
 
 class CounterEditView(UpdateView):

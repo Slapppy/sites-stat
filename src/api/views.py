@@ -86,11 +86,9 @@ class GetMetaDataView(APIView):
                 os_type=os_type,
                 ip=ip_address,
                 language=language,
-                created_at= timezone.now(),
-
-
+                created_at=timezone.now(),
             )
         ]
-        print( timezone.now())
+        print(timezone.now())
         db.insert(notes)
         return HttpResponse(TRANSPARENT_1_PIXEL_GIF, content_type="image/gif")
