@@ -4,7 +4,14 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.urls import reverse
 from django.utils.decorators import method_decorator
-from django.views.generic import ListView, CreateView, View, DetailView, UpdateView
+from django.views.generic import (
+    ListView,
+    CreateView,
+    View,
+    DetailView,
+    UpdateView,
+    TemplateView,
+)
 
 from .models import Counter
 from .forms import CreateUserForm, AddCounterForm
@@ -17,7 +24,9 @@ class CountersListView(ListView):
     def get_queryset(self):
         if not self.request.user.is_authenticated:
             return Counter.objects.none()
-        queryset = Counter.objects.filter(user=self.request.user).order_by("-created_at")
+        queryset = Counter.objects.filter(user=self.request.user).order_by(
+            "-created_at"
+        )
         return self.filter_queryset(queryset)
 
     def filter_queryset(self, counters):
@@ -76,7 +85,7 @@ def auth_page(request):
 
         if user is not None:
             login(request, user)
-            return redirect("profile")
+            return redirect("counters")
         else:
             messages.info(request, "Неверный Логин или Пароль")
 
@@ -87,7 +96,7 @@ def auth_page(request):
 class CounterCreate(CreateView):
     form_class = AddCounterForm
     template_name = "web/add_counter.html"
-    success_url = "/profile"
+    success_url = "/counters"
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
@@ -108,8 +117,8 @@ class CounterDetailView(DetailView):
         return Counter.objects.filter(user=self.request.user)
 
 
-def main_page(request):
-    return render(request, "web/main.html")
+class MainView(TemplateView):
+    template_name = "web/main.html"
 
 
 class CounterEditView(UpdateView):
@@ -124,7 +133,7 @@ class CounterEditView(UpdateView):
         return Counter.objects.filter(user=self.request.user)
 
     def get_success_url(self):
-        return reverse("profile")
+        return reverse("counters")
 
     def get_context_data(self, *, object_list=None, **kwargs):
         return {
@@ -138,7 +147,7 @@ class CounterDeleteView(View):
         obj = get_object_or_404(Counter, pk=pk)
         if obj in Counter.objects.filter(user=request.user):
             obj.delete()
-            return redirect("profile")
+            return redirect("counters")
         else:
             """TODO сделать ридерект на страницу ошибки"""
-            return redirect("profile")
+            return redirect("counters")
