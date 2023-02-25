@@ -7,9 +7,7 @@ from datetime import datetime, timedelta
 import httpagentparser
 from app.clickhouse import create_connection
 from web.clickhouse_models import Views
-from django.utils import timezone
-import time
-from web.models import Counter
+import requests
 
 
 # from src.web.models import Counter
@@ -155,6 +153,10 @@ class GetMetaDataView(APIView):
     def get(self, request, id):
         db = create_connection()
 
+        visitor_unique_key = request.COOKIES.get("unique_key")
+        if not visitor_unique_key:
+            visitor_unique_key = str(uuid.uuid4())
+
         metadata = request.headers["User-Agent"]
         data_split = httpagentparser.detect(metadata, "os")
         referer = request.META.get("HTTP_REFERER")
@@ -162,15 +164,16 @@ class GetMetaDataView(APIView):
         os_type = data_split["platform"]["name"]
         device_type = data_split["os"]["name"]
         ip_address = request.META["REMOTE_ADDR"]
-        language = request.META["HTTP_ACCEPT_LANGUAGE"].split(",")[0][:2]
-        ip_uuid = "".join(ip_address.split("."))
+        language = request.META.get("HTTP_ACCEPT_LANGUAGE").split(",")[0][:2]
+
+        # visitor_unique_key = self.generate_key()
 
         notes = [
             Views(
                 counter_id=id,
                 referer=referer,
                 view_id=uuid.uuid4(),
-                visitor_unique_key=uuid.uuid1(int(ip_uuid)),
+                visitor_unique_key=visitor_unique_key,
                 device_type=device_type,
                 browser_type=browser,
                 user_agent=metadata,
@@ -180,6 +183,8 @@ class GetMetaDataView(APIView):
                 created_at=timezone.now(),
             )
         ]
-        print(timezone.now())
+
         db.insert(notes)
-        return HttpResponse(TRANSPARENT_1_PIXEL_GIF, content_type="image/gif")
+
+        response_data = {"unique_key": visitor_unique_key}
+        return Response(response_data, content_type="application/json")
