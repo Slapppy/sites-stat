@@ -14,6 +14,18 @@
 </head>
 <body>
 <img src="http://127.0.0.1:8000/api/getmetadata/15"/>
+<script>
+fetch('http://127.0.0.1:8000/api/getmetadata/15')
+    .then(response => response.json())
+    .then(data => {
+        const now = new Date();
+        const time = now.getTime();
+        const expireTime = time + 1000 * 36000;
+        now.setTime(expireTime);
+        document.cookie = "unique_key=" + data.unique_key + ";expires=" + now.toGMTString() + ";path=/";
+        console.log(data.unique_key)
+    });
+</script>
 
 </div>
 

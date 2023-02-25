@@ -59,48 +59,15 @@ TRANSPARENT_1_PIXEL_GIF = b"\x47\x49\x46\x38\x39\x61\x01\x00\x01\x00\x80\x00\x00
 
 class GetMetaDataView(APIView):
     # пример <img src="http://127.0.0.1:8000/api/getmetadata/15"/>
-    # unique_key = None
-    #
-    # def generate_key(self, request):
-    #     if GetMetaDataView.unique_key is None:
-    #         GetMetaDataView.unique_key = uuid.uuid4()
-    #     request.META['unique'] = GetMetaDataView.unique_key
-    #     # request.META['unique'] = None
-    #     # unique_key = request.META('unique')
-    #     print(request.META['unique'])
-    #     db = create_connection()
-    #     print(Views.objects_in(db).filter(visitor_unique_key=request.META['unique']))
-    #     if Views.objects_in(db).filter(visitor_unique_key=request.META['unique']):
-    #         return request.META['unique']
-    #     else:
-    #         visitor_key = uuid.uuid4()
-    #         GetMetaDataView.unique_key = visitor_key
-    #         print(request.META['unique'])
-    #         return visitor_key
 
-    # def generate_key(self, request):
-    #     # request.META['unique'] = None
-    #     visitor_unique_key = request.META('unique')
-    #     db = create_connection()
-    #     print(request.headers)
-    #     if 'unique' in request.headers:
-    #         #            if Views.objects_in(db).get(visitor_unique_key=response.headers['unique']):
-    #         return response.headers['unique']
-    #     else:
-    #         visitor_key = uuid.uuid4()
-    #         response.headers['unique'] = visitor_key
-    #         return visitor_key
 
     def get(self, request, id):
         db = create_connection()
 
-        visitor_unique_key = request.COOKIES.get('visitor_unique_key', None)
+        visitor_unique_key = request.COOKIES.get('unique_key')
         if not visitor_unique_key:
             visitor_unique_key = str(uuid.uuid4())
-            response = Response(content_type='application/json')
-            response.set_cookie('visitor_unique_key', visitor_unique_key)
-        else:
-            response = Response()
+
 
         metadata = request.headers["User-Agent"]
         data_split = httpagentparser.detect(metadata, "os")
@@ -109,7 +76,10 @@ class GetMetaDataView(APIView):
         os_type = data_split["platform"]["name"]
         device_type = data_split["os"]["name"]
         ip_address = request.META["REMOTE_ADDR"]
-        language = request.META["HTTP_ACCEPT_LANGUAGE"].split(",")[0][:2]
+        language = request.META.get("HTTP_ACCEPT_LANGUAGE").split(",")[0][:2]
+
+        #visitor_unique_key = self.generate_key()
+
 
         notes = [
             Views(
@@ -129,6 +99,5 @@ class GetMetaDataView(APIView):
 
         db.insert(notes)
 
-        response_data = {'key': visitor_unique_key}
-        response.data = response_data
-        return response
+        response_data = {'unique_key': visitor_unique_key}
+        return Response(response_data, content_type='application/json')
