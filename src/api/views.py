@@ -29,8 +29,8 @@ class StatCounterView(APIView):
 
             # Проверка пользователя
             if (
-                    Counter.objects.all().filter(user_id=request.user.id, id=counter_id).count() != 0
-                    or request.user.is_superuser
+                Counter.objects.all().filter(user_id=request.user.id, id=counter_id).count() != 0
+                or request.user.is_superuser
             ):
                 start_date = datetime.strptime(date1, "%Y-%m-%d")
                 if not date2:
@@ -60,14 +60,12 @@ TRANSPARENT_1_PIXEL_GIF = b"\x47\x49\x46\x38\x39\x61\x01\x00\x01\x00\x80\x00\x00
 class GetMetaDataView(APIView):
     # пример <img src="http://127.0.0.1:8000/api/getmetadata/15"/>
 
-
     def get(self, request, id):
         db = create_connection()
 
-        visitor_unique_key = request.COOKIES.get('unique_key')
+        visitor_unique_key = request.COOKIES.get("unique_key")
         if not visitor_unique_key:
             visitor_unique_key = str(uuid.uuid4())
-
 
         metadata = request.headers["User-Agent"]
         data_split = httpagentparser.detect(metadata, "os")
@@ -78,8 +76,7 @@ class GetMetaDataView(APIView):
         ip_address = request.META["REMOTE_ADDR"]
         language = request.META.get("HTTP_ACCEPT_LANGUAGE").split(",")[0][:2]
 
-        #visitor_unique_key = self.generate_key()
-
+        # visitor_unique_key = self.generate_key()
 
         notes = [
             Views(
@@ -99,5 +96,5 @@ class GetMetaDataView(APIView):
 
         db.insert(notes)
 
-        response_data = {'unique_key': visitor_unique_key}
-        return Response(response_data, content_type='application/json')
+        response_data = {"unique_key": visitor_unique_key}
+        return Response(response_data, content_type="application/json")
