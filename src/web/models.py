@@ -53,9 +53,18 @@ class User(BaseModel, AbstractBaseUser, PermissionsMixin):
 
     class Meta:
         db_table = "web_user"
+        verbose_name = "Пользователь"
+        verbose_name_plural = "Пользователи"
 
 
 class Counter(BaseModel):
     name = models.CharField(max_length=128, unique=True)
     link = models.CharField(max_length=255)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Счетчик"
+        verbose_name_plural = "Счетчики"
