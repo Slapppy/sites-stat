@@ -14,6 +14,7 @@ class BaseModel(models.Model):
     class Meta:
         abstract = True
 
+
 class UserManager(DjangoUserManager):
     def _create_user(self, email, password, commit=True, **extra_fields):
         email = self.normalize_email(email)
