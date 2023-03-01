@@ -1,3 +1,4 @@
+from time import timezone
 from django.http import HttpResponse
 import uuid
 from rest_framework import status
@@ -7,10 +8,9 @@ from datetime import datetime, timedelta
 import httpagentparser
 from app.clickhouse import create_connection
 from web.clickhouse_models import Views
-import requests
+from django.db import connection
 
-
-# from src.web.models import Counter
+from web.models import Counter
 
 
 class StatCounterView(APIView):
@@ -32,9 +32,9 @@ class StatCounterView(APIView):
         if counter_id and date1:
             # Проверка пользователя
             if (
-                Counter.objects.filter(user_id=request.user.id, id=counter_id).count()
-                != 0
-                or request.user.is_superuser
+                    Counter.objects.filter(user_id=request.user.id, id=counter_id).count()
+                    != 0
+                    or request.user.is_superuser
             ):
                 start_date = datetime.strptime(date1, "%Y-%m-%d")
                 if not date2:
@@ -70,7 +70,7 @@ TRANSPARENT_1_PIXEL_GIF = b"\x47\x49\x46\x38\x39\x61\x01\x00\x01\x00\x80\x00\x00
 
 
 class StatCounterVisit(APIView):
-    # h ttp://127.0.0.1:8000/api/visit_stat/data?id=5&start-date=2022-12-29&end-date=2022-12-31
+    # http://127.0.0.1:8000/api/visit_stat/data?id=5&start-date=2022-12-29&end-date=2022-12-31
     @staticmethod
     def get_data(counter_id, start_date, end_date):
         db = create_connection()
@@ -92,9 +92,7 @@ class StatCounterVisit(APIView):
                 visitor = views[i].visitor_unique_key
                 last_time = views[i].created_at
                 count_visits += 1
-            if views[i].visitor_unique_key == visitor and views[
-                i
-            ].created_at - last_time > timedelta(minutes=30):
+            if views[i].visitor_unique_key == visitor and views[i].created_at - last_time > timedelta(minutes=30):
                 count_visits += 1
                 last_time = views[i].created_at
         return count_visits
@@ -111,9 +109,9 @@ class StatCounterVisit(APIView):
         if counter_id:
             # Проверка пользователя
             if (
-                Counter.objects.filter(user_id=request.user.id, id=counter_id).count()
-                != 0
-                or request.user.is_superuser
+                    Counter.objects.filter(user_id=request.user.id, id=counter_id).count()
+                    != 0
+                    or request.user.is_superuser
             ):
                 if start_date:
                     start_date = datetime.strptime(start_date, "%Y-%m-%d")
@@ -150,12 +148,20 @@ class StatCounterVisit(APIView):
 class GetMetaDataView(APIView):
     # пример <img src="http://127.0.0.1:8000/api/getmetadata/15"/>
 
-    def get(self, request, id):
+    def post(self, request, id):
         db = create_connection()
 
-        visitor_unique_key = request.COOKIES.get("unique_key")
-        if not visitor_unique_key:
+        visitor_unique_key = None
+        if not request.data['visitor_unique_key']:
             visitor_unique_key = str(uuid.uuid4())
+        elif Views.objects_in(db).filter(visitor_unique_key=request.data['visitor_unique_key']):
+            visitor_unique_key = request.data['visitor_unique_key']
+        else:
+            visitor_unique_key = str(uuid.uuid4())
+
+
+
+
 
         metadata = request.headers["User-Agent"]
         data_split = httpagentparser.detect(metadata, "os")
@@ -164,7 +170,7 @@ class GetMetaDataView(APIView):
         os_type = data_split["platform"]["name"]
         device_type = data_split["os"]["name"]
         ip_address = request.META["REMOTE_ADDR"]
-        language = request.META.get("HTTP_ACCEPT_LANGUAGE").split(",")[0][:2]
+        language = request.META.get("HTTP_ACCEPT_LANGUAGE", "").split(",")[0][:2]
 
         # visitor_unique_key = self.generate_key()
 
@@ -180,7 +186,7 @@ class GetMetaDataView(APIView):
                 os_type=os_type,
                 ip=ip_address,
                 language=language,
-                created_at=timezone.now(),
+                created_at=timezone.real,
             )
         ]
 
