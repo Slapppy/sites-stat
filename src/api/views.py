@@ -7,9 +7,9 @@ from rest_framework.views import APIView
 from datetime import datetime, timedelta
 import httpagentparser
 from app.clickhouse import create_connection
-from web.clickhouse_models import Views
+from web.clickhouse_models import Views, GuestsInDay
 from django.db import connection
-
+from infi.clickhouse_orm import funcs
 from web.models import Counter
 
 
@@ -115,6 +115,60 @@ class StatCounterVisit(APIView):
                         "start-date": start_date.strftime("%Y-%m-%d"),
                         "end-date": end_date.strftime("%Y-%m-%d"),
                         "count_views": visits,
+                    }
+                )
+
+            return Response(
+                {"error": [{"code": 403, "reason": "AccessError"}]},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        return Response(
+            {"error": [{"code": 400, "reason": "invalidParameter"}]},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+
+class StatCounterGuest(APIView):
+    # http://127.0.0.1:8000/api/guest_stat/data?id=5&start-date=2022-12-29&end-date=2022-12-31
+    @staticmethod
+    def get_data(counter_id, start_date, end_date):
+        db = create_connection()
+        guests = (
+            GuestsInDay.objects_in(db)
+            .filter(created_at__between=(start_date, end_date), counter_id=counter_id)
+            .aggregate("counter_id", sum_guests="sum(count_guests)")
+        )
+        if guests:
+            guests = guests[0].sum_guests
+            return guests
+        return 0
+
+    def get(self, request):
+        counter_id = request.GET.get("id", None)
+        start_date, end_date = request.GET.get("start-date", None), request.GET.get("end-date", None)
+
+        if counter_id:
+            # Проверка пользователя
+            if Counter.objects.filter(user_id=request.user.id, id=counter_id).count() != 0 or request.user.is_superuser:
+                if start_date:
+                    start_date = datetime.strptime(start_date, "%Y-%m-%d")
+                else:
+                    start_date = Counter.objects.get(id=counter_id).created_at
+                    print(start_date)
+
+                if end_date:
+                    end_date = datetime.strptime(end_date, "%Y-%m-%d")
+                else:
+                    end_date = datetime.now()
+
+                guests = self.get_data(counter_id, start_date, end_date)
+                return Response(
+                    {
+                        "counter_id": int(counter_id),
+                        "start-date": start_date.strftime("%Y-%m-%d"),
+                        "end-date": end_date.strftime("%Y-%m-%d"),
+                        "count_guests": guests,
                     }
                 )
 
