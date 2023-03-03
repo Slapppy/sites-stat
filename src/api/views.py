@@ -18,32 +18,22 @@ class StatCounterView(APIView):
     @staticmethod
     def get_data(counter_id, start_date, end_date):
         db = create_connection()
-        views = Views.objects_in(db).filter(
-            created_at__between=(start_date, end_date), counter_id=counter_id
-        )
+        views = Views.objects_in(db).filter(created_at__between=(start_date, end_date), counter_id=counter_id)
         return views
 
     def get(self, request):
         counter_id = request.GET.get("id", None)
-        date1, date2 = request.GET.get("start-date", None), request.GET.get(
-            "end-date", None
-        )
+        date1, date2 = request.GET.get("start-date", None), request.GET.get("end-date", None)
 
         if counter_id and date1:
             # Проверка пользователя
-            if (
-                    Counter.objects.filter(user_id=request.user.id, id=counter_id).count()
-                    != 0
-                    or request.user.is_superuser
-            ):
+            if Counter.objects.filter(user_id=request.user.id, id=counter_id).count() != 0 or request.user.is_superuser:
                 start_date = datetime.strptime(date1, "%Y-%m-%d")
                 if not date2:
                     end_date = datetime.now()
                     date2 = end_date.strftime("%Y-%m-%d")
                 else:
-                    end_date = datetime.strptime(date2, "%Y-%m-%d") + timedelta(
-                        milliseconds=-1
-                    )
+                    end_date = datetime.strptime(date2, "%Y-%m-%d") + timedelta(milliseconds=-1)
 
                 views = self.get_data(counter_id, start_date, end_date)
                 return Response(
@@ -99,20 +89,14 @@ class StatCounterVisit(APIView):
 
     def get(self, request):
         counter_id = request.GET.get("id", None)
-        start_date, end_date = request.GET.get("start-date", None), request.GET.get(
-            "end-date", None
-        )
+        start_date, end_date = request.GET.get("start-date", None), request.GET.get("end-date", None)
         print(counter_id)
         print(start_date)
         print(end_date)
 
         if counter_id:
             # Проверка пользователя
-            if (
-                    Counter.objects.filter(user_id=request.user.id, id=counter_id).count()
-                    != 0
-                    or request.user.is_superuser
-            ):
+            if Counter.objects.filter(user_id=request.user.id, id=counter_id).count() != 0 or request.user.is_superuser:
                 if start_date:
                     start_date = datetime.strptime(start_date, "%Y-%m-%d")
                 else:
@@ -152,16 +136,12 @@ class GetMetaDataView(APIView):
         db = create_connection()
 
         visitor_unique_key = None
-        if not request.data['visitor_unique_key']:
+        if not request.data["visitor_unique_key"]:
             visitor_unique_key = str(uuid.uuid4())
-        elif Views.objects_in(db).filter(visitor_unique_key=request.data['visitor_unique_key']):
-            visitor_unique_key = request.data['visitor_unique_key']
+        elif Views.objects_in(db).filter(visitor_unique_key=request.data["visitor_unique_key"]):
+            visitor_unique_key = request.data["visitor_unique_key"]
         else:
             visitor_unique_key = str(uuid.uuid4())
-
-
-
-
 
         metadata = request.headers["User-Agent"]
         data_split = httpagentparser.detect(metadata, "os")
@@ -171,8 +151,6 @@ class GetMetaDataView(APIView):
         device_type = data_split["os"]["name"]
         ip_address = request.META["REMOTE_ADDR"]
         language = request.META.get("HTTP_ACCEPT_LANGUAGE", "").split(",")[0][:2]
-
-        # visitor_unique_key = self.generate_key()
 
         notes = [
             Views(
@@ -192,5 +170,5 @@ class GetMetaDataView(APIView):
 
         db.insert(notes)
 
-        response_data = {"unique_key": visitor_unique_key}
+        response_data = {"unique_key": str(visitor_unique_key)}
         return Response(response_data, content_type="application/json")
