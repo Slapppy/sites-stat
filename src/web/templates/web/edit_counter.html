@@ -1,25 +1,24 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
+{% extends 'web/base.html' %}
+{% block head %}
+    {% load static %}
     <title>Настройка счетчика</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
     <link rel="stylesheet" href="{% static "web/css/bootstrap.min.css" %}">
     <link href="{% static 'web/css/style_counter.css' %}" rel="stylesheet">
-</head>
-<body>
+{% endblock %}
+
+{% block breadcrumbs_context %}
+    <li class="breadcrumb-item"><a href="{% url 'counters' %}">Список счетчиков</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Настройка {{ object.name }}</li>
+{% endblock %}
+
+{% block content %}
 <div class="content mt-4">
     <div class="container">
         <div class="title">
-            <div class="breadcrumbs">
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{% url 'counters' %}">Список счетчиков</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Настройка {{ object.name }}</li>
-                    </ol>
-                </nav>
-            </div>
+            {% block breadcrumbs %}
+                {{ block.super }}
+            {% endblock %}
             <h2 class="pb-4">Настройка счетчика</h2>
         </div>
         <div class="main">
@@ -40,5 +39,4 @@
         </div>
     </div>
 </div>
-</body>
-</html>
+{% endblock %}
