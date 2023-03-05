@@ -24,9 +24,7 @@ class CountersListView(ListView):
     def get_queryset(self):
         if not self.request.user.is_authenticated:
             return Counter.objects.none()
-        queryset = Counter.objects.filter(user=self.request.user).order_by(
-            "-created_at"
-        )
+        queryset = Counter.objects.filter(user=self.request.user).order_by("-created_at")
         return self.filter_queryset(queryset)
 
     def filter_queryset(self, counters):

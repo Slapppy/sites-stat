@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% block head %}
+    {% endblock %}
+</head>
+
+<body>
+{% block content %}
+    {% block breadcrumbs %}
+        <div class="breadcrumbs container-fluid">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    {% block breadcrumbs_context %}
+                    {% endblock %}
+                </ol>
+            </nav>
+        </div>
+    {% endblock %}
+{% endblock %}
+</body>
+</html>
