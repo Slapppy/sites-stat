@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 from datetime import datetime, timedelta
 import httpagentparser
 from app.clickhouse import create_connection
-from web.clickhouse_models import Views, VisitorsInDay
+from web.clickhouse_models import Views, VisitorInDay
 from django.db import connection
 from infi.clickhouse_orm import funcs
 from web.models import Counter
@@ -61,37 +61,37 @@ TRANSPARENT_1_PIXEL_GIF = b"\x47\x49\x46\x38\x39\x61\x01\x00\x01\x00\x80\x00\x00
 
 class StatCounterVisit(APIView):
     # http://127.0.0.1:8000/api/visit_stat/data?id=5&start-date=2022-12-29&end-date=2022-12-31
-    @staticmethod
-    def get_data(counter_id, start_date, end_date):
-        db = create_connection()
-        end_date += timedelta(days=1)
-        views = (
-            Views.objects_in(db)
-            .filter(created_at__between=(start_date, end_date), counter_id=counter_id)
-            .order_by("visitor_unique_key", "created_at")
-        )
-        if views.count() == 0:
-            return 0
-
-        for i in range(db.select("SELECT "))
-
-
-
-
-        # print("count", views.count())
-        # count_visits = 0
-        # visitor = ""
-        # last_time = ""
-        # for i in range(views.count() - 1):
-        #     print(views[i].created_at)
-        #     if views[i].visitor_unique_key != visitor:
-        #         visitor = views[i].visitor_unique_key
-        #         last_time = views[i].created_at
-        #         count_visits += 1
-        #     if views[i].visitor_unique_key == visitor and views[i].created_at - last_time > timedelta(minutes=30):
-        #         count_visits += 1
-        #         last_time = views[i].created_at
-        return count_visits
+    # @staticmethod
+    # def get_data(counter_id, start_date, end_date):
+    #     db = create_connection()
+    #     end_date += timedelta(days=1)
+    #     views = (
+    #         Views.objects_in(db)
+    #         .filter(created_at__between=(start_date, end_date), counter_id=counter_id)
+    #         .order_by("visitor_unique_key", "created_at")
+    #     )
+    #     if views.count() == 0:
+    #         return 0
+    #
+    #     for i in range(db.select("SELECT "))
+    #
+    #
+    #
+    #
+    #     # print("count", views.count())
+    #     # count_visits = 0
+    #     # visitor = ""
+    #     # last_time = ""
+    #     # for i in range(views.count() - 1):
+    #     #     print(views[i].created_at)
+    #     #     if views[i].visitor_unique_key != visitor:
+    #     #         visitor = views[i].visitor_unique_key
+    #     #         last_time = views[i].created_at
+    #     #         count_visits += 1
+    #     #     if views[i].visitor_unique_key == visitor and views[i].created_at - last_time > timedelta(minutes=30):
+    #     #         count_visits += 1
+    #     #         last_time = views[i].created_at
+    #     return count_visits
 
     def get(self, request):
         counter_id = request.GET.get("id", None)

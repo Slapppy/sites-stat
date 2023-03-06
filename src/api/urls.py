@@ -1,4 +1,4 @@
-from api.views import StatCounterView, GetMetaDataView, StatCounterVisit, StatCounterGuest
+from api.views import StatCounterView, GetMetaDataView, StatCounterVisit, StatCounterVisitor
 from django.urls import path
 
 urlpatterns = [
