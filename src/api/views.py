@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 from datetime import datetime, timedelta
 import httpagentparser
 from app.clickhouse import create_connection
-from web.clickhouse_models import Views, GuestsInDay
+from web.clickhouse_models import Views, VisitorsInDay
 from django.db import connection
 from infi.clickhouse_orm import funcs
 from web.models import Counter
@@ -72,19 +72,25 @@ class StatCounterVisit(APIView):
         )
         if views.count() == 0:
             return 0
-        print("count", views.count())
-        count_visits = 0
-        visitor = ""
-        last_time = ""
-        for i in range(views.count() - 1):
-            print(views[i].created_at)
-            if views[i].visitor_unique_key != visitor:
-                visitor = views[i].visitor_unique_key
-                last_time = views[i].created_at
-                count_visits += 1
-            if views[i].visitor_unique_key == visitor and views[i].created_at - last_time > timedelta(minutes=30):
-                count_visits += 1
-                last_time = views[i].created_at
+
+        for i in range(db.select("SELECT "))
+
+
+
+
+        # print("count", views.count())
+        # count_visits = 0
+        # visitor = ""
+        # last_time = ""
+        # for i in range(views.count() - 1):
+        #     print(views[i].created_at)
+        #     if views[i].visitor_unique_key != visitor:
+        #         visitor = views[i].visitor_unique_key
+        #         last_time = views[i].created_at
+        #         count_visits += 1
+        #     if views[i].visitor_unique_key == visitor and views[i].created_at - last_time > timedelta(minutes=30):
+        #         count_visits += 1
+        #         last_time = views[i].created_at
         return count_visits
 
     def get(self, request):
@@ -129,19 +135,19 @@ class StatCounterVisit(APIView):
         )
 
 
-class StatCounterGuest(APIView):
-    # http://127.0.0.1:8000/api/guest_stat/data?id=5&start-date=2022-12-29&end-date=2022-12-31
+class StatCounterVisitor(APIView):
+    # http://127.0.0.1:8000/api/visitor_stat/data?id=5&start-date=2022-12-29&end-date=2022-12-31
     @staticmethod
     def get_data(counter_id, start_date, end_date):
         db = create_connection()
-        guests = (
-            GuestsInDay.objects_in(db)
+        visitors = (
+            VisitorsInDay.objects_in(db)
             .filter(created_at__between=(start_date, end_date), counter_id=counter_id)
-            .aggregate("counter_id", sum_guests="sum(count_guests)")
+            .aggregate("counter_id", sum_visitors="sum(count_visitors)")
         )
-        if guests:
-            guests = guests[0].sum_guests
-            return guests
+        if visitors:
+            visitors = visitors[0].sum_visitors
+            return visitors
         return 0
 
     def get(self, request):
@@ -162,13 +168,13 @@ class StatCounterGuest(APIView):
                 else:
                     end_date = datetime.now()
 
-                guests = self.get_data(counter_id, start_date, end_date)
+                visitors = self.get_data(counter_id, start_date, end_date)
                 return Response(
                     {
                         "counter_id": int(counter_id),
                         "start-date": start_date.strftime("%Y-%m-%d"),
                         "end-date": end_date.strftime("%Y-%m-%d"),
-                        "count_guests": guests,
+                        "count_visitors": visitors,
                     }
                 )
 
