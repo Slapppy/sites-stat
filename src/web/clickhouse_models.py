@@ -29,9 +29,9 @@ class Views(Model):
     engine = MergeTree("created_at", ("created_at",))
 
 
-class GuestsInDay(Model):
+class VisitorInDay(Model):
     counter_id = UInt16Field()
-    count_guests = UInt64Field()
+    count_visitor = UInt64Field()
     created_at = DateField()
 
     engine = SummingMergeTree(
@@ -41,7 +41,7 @@ class GuestsInDay(Model):
             "created_at",
         ),
         summing_cols=(
-            "count_guests",
+            "count_visitor",
             "created_at",
         ),
     )
