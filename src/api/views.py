@@ -254,7 +254,7 @@ class StatViewInDay(APIView):
 
     @staticmethod
     def get_date(date_filter):
-        end_date = date.today() - timedelta(days=1)
+        end_date = date.today()
         if date_filter == "threedays":
             start_date = end_date - timedelta(days=2)
         elif date_filter == "week":
