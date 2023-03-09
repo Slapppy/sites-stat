@@ -240,6 +240,16 @@ class StatViewInDay(APIView):
     пример запроса:
     http://127.0.0.1:8000/api/view/data?id=15&filter=month
 
+    Methods
+    -------
+    get_date(date_filter)
+        По значению фильтра определяет начальную и конечную дату
+
+    get_data(counter_id, start_date, end_date)
+        Возвращает список объектов из таблицы viewinday
+
+    get(request)
+        Обработчик  get запроса
     """
 
     @staticmethod
@@ -271,29 +281,28 @@ class StatViewInDay(APIView):
 
         filter_lst = ["threedays", "week", "month", "quarter", "year"]
 
-        if counter_id:
+        if Counter.objects.filter(id=counter_id):
             if date_filter in filter_lst:
                 start_date, end_date = self.get_date(date_filter)
                 views = self.get_data(counter_id, start_date, end_date)
-                if views:
 
-                    response = {
-                        "counter_id": counter_id,
-                        "filter": date_filter,
-                        "start_date": start_date,
-                        "end_date": end_date,
-                        "data": [],
-                    }
+                response = {
+                    "counter_id": counter_id,
+                    "filter": date_filter,
+                    "start_date": start_date,
+                    "end_date": end_date,
+                    "data": [],
+                }
 
-                    temp_date = start_date
-                    while temp_date <= end_date:
-                        view = list(filter(lambda x: x.created_at == temp_date, views))
-                        response["data"].append(
-                            {"date": temp_date, "count_view": view[0].count_visitor if len(view) == 1 else 0}
-                        )
-                        temp_date += timedelta(days=1)
+                temp_date = start_date
+                while temp_date <= end_date:
+                    view = list(filter(lambda x: x.created_at == temp_date, views))
+                    response["data"].append(
+                        {"date": temp_date, "count_view": view[0].count_visitor if len(view) == 1 else 0}
+                    )
+                    temp_date += timedelta(days=1)
 
-                    return Response(response)
+                return Response(response)
         return Response(
             {"error": [{"code": 400, "reason": "invalidParameter"}]},
             status=status.HTTP_400_BAD_REQUEST,
