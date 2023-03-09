@@ -238,52 +238,62 @@ class StatViewInDay(APIView):
     """
     Количество просмотров у счетчика за определенный промежуток времени
     пример запроса:
-    http://127.0.0.1:8000/api/view/data?id=3&filter=month
+    http://127.0.0.1:8000/api/view/data?id=15&filter=month
 
     """
 
     @staticmethod
-    def get_data(counter_id, filter):
+    def get_date(date_filter):
         end_date = date.today() - timedelta(days=1)
-        if filter == "threedays":
+        if date_filter == "threedays":
             start_date = end_date - timedelta(days=2)
-        elif filter == "week":
+        elif date_filter == "week":
             start_date = end_date - timedelta(days=6)
-        elif filter == "month":
+        elif date_filter == "month":
             month, year = (end_date.month - 1, end_date.year) if end_date.month != 1 else (12, end_date.year - 1)
             start_date = end_date.replace(day=end_date.day, month=month, year=year)
-        elif filter == "quarter":
+        elif date_filter == "quarter":
             month, year = (end_date.month - 3, end_date.year) if end_date.month != 1 else (12, end_date.year - 1)
             start_date = end_date.replace(day=end_date.day, month=month, year=year)
         else:
             start_date = end_date.replace(day=end_date.day, month=end_date.month, year=end_date.year - 1)
         return start_date, end_date
 
+    @staticmethod
+    def get_data(counter_id, start_date, end_date):
+        db = create_connection()
+        views = VisitorInDay.objects_in(db).filter(created_at__between=(start_date, end_date), counter_id=counter_id)
+        return list(views)
+
     def get(self, request):
         counter_id = request.GET.get("id", None)
-        filter = request.GET.get("filter", None)
+        date_filter = request.GET.get("filter", None)
 
         filter_lst = ["threedays", "week", "month", "quarter", "year"]
 
         if counter_id:
-            if filter in filter_lst:
-                start_date, end_date = self.get_data(counter_id, filter)
-                response = {
-                    "counter_id": counter_id,
-                    "filter": filter,
-                    "start_date": start_date,
-                    "end_date": end_date,
-                    "data": [],
-                }
-                temp_date = start_date
-                db = create_connection()
-                while temp_date <= end_date:
-                    views = list(VisitorInDay.objects_in(db).filter(created_at=temp_date, counter_id=counter_id))
-                    response["data"].append(
-                        {"date": temp_date, "count_view": views[0].count_visitor if len(views) == 1 else 0}
-                    )
-                    temp_date += timedelta(days=1)
-                return Response(response)
+            if date_filter in filter_lst:
+                start_date, end_date = self.get_date(date_filter)
+                views = self.get_data(counter_id, start_date, end_date)
+                if views:
+
+                    response = {
+                        "counter_id": counter_id,
+                        "filter": date_filter,
+                        "start_date": start_date,
+                        "end_date": end_date,
+                        "data": [],
+                    }
+
+                    temp_date = start_date
+                    while temp_date <= end_date:
+                        view = list(filter(lambda x: x.created_at == temp_date, views))
+                        response["data"].append(
+                            {"date": temp_date, "count_view": view[0].count_visitor if len(view) == 1 else 0}
+                        )
+                        temp_date += timedelta(days=1)
+
+                    return Response(response)
         return Response(
             {"error": [{"code": 400, "reason": "invalidParameter"}]},
             status=status.HTTP_400_BAD_REQUEST,
