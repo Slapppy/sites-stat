@@ -4,7 +4,7 @@ import uuid
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 import httpagentparser
 from app.clickhouse import create_connection
 from web.clickhouse_models import Views, VisitorInDay
@@ -141,7 +141,7 @@ class StatCounterVisitor(APIView):
     def get_data(counter_id, start_date, end_date):
         db = create_connection()
         visitors = (
-            VisitorsInDay.objects_in(db)
+            VisitorInDay.objects_in(db)
             .filter(created_at__between=(start_date, end_date), counter_id=counter_id)
             .aggregate("counter_id", sum_visitors="sum(count_visitors)")
         )
@@ -232,3 +232,78 @@ class GetMetaDataView(APIView):
 
         response_data = {"unique_key": str(visitor_unique_key)}
         return Response(response_data, content_type="application/json")
+
+
+class StatViewInDay(APIView):
+    """
+    Количество просмотров у счетчика за определенный промежуток времени
+    пример запроса:
+    http://127.0.0.1:8000/api/view/data?id=15&filter=month
+
+    Methods
+    -------
+    get_date(date_filter)
+        По значению фильтра определяет начальную и конечную дату
+
+    get_data(counter_id, start_date, end_date)
+        Возвращает список объектов из таблицы viewinday
+
+    get(request)
+        Обработчик  get запроса
+    """
+
+    @staticmethod
+    def get_date(date_filter):
+        end_date = date.today()
+        if date_filter == "threedays":
+            start_date = end_date - timedelta(days=2)
+        elif date_filter == "week":
+            start_date = end_date - timedelta(days=6)
+        elif date_filter == "month":
+            month, year = (end_date.month - 1, end_date.year) if end_date.month != 1 else (12, end_date.year - 1)
+            start_date = end_date.replace(day=end_date.day, month=month, year=year)
+        elif date_filter == "quarter":
+            month, year = (end_date.month - 3, end_date.year) if end_date.month != 1 else (12, end_date.year - 1)
+            start_date = end_date.replace(day=end_date.day, month=month, year=year)
+        else:
+            start_date = end_date.replace(day=end_date.day, month=end_date.month, year=end_date.year - 1)
+        return start_date, end_date
+
+    @staticmethod
+    def get_data(counter_id, start_date, end_date):
+        db = create_connection()
+        views = VisitorInDay.objects_in(db).filter(created_at__between=(start_date, end_date), counter_id=counter_id)
+        return list(views)
+
+    def get(self, request):
+        counter_id = request.GET.get("id", None)
+        date_filter = request.GET.get("filter", None)
+
+        filter_lst = ["threedays", "week", "month", "quarter", "year"]
+
+        if Counter.objects.filter(id=counter_id):
+            if date_filter in filter_lst:
+                start_date, end_date = self.get_date(date_filter)
+                views = self.get_data(counter_id, start_date, end_date)
+
+                response = {
+                    "counter_id": counter_id,
+                    "filter": date_filter,
+                    "start_date": start_date,
+                    "end_date": end_date,
+                    "data": [],
+                }
+
+                temp_date = start_date
+                while temp_date <= end_date:
+                    view = list(filter(lambda x: x.created_at == temp_date, views))
+                    response["data"].append(
+                        {"date": temp_date, "count_view": view[0].count_visitor if len(view) == 1 else 0}
+                    )
+                    temp_date += timedelta(days=1)
+
+                return Response(response)
+        return Response(
+            {"error": [{"code": 400, "reason": "invalidParameter"}]},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
