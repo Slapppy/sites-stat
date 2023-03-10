@@ -45,3 +45,21 @@ class VisitorInDay(Model):
             "created_at",
         ),
     )
+
+
+class ViewInDay(Model):
+    counter_id = UInt16Field()
+    count_visits = UInt64Field()
+    created_at = DateField()
+
+    engine = SummingMergeTree(
+        "created_at",
+        (
+            "counter_id",
+            "created_at",
+        ),
+        summing_cols=(
+            "count_visits",
+            "created_at",
+        ),
+    )
