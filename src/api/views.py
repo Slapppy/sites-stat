@@ -1,6 +1,6 @@
-from time import timezone
 from django.http import HttpResponse
 import uuid
+from django.utils import timezone
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -195,6 +195,8 @@ class GetMetaDataView(APIView):
     def post(self, request, id):
         db = create_connection()
 
+
+        print(request.data)
         visitor_unique_key = None
         if not request.data["visitor_unique_key"]:
             visitor_unique_key = str(uuid.uuid4())
@@ -224,7 +226,7 @@ class GetMetaDataView(APIView):
                 os_type=os_type,
                 ip=ip_address,
                 language=language,
-                created_at=timezone.real,
+                created_at=timezone.now(),
             )
         ]
 

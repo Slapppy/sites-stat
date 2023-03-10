@@ -14,18 +14,9 @@
 {% block content %}
     <img src="http://127.0.0.1:8000/api/getmetadata/15"/>
     <script>
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', 'http://127.0.0.1:8000/api/getmetadata/15', true);
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.onreadystatechange = function () {
-            if (this.readyState === 4 && this.status === 200) {
-                const response = JSON.parse(this.responseText);
-                const unique_key = response.unique_key;
-                document.cookie = 'unique_key=' + unique_key;
-            }
-        };
 
-        function getCookieValue(key) {
+
+    function getCookieValue(key) {
             const cookies = document.cookie.split(';');
             for (let i = 0; i < cookies.length; i++) {
                 const cookie = cookies[i].trim();
@@ -36,6 +27,20 @@
             }
             return null;
         }
+        const csrftoken = getCookieValue('csrftoken');
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', 'http://127.0.0.1:8000/api/getmetadata/12', true);
+        xhr.setRequestHeader('X-CSRFToken', csrftoken); // set CSRF token
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                const response = JSON.parse(this.responseText);
+                const unique_key = response.unique_key;
+                document.cookie = 'unique_key=' + unique_key;
+            }
+        };
+
 
         xhr.send(JSON.stringify({visitor_unique_key: getCookieValue("unique_key")}));
     </script>

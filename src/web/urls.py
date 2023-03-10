@@ -11,12 +11,12 @@ from .views import (
 
 urlpatterns = [
     path("", views.MainView.as_view(), name="main"),
-    path("registration", RegistrationView.as_view(), name="reg"),
     path("auth", views.auth_page, name="auth"),
     path("logout/", LogoutView.as_view(next_page=reverse_lazy("main")), name="logout"),
+    path("registration", RegistrationView.as_view(), name="reg"),
     path("counters", views.CountersListView.as_view(), name="counters"),
-    path("counters/<int:pk>", CounterDetailView.as_view(), name="counter"),
     path("counters/add", CounterCreate.as_view(), name="add"),
+    path("counters/<int:pk>", CounterDetailView.as_view(), name="counter"),
     path("counters/edit/<int:id>", CounterEditView.as_view(), name="edit"),
     path("counters/delete/<int:pk>", CounterDeleteView.as_view(), name="delete"),
 ]
