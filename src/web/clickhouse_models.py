@@ -16,6 +16,7 @@ from infi.clickhouse_orm import (
 class Views(Model):
     counter_id = UInt16Field()
     view_id = UUIDField()
+    visit_id = UUIDField()
     visitor_unique_key = UUIDField()
     referer = StringField()
     device_type = StringField()

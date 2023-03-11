@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 
 from app.clickhouse import create_connection
-from web.clickhouse_models import Views, VisitorInDay, ViewInDay
+from web.clickhouse_models import Views, VisitorInDay, ViewInDay, VisitInDay
 
 
 class Command(BaseCommand):
