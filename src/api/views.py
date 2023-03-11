@@ -204,6 +204,9 @@ class GetMetaDataView(APIView):
             visitor_unique_key = request.data["visitor_unique_key"]
         else:
             visitor_unique_key = str(uuid.uuid4())
+        print(f"visit_id: {request.data}")
+        # Что если генерировать как int
+        visit_id = str(uuid.uuid4()) if not request.data["visit_id"] else request.data["visit_id"]
 
         metadata = request.headers["User-Agent"]
         data_split = httpagentparser.detect(metadata, "os")
@@ -219,6 +222,7 @@ class GetMetaDataView(APIView):
                 counter_id=id,
                 referer=referer,
                 view_id=uuid.uuid4(),
+                visit_id=visit_id,
                 visitor_unique_key=visitor_unique_key,
                 device_type=device_type,
                 browser_type=browser,
@@ -232,7 +236,7 @@ class GetMetaDataView(APIView):
 
         db.insert(notes)
 
-        response_data = {"unique_key": str(visitor_unique_key)}
+        response_data = {"unique_key": str(visitor_unique_key), "visit_id": str(visit_id)}
         return Response(response_data, content_type="application/json")
 
 
