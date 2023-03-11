@@ -195,8 +195,6 @@ class GetMetaDataView(APIView):
     def post(self, request, id):
         db = create_connection()
 
-
-        print(request.data)
         visitor_unique_key = None
         if not request.data["visitor_unique_key"]:
             visitor_unique_key = str(uuid.uuid4())
