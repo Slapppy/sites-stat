@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 from datetime import date, datetime, timedelta
 import httpagentparser
 from app.clickhouse import create_connection
-from web.clickhouse_models import Views, VisitorInDay, VisitInDay
+from web.clickhouse_models import Views, VisitorInDay, VisitInDay, ViewInDay
 from django.db import connection
 from infi.clickhouse_orm import funcs
 from web.models import Counter
@@ -167,7 +167,6 @@ class GetMetaDataView(APIView):
     def post(self, request, id):
         db = create_connection()
 
-
         print(request.data)
         visitor_unique_key = None
         if not request.data["visitor_unique_key"]:
@@ -250,7 +249,7 @@ class StatViewInDay(APIView):
     @staticmethod
     def get_data(counter_id, start_date, end_date):
         db = create_connection()
-        views = VisitorInDay.objects_in(db).filter(created_at__between=(start_date, end_date), counter_id=counter_id)
+        views = ViewInDay.objects_in(db).filter(created_at__between=(start_date, end_date), counter_id=counter_id)
         return list(views)
 
     def get(self, request):
