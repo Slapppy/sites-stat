@@ -13,6 +13,7 @@ from infi.clickhouse_orm import funcs
 from web.models import Counter
 
 
+
 class StatCounterView(APIView):
     # пример запроса: http://127.0.0.1:8000/api/view_stat/data?id=5&start-date=2022-12-29&end-date=2022-12-31
     @staticmethod

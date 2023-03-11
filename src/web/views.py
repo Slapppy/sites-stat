@@ -117,6 +117,7 @@ class CounterDetailView(DetailView):
         context["chart_data"] = chart_data
         return context
 
+
     def get_queryset(self):
         if not self.request.user.is_authenticated:
             return Counter.objects.none()

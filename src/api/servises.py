@@ -2,6 +2,7 @@ import requests
 from datetime import datetime, timedelta
 
 
+
 def get_data_for_chart(id):
     # Получаем данные из API
     url = f"http://127.0.0.1:8000/api/view/data?id={id}&filter=month"
