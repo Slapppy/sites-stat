@@ -10,4 +10,5 @@ class Command(BaseCommand):
         db.create_table(Views)
         db.create_table(VisitorInDay)
         db.create_table(ViewInDay)
+        db.create_table(VisitInDay)
         print("tables created")
