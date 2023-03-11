@@ -8,16 +8,17 @@
 
 <body>
 {% block content %}
-    {% block breadcrumbs %}
-        <div class="breadcrumbs container-fluid">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    {% block breadcrumbs_context %}
-                    {% endblock %}
-                </ol>
-            </nav>
-        </div>
-    {% endblock %}
+{% block breadcrumbs %}
+<div class="breadcrumbs container-fluid">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            {% block breadcrumbs_context %}
+            {% endblock %}
+        </ol>
+    </nav>
+</div>
 {% endblock %}
+{% endblock %}
+<script defer src="src/web/static/web/js/jquery.min.js"></script>
 </body>
 </html>
