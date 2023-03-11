@@ -109,10 +109,10 @@ class CounterCreate(CreateView):
 
 class CounterDetailView(DetailView):
     template_name = "web/counter.html"
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        chart_data = get_data_for_chart()
-        print(chart_data)
+        chart_data = get_data_for_chart(self.object.pk)
         context["chart_data"] = chart_data
         return context
 
