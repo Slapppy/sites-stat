@@ -16,6 +16,7 @@ from infi.clickhouse_orm import (
 class Views(Model):
     counter_id = UInt16Field()
     view_id = UUIDField()
+    visit_id = UUIDField()
     visitor_unique_key = UUIDField()
     referer = StringField()
     device_type = StringField()
@@ -42,6 +43,42 @@ class VisitorInDay(Model):
         ),
         summing_cols=(
             "count_visitor",
+            "created_at",
+        ),
+    )
+
+
+class VisitInDay(Model):
+    counter_id = UInt16Field()
+    count_visits = UInt64Field()
+    created_at = DateField()
+
+    engine = SummingMergeTree(
+        "created_at",
+        (
+            "counter_id",
+            "created_at",
+        ),
+        summing_cols=(
+            "count_visits",
+            "created_at",
+        ),
+    )
+
+
+class ViewInDay(Model):
+    counter_id = UInt16Field()
+    count_visits = UInt64Field()
+    created_at = DateField()
+
+    engine = SummingMergeTree(
+        "created_at",
+        (
+            "counter_id",
+            "created_at",
+        ),
+        summing_cols=(
+            "count_visits",
             "created_at",
         ),
     )

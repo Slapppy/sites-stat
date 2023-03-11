@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 from datetime import date, datetime, timedelta
 import httpagentparser
 from app.clickhouse import create_connection
-from web.clickhouse_models import Views, VisitorInDay
+from web.clickhouse_models import Views, VisitorInDay, VisitInDay, ViewInDay
 from django.db import connection
 from infi.clickhouse_orm import funcs
 from web.models import Counter
@@ -62,44 +62,16 @@ TRANSPARENT_1_PIXEL_GIF = b"\x47\x49\x46\x38\x39\x61\x01\x00\x01\x00\x80\x00\x00
 
 class StatCounterVisit(APIView):
     # http://127.0.0.1:8000/api/visit_stat/data?id=5&start-date=2022-12-29&end-date=2022-12-31
-    # @staticmethod
-    # def get_data(counter_id, start_date, end_date):
-    #     db = create_connection()
-    #     end_date += timedelta(days=1)
-    #     views = (
-    #         Views.objects_in(db)
-    #         .filter(created_at__between=(start_date, end_date), counter_id=counter_id)
-    #         .order_by("visitor_unique_key", "created_at")
-    #     )
-    #     if views.count() == 0:
-    #         return 0
-    #
-    #     for i in range(db.select("SELECT "))
-    #
-    #
-    #
-    #
-    #     # print("count", views.count())
-    #     # count_visits = 0
-    #     # visitor = ""
-    #     # last_time = ""
-    #     # for i in range(views.count() - 1):
-    #     #     print(views[i].created_at)
-    #     #     if views[i].visitor_unique_key != visitor:
-    #     #         visitor = views[i].visitor_unique_key
-    #     #         last_time = views[i].created_at
-    #     #         count_visits += 1
-    #     #     if views[i].visitor_unique_key == visitor and views[i].created_at - last_time > timedelta(minutes=30):
-    #     #         count_visits += 1
-    #     #         last_time = views[i].created_at
-    #     return count_visits
+    @staticmethod
+    def get_data(counter_id, start_date, end_date):
+        db = create_connection()
+        end_date += timedelta(days=1)
+        views = VisitInDay.objects_in(db).filter(created_at__between=(start_date, end_date), counter_id=counter_id)
+        return views.count()
 
     def get(self, request):
         counter_id = request.GET.get("id", None)
         start_date, end_date = request.GET.get("start-date", None), request.GET.get("end-date", None)
-        print(counter_id)
-        print(start_date)
-        print(end_date)
 
         if counter_id:
             # Проверка пользователя
@@ -121,7 +93,7 @@ class StatCounterVisit(APIView):
                         "counter_id": int(counter_id),
                         "start-date": start_date.strftime("%Y-%m-%d"),
                         "end-date": end_date.strftime("%Y-%m-%d"),
-                        "count_views": visits,
+                        "count_visits": visits,
                     }
                 )
 
@@ -203,6 +175,9 @@ class GetMetaDataView(APIView):
             visitor_unique_key = request.data["visitor_unique_key"]
         else:
             visitor_unique_key = str(uuid.uuid4())
+        print(f"visit_id: {request.data}")
+        # Что если генерировать как int
+        visit_id = str(uuid.uuid4()) if not request.data["visit_id"] else request.data["visit_id"]
 
         metadata = request.headers["User-Agent"]
         data_split = httpagentparser.detect(metadata, "os")
@@ -218,6 +193,7 @@ class GetMetaDataView(APIView):
                 counter_id=id,
                 referer=referer,
                 view_id=uuid.uuid4(),
+                visit_id=visit_id,
                 visitor_unique_key=visitor_unique_key,
                 device_type=device_type,
                 browser_type=browser,
@@ -231,7 +207,7 @@ class GetMetaDataView(APIView):
 
         db.insert(notes)
 
-        response_data = {"unique_key": str(visitor_unique_key)}
+        response_data = {"unique_key": str(visitor_unique_key), "visit_id": str(visit_id)}
         return Response(response_data, content_type="application/json")
 
 
@@ -273,7 +249,7 @@ class StatViewInDay(APIView):
     @staticmethod
     def get_data(counter_id, start_date, end_date):
         db = create_connection()
-        views = VisitorInDay.objects_in(db).filter(created_at__between=(start_date, end_date), counter_id=counter_id)
+        views = ViewInDay.objects_in(db).filter(created_at__between=(start_date, end_date), counter_id=counter_id)
         return list(views)
 
     def get(self, request):
