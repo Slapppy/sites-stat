@@ -112,10 +112,11 @@ class CounterDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        chart_data = get_data_for_chart()
+        chart_data = get_data_for_chart(self.object.pk)
         print(chart_data)
         context["chart_data"] = chart_data
         return context
+
 
     def get_queryset(self):
         if not self.request.user.is_authenticated:

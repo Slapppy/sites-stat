@@ -13,6 +13,7 @@ from infi.clickhouse_orm import funcs
 from web.models import Counter
 
 
+
 class StatCounterView(APIView):
     # пример запроса: http://127.0.0.1:8000/api/view_stat/data?id=5&start-date=2022-12-29&end-date=2022-12-31
     @staticmethod
@@ -167,7 +168,6 @@ class GetMetaDataView(APIView):
     def post(self, request, id):
         db = create_connection()
 
-        print(request.data)
         visitor_unique_key = None
         if not request.data["visitor_unique_key"]:
             visitor_unique_key = str(uuid.uuid4())
