@@ -211,9 +211,9 @@ class GetMetaDataView(APIView):
         return Response(response_data, content_type="application/json")
 
 
-class StatViewInDay(APIView):
+class StatInDay(APIView):
     """
-    Количество просмотров у счетчика за определенный промежуток времени
+    Параметры у счетчика за определенный промежуток времени
     пример запроса:
     http://127.0.0.1:8000/api/view/data?id=15&filter=month
 
@@ -228,6 +228,9 @@ class StatViewInDay(APIView):
     get(request)
         Обработчик  get запроса
     """
+
+    field_name = None
+    model = None
 
     @staticmethod
     def get_date(date_filter):
@@ -246,10 +249,9 @@ class StatViewInDay(APIView):
             start_date = end_date.replace(day=end_date.day, month=end_date.month, year=end_date.year - 1)
         return start_date, end_date
 
-    @staticmethod
-    def get_data(counter_id, start_date, end_date):
+    def get_data(self, counter_id, start_date, end_date):
         db = create_connection()
-        views = ViewInDay.objects_in(db).filter(created_at__between=(start_date, end_date), counter_id=counter_id)
+        views = self.model.objects_in(db).filter(created_at__between=(start_date, end_date), counter_id=counter_id)
         return list(views)
 
     def get(self, request):
@@ -275,7 +277,7 @@ class StatViewInDay(APIView):
                 while temp_date <= end_date:
                     view = list(filter(lambda x: x.created_at == temp_date, views))
                     response["data"].append(
-                        {"date": temp_date, "count_view": view[0].count_visitor if len(view) == 1 else 0}
+                        {"date": temp_date, self.field_name: getattr(view[0], self.field_name) if len(view) == 1 else 0}
                     )
                     temp_date += timedelta(days=1)
 
@@ -284,3 +286,18 @@ class StatViewInDay(APIView):
             {"error": [{"code": 400, "reason": "invalidParameter"}]},
             status=status.HTTP_400_BAD_REQUEST,
         )
+
+
+class StatViewInDay(StatInDay, APIView):
+    field_name = "count_view"
+    model = ViewInDay
+
+
+class StatVisitInDay(StatInDay, APIView):
+    field_name = "count_visit"
+    model = VisitInDay
+
+
+class StatVisitorInDay(StatInDay, APIView):
+    field_name = "count_visitor"
+    model = VisitorInDay
