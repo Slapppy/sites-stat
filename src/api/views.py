@@ -263,7 +263,7 @@ class StatInDay(APIView):
         if Counter.objects.filter(id=counter_id):
             if date_filter in filter_lst:
                 start_date, end_date = self.get_date(date_filter)
-                views = self.get_data(counter_id, start_date, end_date)
+                dataset = self.get_data(counter_id, start_date, end_date)
 
                 response = {
                     "counter_id": counter_id,
@@ -275,9 +275,12 @@ class StatInDay(APIView):
 
                 temp_date = start_date
                 while temp_date <= end_date:
-                    view = list(filter(lambda x: x.created_at == temp_date, views))
+                    data = list(filter(lambda x: x.created_at == temp_date, dataset))
                     response["data"].append(
-                        {"date": temp_date, self.field_name: getattr(view[0], self.field_name) if len(view) == 1 else 0}
+                        {
+                            "date": temp_date,
+                            self.field_name: sum((getattr(d, self.field_name) for d in data)) if len(data) > 0 else 0,
+                        }
                     )
                     temp_date += timedelta(days=1)
 
