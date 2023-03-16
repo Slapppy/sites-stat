@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     {% block head %}
-    {% endblock %}
+    {% endblock head %}
 </head>
 
 <body>
@@ -13,12 +13,12 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             {% block breadcrumbs_context %}
-            {% endblock %}
+            {% endblock breadcrumbs_context %}
         </ol>
     </nav>
 </div>
-{% endblock %}
-{% endblock %}
+{% endblock breadcrumbs %}
+{% endblock content %}
 <script defer src="src/web/static/web/js/jquery.min.js"></script>
 </body>
 </html>
