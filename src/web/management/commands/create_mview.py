@@ -12,11 +12,11 @@ class Command(BaseCommand):
             def views():
                 db.raw(
                     "CREATE MATERIALIZED VIEW view_in_day_mv TO viewinday AS SELECT counter_id, "
-                    "count(view_id) as count_view, toDate(created_at) as created_at FROM views "
+                    "count(view_id) as count_views, toDate(created_at) as created_at FROM views "
                     "GROUP BY counter_id, created_at;"
                 )
                 db.raw(
-                    "INSERT INTO viewinday SELECT counter_id, count(view_id) as count_view, "
+                    "INSERT INTO viewinday SELECT counter_id, count(view_id) as count_views, "
                     "toDate(created_at) as created_at FROM views GROUP BY counter_id, created_at;"
                 )
 
