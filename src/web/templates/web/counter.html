@@ -28,42 +28,28 @@
         Название счетчика: {{ object.name }}
     </p>
 </div>
- <canvas id="myChart"></canvas>
 
-    <style>
-        #myChart {
-            position: absolute;
-            top: 170px;
-            left: 20px;
-            border: 1px solid #ccc;
-        }
-    </style>
 
-    <script>
-var ctx = document.getElementById('myChart').getContext('2d');
-var chart_data = {{ chart_data|safe }};
+<div class= "chart-container" id="chart-container"></div>
 
-var myChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: chart_data.labels,
-        datasets: [{
-            label: 'Number of Views',
-            data: chart_data.values,
-            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-            borderColor: 'rgba(255, 99, 132, 1)',
-            borderWidth: 1
-        }]
-    },
-    options: {
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true
-                }
-            }]
-        }
-    }
-});
-</script>
+<div class="panel">
+  <button id="btn3Days">3 дня</button>
+  <button id="btnWeek">Неделя</button>
+  <button id="btnMonth" class="active">Месяц</button>
+  <button id="btnQuarter">Квартал</button>
+  <button id="btnYear">Год</button>
+</div>
+
+
+<script src="{% static 'web/js/charts.js' %}"></script>
+
+
+
+
+<div class="footer fixed-bottom">
+    <a href="#">О нас</a>
+    <a href="#">Связаться с поддержкой</a>
+    <a href="#">Лицензия</a>
+</div>
+
 {% endblock %}

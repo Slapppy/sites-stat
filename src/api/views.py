@@ -166,19 +166,14 @@ class GetMetaDataView(APIView):
 
     def post(self, request, id):
         db = create_connection()
-
+        visitor_unique_key = (
+            str(uuid.uuid4()) if not request.data.get("visitor_unique_key") else request.data.get("visitor_unique_key")
+        )
+        visit_id = str(uuid.uuid4()) if not request.data.get("visit_id") else request.data.get("visit_id")
+        # visitor_unique_key = request.data.get("visitor_unique_key", str(uuid.uuid4()))
         print(request.data)
-        visitor_unique_key = None
-        if not request.data["visitor_unique_key"]:
-            visitor_unique_key = str(uuid.uuid4())
-        elif Views.objects_in(db).filter(visitor_unique_key=request.data["visitor_unique_key"]):
-            visitor_unique_key = request.data["visitor_unique_key"]
-        else:
-            visitor_unique_key = str(uuid.uuid4())
-        print(f"visit_id: {request.data}")
-        # Что если генерировать как int
-        visit_id = str(uuid.uuid4()) if not request.data["visit_id"] else request.data["visit_id"]
-
+        print(visitor_unique_key)
+        print(visit_id)
         metadata = request.headers["User-Agent"]
         data_split = httpagentparser.detect(metadata, "os")
         referer = request.META.get("HTTP_REFERER")
@@ -211,9 +206,9 @@ class GetMetaDataView(APIView):
         return Response(response_data, content_type="application/json")
 
 
-class StatViewInDay(APIView):
+class StatInDay(APIView):
     """
-    Количество просмотров у счетчика за определенный промежуток времени
+    Параметры у счетчика за определенный промежуток времени
     пример запроса:
     http://127.0.0.1:8000/api/view/data?id=15&filter=month
 
@@ -229,6 +224,9 @@ class StatViewInDay(APIView):
         Обработчик  get запроса
     """
 
+    field_name = None
+    model = None
+
     @staticmethod
     def get_date(date_filter):
         end_date = date.today()
@@ -239,17 +237,22 @@ class StatViewInDay(APIView):
         elif date_filter == "month":
             month, year = (end_date.month - 1, end_date.year) if end_date.month != 1 else (12, end_date.year - 1)
             start_date = end_date.replace(day=end_date.day, month=month, year=year)
+        # elif date_filter == "quarter":
+        #     month, year = (end_date.month - 3, end_date.year) if end_date.month != 1 else (12, end_date.year - 1)
+        #     start_date = end_date.replace(day=end_date.day, month=month, year=year)
         elif date_filter == "quarter":
-            month, year = (end_date.month - 3, end_date.year) if end_date.month != 1 else (12, end_date.year - 1)
+            quarter = (end_date.month - 1) // 3  # calculate the quarter number
+            year = end_date.year - quarter // 4 - 1  # adjust year based on quarter number
+            month = (end_date.month - 2) % 12  # calculate the first month of the quarter
             start_date = end_date.replace(day=end_date.day, month=month, year=year)
+
         else:
             start_date = end_date.replace(day=end_date.day, month=end_date.month, year=end_date.year - 1)
         return start_date, end_date
 
-    @staticmethod
-    def get_data(counter_id, start_date, end_date):
+    def get_data(self, counter_id, start_date, end_date):
         db = create_connection()
-        views = ViewInDay.objects_in(db).filter(created_at__between=(start_date, end_date), counter_id=counter_id)
+        views = self.model.objects_in(db).filter(created_at__between=(start_date, end_date), counter_id=counter_id)
         return list(views)
 
     def get(self, request):
@@ -261,7 +264,7 @@ class StatViewInDay(APIView):
         if Counter.objects.filter(id=counter_id):
             if date_filter in filter_lst:
                 start_date, end_date = self.get_date(date_filter)
-                views = self.get_data(counter_id, start_date, end_date)
+                dataset = self.get_data(counter_id, start_date, end_date)
 
                 response = {
                     "counter_id": counter_id,
@@ -273,9 +276,12 @@ class StatViewInDay(APIView):
 
                 temp_date = start_date
                 while temp_date <= end_date:
-                    view = list(filter(lambda x: x.created_at == temp_date, views))
+                    data = list(filter(lambda x: x.created_at == temp_date, dataset))
                     response["data"].append(
-                        {"date": temp_date, "count_view": view[0].count_visitor if len(view) == 1 else 0}
+                        {
+                            "date": temp_date,
+                            self.field_name: sum((getattr(d, self.field_name) for d in data)) if len(data) > 0 else 0,
+                        }
                     )
                     temp_date += timedelta(days=1)
 
@@ -284,3 +290,18 @@ class StatViewInDay(APIView):
             {"error": [{"code": 400, "reason": "invalidParameter"}]},
             status=status.HTTP_400_BAD_REQUEST,
         )
+
+
+class StatViewInDay(StatInDay, APIView):
+    field_name = "count_view"
+    model = ViewInDay
+
+
+class StatVisitInDay(StatInDay, APIView):
+    field_name = "count_visit"
+    model = VisitInDay
+
+
+class StatVisitorInDay(StatInDay, APIView):
+    field_name = "count_visitor"
+    model = VisitorInDay
