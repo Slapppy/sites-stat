@@ -1,0 +1,15 @@
+
+
+.panel button {
+  margin-left: 15px;
+
+}
+
+
+.chart-container{
+    width: 450px;
+    height: 250px;
+      border: 1px solid black;
+      margin-left: 20px;
+
+  }
