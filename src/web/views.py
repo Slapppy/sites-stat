@@ -13,7 +13,7 @@ from django.views.generic import (
     TemplateView,
 )
 
-from api.servises import get_data_for_chart
+
 from .models import Counter
 from .forms import CreateUserForm, AddCounterForm
 
@@ -110,11 +110,6 @@ class CounterCreate(CreateView):
 class CounterDetailView(DetailView):
     template_name = "web/counter.html"
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        chart_data = get_data_for_chart(self.object.pk)
-        context["chart_data"] = chart_data
-        return context
 
     def get_queryset(self):
         if not self.request.user.is_authenticated:
