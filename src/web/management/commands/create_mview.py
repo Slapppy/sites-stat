@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand
 from infi.clickhouse_orm import ServerError
 
+
 from app.clickhouse import create_connection
 
 
@@ -23,22 +24,22 @@ class Command(BaseCommand):
             def visits():
                 db.raw(
                     "CREATE MATERIALIZED VIEW visit_in_day_mv TO visitinday AS SELECT counter_id, "
-                    "count(visit_id) as count_visits, toDate(created_at) as created_at FROM views "
+                    "count(DISTINCT visit_id) as count_visit, toDate(created_at) as created_at FROM views "
                     "GROUP BY counter_id, created_at;"
                 )
                 db.raw(
-                    "INSERT INTO visitinday SELECT counter_id, count(visit_id) as count_visits, "
+                    "INSERT INTO visitinday SELECT counter_id, count(DISTINCT visit_id) as count_visit, "
                     "toDate(created_at) as created_at FROM views GROUP BY counter_id, created_at;"
                 )
 
             def visitors():
                 db.raw(
                     "CREATE MATERIALIZED VIEW visitor_in_day_mv TO visitorinday AS SELECT counter_id, "
-                    "count(visitor_unique_key) as count_visitor, toDate(created_at) as created_at FROM views "
+                    "count(DISTINCT visitor_unique_key) as count_visitor, toDate(created_at) as created_at FROM views "
                     "GROUP BY counter_id, created_at;"
                 )
                 db.raw(
-                    "INSERT INTO visitorinday SELECT counter_id, count(visitor_unique_key) as count_visitor, "
+                    "INSERT INTO visitorinday SELECT counter_id, count(DISTINCT visitor_unique_key) as count_visitor, "
                     "toDate(created_at) as created_at FROM views GROUP BY counter_id, created_at;"
                 )
 
@@ -46,6 +47,5 @@ class Command(BaseCommand):
             visits()
             visitors()
             print("Command completed successfully")
-
         except ServerError:
             print("View creation error")

@@ -50,7 +50,7 @@ class VisitorInDay(Model):
 
 class VisitInDay(Model):
     counter_id = UInt16Field()
-    count_visits = UInt64Field()
+    count_visit = UInt64Field()
     created_at = DateField()
 
     engine = SummingMergeTree(
@@ -60,7 +60,7 @@ class VisitInDay(Model):
             "created_at",
         ),
         summing_cols=(
-            "count_visits",
+            "count_visit",
             "created_at",
         ),
     )
@@ -68,7 +68,7 @@ class VisitInDay(Model):
 
 class ViewInDay(Model):
     counter_id = UInt16Field()
-    count_views = UInt64Field()
+    count_view = UInt64Field()
     created_at = DateField()
 
     engine = SummingMergeTree(
@@ -78,7 +78,7 @@ class ViewInDay(Model):
             "created_at",
         ),
         summing_cols=(
-            "count_views",
+            "count_view",
             "created_at",
         ),
     )
