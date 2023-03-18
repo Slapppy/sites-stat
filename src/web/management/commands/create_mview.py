@@ -24,7 +24,7 @@ class Command(BaseCommand):
             def visits():
                 db.raw(
                     "CREATE MATERIALIZED VIEW visit_in_day_mv TO visitinday AS SELECT counter_id, "
-                    "count(DISTINCT visit_id) as count_visit, toDate(created_at) as created_at FROM views "
+                    "count(DISTINCT visit_id) as count_visits, toDate(created_at) as created_at FROM views "
                     "GROUP BY counter_id, created_at;"
                 )
                 db.raw(
@@ -35,7 +35,7 @@ class Command(BaseCommand):
             def visitors():
                 db.raw(
                     "CREATE MATERIALIZED VIEW visitor_in_day_mv TO visitorinday AS SELECT counter_id, "
-                    "count(DISTINCT visitor_unique_key) as count_visitor, toDate(created_at) as created_at FROM views "
+                    "count(DISTINCT visitor_unique_key) as count_visitors, toDate(created_at) as created_at FROM views "
                     "GROUP BY counter_id, created_at;"
                 )
                 db.raw(

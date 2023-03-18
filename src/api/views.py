@@ -210,7 +210,7 @@ class StatInDay(APIView):
     """
     Параметры у счетчика за определенный промежуток времени
     пример запроса:
-    http://127.0.0.1:8000/api/view/data?id=15&filter=month
+    http://127.0.0.1:8000/api/view/data?id=15&filter=quarter
 
     Methods
     -------
@@ -293,15 +293,15 @@ class StatInDay(APIView):
 
 
 class StatViewInDay(StatInDay, APIView):
-    field_name = "count_view"
+    field_name = "count_views"
     model = ViewInDay
 
 
 class StatVisitInDay(StatInDay, APIView):
-    field_name = "count_visit"
+    field_name = "count_visits"
     model = VisitInDay
 
 
 class StatVisitorInDay(StatInDay, APIView):
-    field_name = "count_visitor"
+    field_name = "count_visitors"
     model = VisitorInDay

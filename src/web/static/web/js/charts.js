@@ -52,7 +52,7 @@ function updateChartData() {
     dataType: 'json',
     success: function(data) {
       // Extract the data for the chart
-      const chartData = data.data.map(item => [Date.parse(item.date), item.count_view]);
+      const chartData = data.data.map(item => [Date.parse(item.date), item.count_views]);
 
       // Create a Highcharts chart
       Highcharts.chart(chartContainer, {
