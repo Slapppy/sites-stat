@@ -166,19 +166,14 @@ class GetMetaDataView(APIView):
 
     def post(self, request, id):
         db = create_connection()
-
+        visitor_unique_key = (
+            str(uuid.uuid4()) if not request.data.get("visitor_unique_key") else request.data.get("visitor_unique_key")
+        )
+        visit_id = str(uuid.uuid4()) if not request.data.get("visit_id") else request.data.get("visit_id")
+        # visitor_unique_key = request.data.get("visitor_unique_key", str(uuid.uuid4()))
         print(request.data)
-        visitor_unique_key = None
-        if not request.data["visitor_unique_key"]:
-            visitor_unique_key = str(uuid.uuid4())
-        elif Views.objects_in(db).filter(visitor_unique_key=request.data["visitor_unique_key"]):
-            visitor_unique_key = request.data["visitor_unique_key"]
-        else:
-            visitor_unique_key = str(uuid.uuid4())
-        print(f"visit_id: {request.data}")
-        # Что если генерировать как int
-        visit_id = str(uuid.uuid4()) if not request.data["visit_id"] else request.data["visit_id"]
-
+        print(visitor_unique_key)
+        print(visit_id)
         metadata = request.headers["User-Agent"]
         data_split = httpagentparser.detect(metadata, "os")
         referer = request.META.get("HTTP_REFERER")
