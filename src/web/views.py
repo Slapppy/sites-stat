@@ -110,7 +110,6 @@ class CounterCreate(CreateView):
 class CounterDetailView(DetailView):
     template_name = "web/counter.html"
 
-
     def get_queryset(self):
         if not self.request.user.is_authenticated:
             return Counter.objects.none()
