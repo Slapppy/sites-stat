@@ -83,7 +83,7 @@ a {
 
 .forgot a,
 .register a {
-	color: #1846c7;
+	color: #92d82f;
 }
 
 .button-send-wrap {
@@ -96,8 +96,8 @@ a {
 	width: 100%;
 	border-color: rgba(0, 0, 0, 0);
 	border: none;
-	background: #1846c7;
-	color: #fff;
+	background: #a7f736;
+	color: #000;
 	padding: 0.5rem 1rem;
 	font-size: 0.875rem;
 	line-height: 1.4285714286;
