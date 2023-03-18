@@ -237,9 +237,15 @@ class StatInDay(APIView):
         elif date_filter == "month":
             month, year = (end_date.month - 1, end_date.year) if end_date.month != 1 else (12, end_date.year - 1)
             start_date = end_date.replace(day=end_date.day, month=month, year=year)
+        # elif date_filter == "quarter":
+        #     month, year = (end_date.month - 3, end_date.year) if end_date.month != 1 else (12, end_date.year - 1)
+        #     start_date = end_date.replace(day=end_date.day, month=month, year=year)
         elif date_filter == "quarter":
-            month, year = (end_date.month - 3, end_date.year) if end_date.month != 1 else (12, end_date.year - 1)
+            quarter = (end_date.month - 1) // 3  # calculate the quarter number
+            year = end_date.year - quarter // 4 - 1  # adjust year based on quarter number
+            month = (end_date.month - 2) % 12  # calculate the first month of the quarter
             start_date = end_date.replace(day=end_date.day, month=month, year=year)
+
         else:
             start_date = end_date.replace(day=end_date.day, month=end_date.month, year=end_date.year - 1)
         return start_date, end_date
