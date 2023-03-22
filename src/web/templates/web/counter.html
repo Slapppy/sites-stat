@@ -27,7 +27,7 @@
         {{ block.super }}
     {% endblock %}
 
-    <div class="container-fluid">
+    <div class="container">
         <div class="page-content">
             <div class="page-title">
                 <p id="counter_name">
@@ -35,39 +35,32 @@
                 </p>
             </div>
             <div class="page-charts">
-                <div class="date-selector">
-                    <span class="date-radio-button">
-                        <label>
-                            <input type="radio" name="period" value="threedays">
-                            <span>3 дня</span>
+                <div class="date-selector mb-3">
+                    <span class="date-radio-buttons">
+                        <label class="radio-button">
+                            <input class="input-radio-button" type="radio" name="period" value="threedays">
+                            <span class="title-radio-button left-radio-button">3 дня</span>
                         </label>
-                        <label>
-                            <input type="radio" name="period" value="week">
-                            <span>Неделя</span>
+                        <label class="radio-button">
+                            <input class="input-radio-button" type="radio" name="period" value="week">
+                            <span class="title-radio-button">Неделя</span>
                         </label>
-                        <label>
-                            <input type="radio" name="period" value="month" checked>
-                            <span>Месяц</span>
+                        <label class="radio-button">
+                            <input class="input-radio-button" type="radio" name="period" value="month" checked>
+                            <span class="title-radio-button">Месяц</span>
                         </label>
-                        <label>
-                            <input type="radio" name="period" value="quarter">
-                            <span>Квартал</span>
+                        <label class="radio-button">
+                            <input class="input-radio-button" type="radio" name="period" value="quarter">
+                            <span class="title-radio-button">Квартал</span>
                         </label>
-                        <label>
-                            <input type="radio" name="period" value="year">
-                            <span>Год</span>
+                        <label class="radio-button">
+                            <input class="input-radio-button" type="radio" name="period" value="year">
+                            <span class="title-radio-button  right-radio-button">Год</span>
                         </label>
                     </span>
                 </div>
                 <div class="chart-container" id="chart-container"></div>
             </div>
-            <div class="date-selector">
-                    <button id="btn3Days">3 дня</button>
-                    <button id="btnWeek">Неделя</button>
-                    <button id="btnMonth" class="active">Месяц</button>
-                    <button id="btnQuarter">Квартал</button>
-                    <button id="btnYear">Год</button>
-                </div>
         </div>
 
     </div>
