@@ -1,15 +1,17 @@
+from django.utils import timezone
+from django.db import connection
 from django.http import HttpResponse
 import uuid
 from django.utils import timezone
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
+from infi.clickhouse_orm import funcs
 from datetime import date, datetime, timedelta
 import httpagentparser
 from app.clickhouse import create_connection
 from web.clickhouse_models import Views, VisitorInDay, VisitInDay, ViewInDay
-from django.db import connection
-from infi.clickhouse_orm import funcs
 from web.models import Counter
 
 
