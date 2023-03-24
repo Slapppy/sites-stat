@@ -95,7 +95,8 @@ def auth_page(request):
 class CounterCreate(CreateView):
     form_class = AddCounterForm
     template_name = "web/add_counter.html"
-    success_url = "/counters"
+    success_url = "/counters/add"
+    info_sended = True
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
@@ -103,8 +104,13 @@ class CounterCreate(CreateView):
 
     def form_valid(self, form):
         if self.request.user.is_authenticated:
+
             form.instance.user = self.request.user
             return super(CounterCreate, self).form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        ctx = super(CounterCreate, self).get_context_data(**kwargs)
+        return ctx
 
 
 class CounterDetailView(DetailView):
@@ -137,7 +143,7 @@ class CounterEditView(UpdateView):
     def get_context_data(self, *, object_list=None, **kwargs):
         return {
             **super(CounterEditView, self).get_context_data(**kwargs),
-            "id": self.kwargs[self.slug_url_kwarg],
+            "id_counter": self.kwargs[self.slug_url_kwarg],
         }
 
 
