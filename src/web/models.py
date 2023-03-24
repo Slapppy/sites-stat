@@ -61,7 +61,7 @@ class User(BaseModel, AbstractBaseUser, PermissionsMixin):
 class Counter(BaseModel):
     name = models.CharField(max_length=128, unique=True)
     link = models.CharField(max_length=255)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="counters")
 
     def __str__(self):
         return self.name
