@@ -51,7 +51,7 @@ function updateChartData() {
 
                 yAxis: {
                     title: {
-                        text: 'Количество'
+                        text: 'Count'
 
                     },
                 },
