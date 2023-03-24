@@ -21,7 +21,6 @@ class Command(BaseCommand):
                     "toDate(created_at) as created_at FROM views GROUP BY counter_id, created_at;"
                 )
 
-
             def visits():
                 db.raw(
                     "CREATE MATERIALIZED VIEW visit_in_day_mv TO visitinday AS SELECT counter_id, "

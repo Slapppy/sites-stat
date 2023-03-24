@@ -13,7 +13,6 @@ from infi.clickhouse_orm import (
 )
 
 
-
 class Views(Model):
     counter_id = UInt16Field()
     view_id = UUIDField()
