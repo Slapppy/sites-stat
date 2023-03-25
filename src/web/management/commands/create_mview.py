@@ -43,6 +43,7 @@ class Command(BaseCommand):
                     "toDate(created_at) as created_at FROM views GROUP BY counter_id, created_at;"
                 )
 
+
             views()
             visits()
             visitors()
