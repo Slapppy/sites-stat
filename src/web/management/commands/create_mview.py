@@ -13,34 +13,34 @@ class Command(BaseCommand):
             def views():
                 db.raw(
                     "CREATE MATERIALIZED VIEW view_in_day_mv TO viewinday AS SELECT counter_id, "
-                    "count(view_id) as count_views, toDate(created_at) as created_at FROM pages "
+                    "count(view_id) as count_views, toDate(created_at) as created_at FROM views "
                     "GROUP BY counter_id, created_at;"
                 )
                 db.raw(
                     "INSERT INTO viewinday SELECT counter_id, count(view_id) as count_views, "
-                    "toDate(created_at) as created_at FROM pages GROUP BY counter_id, created_at;"
+                    "toDate(created_at) as created_at FROM views GROUP BY counter_id, created_at;"
                 )
 
             def visits():
                 db.raw(
                     "CREATE MATERIALIZED VIEW visit_in_day_mv TO visitinday AS SELECT counter_id, "
-                    "count(DISTINCT visit_id) as count_visits, toDate(created_at) as created_at FROM pages "
+                    "count(DISTINCT visit_id) as count_visits, toDate(created_at) as created_at FROM views "
                     "GROUP BY counter_id, created_at;"
                 )
                 db.raw(
                     "INSERT INTO visitinday SELECT counter_id, count(DISTINCT visit_id) as count_visit, "
-                    "toDate(created_at) as created_at FROM pages GROUP BY counter_id, created_at;"
+                    "toDate(created_at) as created_at FROM views GROUP BY counter_id, created_at;"
                 )
 
             def visitors():
                 db.raw(
                     "CREATE MATERIALIZED VIEW visitor_in_day_mv TO visitorinday AS SELECT counter_id, "
-                    "count(DISTINCT visitor_unique_key) as count_visitors, toDate(created_at) as created_at FROM pages "
+                    "count(DISTINCT visitor_unique_key) as count_visitors, toDate(created_at) as created_at FROM views "
                     "GROUP BY counter_id, created_at;"
                 )
                 db.raw(
                     "INSERT INTO visitorinday SELECT counter_id, count(DISTINCT visitor_unique_key) as count_visitor, "
-                    "toDate(created_at) as created_at FROM pages GROUP BY counter_id, created_at;"
+                    "toDate(created_at) as created_at FROM views GROUP BY counter_id, created_at;"
                 )
 
             views()

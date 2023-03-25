@@ -4,9 +4,8 @@ const idCounter = data.idCounter
 
 function innerTextScript(idCounter) {
   matrika.innerText = `
-      <noscript><img></noscript>
-<script src="http://127.0.0.1:8000/api/getmetadata/${idCounter}"/"></script>
-<script>init(100)</script>`;
+  <noscript><img src="http://127.0.0.1:8000/api/getmetadata/${idCounter}"/></noscript>
+    <script src="http://127.0.0.1:8000/api/getmetadata/${idCounter}"></script>`;
 };
 
 
