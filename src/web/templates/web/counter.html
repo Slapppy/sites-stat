@@ -12,7 +12,7 @@
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <link href="{% static 'web/frontend/src/assets/style_counter.css' %}" rel="stylesheet">
     <link href="{% static 'web/frontend/src/assets/chart.css' %}" rel="stylesheet">
-    <script type= "module" src="{% static 'web/frontend/dist/assets/index.js' %}"></script>
+    <script type="module" src="{% static 'web/frontend/dist/assets/index.js' %}"></script>
     <link href="{% static 'web/frontend/dist/assets/index.css' %}" rel="stylesheet">
 
 {% endblock %}
@@ -24,23 +24,20 @@
 
 {% block content %}
 
-{% block breadcrumbs %}
-    {{ block.super }}
-{% endblock %}
+    {% block breadcrumbs %}
+        {{ block.super }}
+    {% endblock %}
 
-<div class="container-fluid">
-    <p id="counter_name">
-        Название счетчика: {{ object.name }}
-    </p>
-</div>
-
-<div id = "app"></div>
-
-
-<div class="footer fixed-bottom">
-    <a href="#">О нас</a>
-    <a href="#">Связаться с поддержкой</a>
-    <a href="#">Лицензия</a>
-</div>
+    <div class="container-fluid">
+        <p id="counter_name">
+            Название счетчика: {{ object.name }}
+        </p>
+        <div id="app"></div>
+    </div>
+    <div class="footer fixed-bottom">
+        <a href="#">О нас</a>
+        <a href="#">Связаться с поддержкой</a>
+        <a href="#">Лицензия</a>
+    </div>
 
 {% endblock %}
