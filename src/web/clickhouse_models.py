@@ -3,6 +3,8 @@ from infi.clickhouse_orm import (
     Model,
     DateTimeField,
     DateField,
+    Int8Field,
+    UInt8Field,
     UInt16Field,
     UInt64Field,
     UUIDField,
@@ -10,6 +12,7 @@ from infi.clickhouse_orm import (
     FixedStringField,
     MergeTree,
     SummingMergeTree,
+    CollapsingMergeTree,
 )
 
 
@@ -69,16 +72,15 @@ class VisitInDay(Model):
 class ViewInDay(Model):
     counter_id = UInt16Field()
     count_views = UInt64Field()
-    created_at = DateField()
+    date = DateField()
+    created_time = DateTimeField()
+    sign = Int8Field()
 
-    engine = SummingMergeTree(
-        "created_at",
+    engine = CollapsingMergeTree(
+        "date",
         (
             "counter_id",
-            "created_at",
+            "date",
         ),
-        summing_cols=(
-            "count_views",
-            "created_at",
-        ),
+        "sign",
     )
