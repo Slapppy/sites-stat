@@ -1,36 +1,7 @@
 <template>
   <div class="page-charts">
-    <div class="filter-wrapper">
-      <div class="date-selector mb-3">
-        <span class="date-radio-buttons">
-            <label class="radio-button">
-                <input class="input-radio-button" type="radio" name="period" value="threedays"
-                       @click="handleFilterClick('threedays')">
-                <span class="title-radio-button left-radio-button">3 дня</span>
-            </label>
-            <label class="radio-button">
-                <input class="input-radio-button" type="radio" name="period" value="week"
-                       @click="handleFilterClick('week')">
-                <span class="title-radio-button">Неделя</span>
-            </label>
-            <label class="radio-button">
-                <input class="input-radio-button" type="radio" name="period" value="month"
-                       @click="handleFilterClick('month')" checked>
-                <span class="title-radio-button">Месяц</span>
-            </label>
-            <label class="radio-button">
-                <input class="input-radio-button" type="radio" name="period" value="quarter"
-                       @click="handleFilterClick('quarter')">
-                <span class="title-radio-button">Квартал</span>
-            </label>
-            <label class="radio-button">
-                <input class="input-radio-button" type="radio" name="period" value="year"
-                       @click="handleFilterClick('year')">
-                <span class="title-radio-button  right-radio-button">Год</span>
-            </label>
-        </span>
-      </div>
-    </div>
+    <!-- Include FilterPanel component and listen for filter-changed event -->
+    <FilterPanel v-model="selectedFilter" @filter-changed="handleFilterChanged" />
     <div class="charts">
       <div class="view-chart" id="view-chart"></div>
       <div class="visit-chart" id="visit-chart"></div>
@@ -39,18 +10,21 @@
   </div>
 </template>
 
+
 <script>
 import Highcharts from 'highcharts'
 import $ from 'jquery'
+import FilterPanel from "../containers/FilterPanel.vue";
 
 export default {
   name: 'CounterPage',
+  components:{FilterPanel},
   data() {
     return {
-      apiResponse1: null,
-      apiResponse2: null,
-      apiResponse3: null,
-      filter: 'month', // добавляем параметр фильтрации по умолчанию
+      apiResponseViews: null,
+      apiResponseVisits: null,
+      apiResponseVisitors: null,
+      selectedFilter: 'week',
     }
   },
   mounted() {
@@ -66,7 +40,7 @@ export default {
       const ip = '127.0.0.1';
 
       $.ajax({
-        url: `http://${ip}:8000/api/view/data?id=${id}&filter=${this.filter}`,
+        url: `http://${ip}:8000/api/view/data?id=${id}&filter=${this.selectedFilter}`,
         method: 'GET',
         dataType: 'json',
         success: (response) => {
@@ -77,9 +51,8 @@ export default {
           console.log(error)
         }
       })
-
       $.ajax({
-        url: `http://${ip}:8000/api/visit/data?id=${id}&filter=${this.filter}`,
+        url: `http://${ip}:8000/api/visit/data?id=${id}&filter=${this.selectedFilter}`,
         method: 'GET',
         dataType: 'json',
         success: (response) => {
@@ -91,7 +64,7 @@ export default {
         }
       })
       $.ajax({
-        url: `http://${ip}:8000/api/visitor/data?id=${id}&filter=${this.filter}`,
+        url: `http://${ip}:8000/api/visitor/data?id=${id}&filter=${this.selectedFilter}`,
         method: 'GET',
         dataType: 'json',
         success: (response) => {
@@ -264,11 +237,10 @@ export default {
     },
 
 
-    handleFilterClick(filter) {
-      this.filter = filter;
-      this.loadData();
-    },
-
+   handleFilterChanged(filter) {
+    this.selectedFilter = filter;
+    this.loadData();
+    }
   },
 }
 </script>
