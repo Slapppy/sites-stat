@@ -186,6 +186,7 @@ class GetMetaDataView(APIView):
         device_type = data_split["os"]["name"]
         ip_address = request.META["REMOTE_ADDR"]
         language = request.META.get("HTTP_ACCEPT_LANGUAGE", "").split(",")[0][:2]
+        print(timezone.now())
 
         notes = [
             Views(
@@ -235,30 +236,19 @@ class StatInDay(APIView):
     @staticmethod
     def get_date(date_filter):
         end_date = date.today()
-        if date_filter == "threedays":
-            start_date = end_date - timedelta(days=2)
-        elif date_filter == "week":
-            start_date = end_date - timedelta(days=6)
-        elif date_filter == "month":
-            month, year = (end_date.month - 1, end_date.year) if end_date.month != 1 else (12, end_date.year - 1)
-            start_date = end_date.replace(day=end_date.day, month=month, year=year)
-        # elif date_filter == "quarter":
-        #     month, year = (end_date.month - 3, end_date.year) if end_date.month != 1 else (12, end_date.year - 1)
-        #     start_date = end_date.replace(day=end_date.day, month=month, year=year)
-        elif date_filter == "quarter":
-            quarter = (end_date.month - 1) // 3  # calculate the quarter number
-            year = end_date.year - quarter // 4 - 1  # adjust year based on quarter number
-            month = (end_date.month - 2) % 12  # calculate the first month of the quarter
-            start_date = end_date.replace(day=end_date.day, month=month, year=year)
-
-        else:
-            start_date = end_date.replace(day=end_date.day, month=end_date.month, year=end_date.year - 1)
+        days = {"threedays": 2, "week": 6, "month": 30, "quarter": 90, "year": 365}
+        start_date = end_date - timedelta(days=days[date_filter])
         return start_date, end_date
 
     def get_data(self, counter_id, start_date, end_date):
         db = create_connection()
-        views = self.model.objects_in(db).filter(created_at__between=(start_date, end_date), counter_id=counter_id)
-        return list(views)
+        queryset = (
+            self.model.objects_in(db)
+            .filter(date__between=(start_date, end_date), counter_id=counter_id, sign=1)
+            .order_by("-created_time")
+        )
+
+        return list(queryset)
 
     def get(self, request):
         counter_id = request.GET.get("id", None)
@@ -281,11 +271,11 @@ class StatInDay(APIView):
 
                 temp_date = start_date
                 while temp_date <= end_date:
-                    data = list(filter(lambda x: x.created_at == temp_date, dataset))
+                    data = list(filter(lambda x: x.date == temp_date, dataset))
                     response["data"].append(
                         {
                             "date": temp_date,
-                            self.field_name: sum((getattr(d, self.field_name) for d in data)) if len(data) > 0 else 0,
+                            self.field_name: getattr(data[0], self.field_name) if len(data) > 0 else 0,
                         }
                     )
                     temp_date += timedelta(days=1)
