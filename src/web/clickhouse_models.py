@@ -36,17 +36,30 @@ class Views(Model):
 class VisitorInDay(Model):
     counter_id = UInt16Field()
     count_visitors = UInt64Field()
-    created_at = DateField()
+    date = DateField()
+    created_time = DateTimeField()
+    sign = Int8Field()
 
-    engine = SummingMergeTree(
-        "created_at",
+    engine = CollapsingMergeTree(
+        "date",
         (
             "counter_id",
-            "created_at",
+            "date",
         ),
-        summing_cols=(
-            "count_visitors",
-            "created_at",
+        "sign",
+    )
+
+
+class UniqueVisitors(Model):
+    counter_id = UInt16Field()
+    visitor_unique_key = UUIDField()
+    date = DateField()
+
+    engine = MergeTree(
+        "date",
+        (
+            "counter_id",
+            "date",
         ),
     )
 
@@ -54,17 +67,30 @@ class VisitorInDay(Model):
 class VisitInDay(Model):
     counter_id = UInt16Field()
     count_visits = UInt64Field()
-    created_at = DateField()
+    date = DateField()
+    created_time = DateTimeField()
+    sign = Int8Field()
 
-    engine = SummingMergeTree(
-        "created_at",
+    engine = CollapsingMergeTree(
+        "date",
         (
             "counter_id",
-            "created_at",
+            "date",
         ),
-        summing_cols=(
-            "count_visits",
-            "created_at",
+        "sign",
+    )
+
+
+class UniqueVisits(Model):
+    counter_id = UInt16Field()
+    visit_id = UUIDField()
+    date = DateField()
+
+    engine = MergeTree(
+        "date",
+        (
+            "counter_id",
+            "date",
         ),
     )
 
