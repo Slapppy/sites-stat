@@ -24,7 +24,7 @@ export default {
       apiResponseViews: null,
       apiResponseVisits: null,
       apiResponseVisitors: null,
-      selectedFilter: 'week',
+      selectedFilter: 'month',
     }
   },
   mounted() {

@@ -5,27 +5,27 @@
         <span class="date-radio-buttons">
             <label class="radio-button">
                 <input class="input-radio-button" type="radio" name="period" value="threedays"
-                       v-model="selectedFilter" @click="onFilterChange">
+                       v-model="selectedFilter" @change="onFilterChange">
                 <span class="title-radio-button left-radio-button">3 дня</span>
             </label>
             <label class="radio-button">
                 <input class="input-radio-button" type="radio" name="period" value="week"
-                        v-model="selectedFilter" @click="onFilterChange">
+                        v-model="selectedFilter" @change="onFilterChange">
                 <span class="title-radio-button">Неделя</span>
             </label>
             <label class="radio-button">
                 <input class="input-radio-button" type="radio" name="period" value="month"
-                       v-model="selectedFilter" @click="onFilterChange">
+                       v-model="selectedFilter" @change="onFilterChange">
                 <span class="title-radio-button">Месяц</span>
             </label>
             <label class="radio-button">
                 <input class="input-radio-button" type="radio" name="period" value="quarter"
-                       v-model="selectedFilter" @click="onFilterChange">
+                       v-model="selectedFilter" @change="onFilterChange">
                 <span class="title-radio-button">Квартал</span>
             </label>
             <label class="radio-button">
                 <input class="input-radio-button" type="radio" name="period" value="year"
-                       v-model="selectedFilter" @click="onFilterChange">
+                       v-model="selectedFilter" @change="onFilterChange">
                 <span class="title-radio-button  right-radio-button">Год</span>
             </label>
         </span>
@@ -54,6 +54,16 @@ export default {
       selectedFilter: this.filter
     }
   },
+  computed: {
+  syncedFilter: {
+    get() {
+      return this.selectedFilter;
+    },
+    set(value) {
+      this.selectedFilter = value;
+    },
+  },
+},
   watch: {
     filter(newVal) {
       this.selectedFilter = newVal;
