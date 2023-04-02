@@ -1,5 +1,5 @@
 <script setup>
-import CounterPage from "@/containers/CounterPage.vue";
+import CounterPage from "../../containers/CounterPage.vue";
 </script>
 
 <template>

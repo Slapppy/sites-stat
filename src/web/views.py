@@ -104,7 +104,6 @@ class CounterCreate(CreateView):
 
     def form_valid(self, form):
         if self.request.user.is_authenticated:
-
             form.instance.user = self.request.user
             return super(CounterCreate, self).form_valid(form)
 

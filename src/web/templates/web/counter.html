@@ -10,10 +10,10 @@
             integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
             crossorigin="anonymous"></script>
     <script src="https://code.highcharts.com/highcharts.js"></script>
-    <link href="{% static 'web/frontend/src/assets/style_counter.css' %}" rel="stylesheet">
-    <link href="{% static 'web/frontend/src/assets/chart.css' %}" rel="stylesheet">
-    <script type="module" src="{% static 'web/frontend/dist/assets/index.js' %}"></script>
-    <link href="{% static 'web/frontend/dist/assets/index.css' %}" rel="stylesheet">
+    <link href="{% static 'src/assets/style_counter.css' %}" rel="stylesheet">
+    <link href="{% static 'src/assets/chart.css' %}" rel="stylesheet">
+    <script type="module" src="{% static '/dist/assets/CounterPage.js' %}"></script>
+    <link href="{% static '/dist/assets/index.css' %}" rel="stylesheet">
 
 {% endblock %}
 
@@ -32,7 +32,9 @@
         <p id="counter_name">
             Название счетчика: {{ object.name }}
         </p>
-        <div id="app"></div>
+
+    <div id="counterpage"></div>
+
     </div>
     <div class="footer fixed-bottom">
         <a href="#">О нас</a>

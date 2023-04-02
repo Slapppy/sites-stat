@@ -1,4 +1,7 @@
 from django.urls import path, include, reverse_lazy
+from django.conf import settings
+from django.conf.urls.static import static
+
 from django.contrib.auth.views import LogoutView
 from . import views
 from .views import (
@@ -19,4 +22,4 @@ urlpatterns = [
     path("counters/<int:pk>", CounterDetailView.as_view(), name="counter"),
     path("counters/edit/<int:id>", CounterEditView.as_view(), name="edit"),
     path("counters/delete/<int:pk>", CounterDeleteView.as_view(), name="delete"),
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

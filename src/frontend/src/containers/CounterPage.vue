@@ -8,6 +8,7 @@
       <div class="visitor-chart" id="visitor-chart"></div>
     </div>
   </div>
+
 </template>
 
 
@@ -236,8 +237,7 @@ export default {
       });
     },
 
-
-   handleFilterChanged(filter) {
+    handleFilterChanged(filter) {
     this.selectedFilter = filter;
     this.loadData();
     }

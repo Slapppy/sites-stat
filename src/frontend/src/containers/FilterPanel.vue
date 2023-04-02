@@ -54,16 +54,6 @@ export default {
       selectedFilter: this.filter
     }
   },
-  computed: {
-  syncedFilter: {
-    get() {
-      return this.selectedFilter;
-    },
-    set(value) {
-      this.selectedFilter = value;
-    },
-  },
-},
   watch: {
     filter(newVal) {
       this.selectedFilter = newVal;
