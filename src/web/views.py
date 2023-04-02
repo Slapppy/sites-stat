@@ -1,4 +1,6 @@
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
@@ -13,12 +15,11 @@ from django.views.generic import (
     TemplateView,
 )
 
-
 from .models import Counter
 from .forms import CreateUserForm, AddCounterForm
 
 
-class CountersListView(ListView):
+class CountersListView(ListView, LoginRequiredMixin):
     template_name = "web/profile.html"
     model = Counter
 

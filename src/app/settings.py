@@ -47,6 +47,9 @@ INSTALLED_APPS = [
     "rest_framework",
 ]
 
+LOGIN_REDIRECT_URL = 'counters'
+LOGIN_URL = 'login'
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -56,6 +59,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+
 ]
 
 CORS_ORIGIN_ALLOW_ALL = False
