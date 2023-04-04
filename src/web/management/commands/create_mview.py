@@ -1,6 +1,5 @@
 from django.core.management.base import BaseCommand
 from infi.clickhouse_orm import ServerError
-import random
 
 
 from app.clickhouse import create_connection
@@ -13,26 +12,13 @@ class Command(BaseCommand):
 
             def views():
                 db.raw(
-                    "CREATE MATERIALIZED VIEW view_in_day_mv TO viewinday AS "
-                    "select end_data.counter_id, end_data.count_views, end_data.date, "
-                    "toDateTime(now()) as created_time, end_data.sign "
-                    "from (SELECT  s.counter_id, (s.new_views + s.old_views) as count_views, s.date, "
-                    "coalesce(s.sign, 1) as sign FROM "
-                    "(select v.counter_id, v.new_views, v.date, view_t.old_views, view_t.sign from "
-                    "(select counter_id, count(view_id) as new_views, toDate(views.created_at) as date "
-                    "from views GROUP BY counter_id, date) v "
-                    "LEFT JOIN (select t.counter_id, t.old_views, t.date, sgn.sign as sign from "
-                    "(select counter_id, count_views as old_views, date, "
-                    "row_number() over(partition by counter_id, date order by created_time desc, sign desc) "
-                    "as rn from viewinday where date=today()) t cross join "
-                    "(select case when number = 0 then -1 when number = 1 then 1 end as sign from numbers(2)) sgn"
-                    " where rn = 1) view_t "
-                    "on view_t.counter_id = v.counter_id and view_t.date = v.date) s) end_data"
+                    "CREATE MATERIALIZED VIEW view_in_day_mv TO viewinday AS SELECT counter_id, "
+                    "count(view_id) as count_views, toDate(created_at) as created_at FROM views "
+                    "GROUP BY counter_id, created_at;"
                 )
                 db.raw(
                     "INSERT INTO viewinday SELECT counter_id, count(view_id) as count_views, "
-                    "toDate(created_at) as date, now() as created_time, 1 as sign FROM views "
-                    "GROUP BY counter_id, date;"
+                    "toDate(created_at) as created_at FROM views GROUP BY counter_id, created_at;"
                 )
 
             def visits():
@@ -49,26 +35,13 @@ class Command(BaseCommand):
                     "toDate(created_at) as date FROM views;"
                 )
                 db.raw(
-                    "CREATE MATERIALIZED VIEW visit_in_day_mv TO visitinday AS "
-                    "select end_data.counter_id, end_data.count_visits, end_data.date, "
-                    "toDateTime(now()) as created_time, end_data.sign "
-                    "from (SELECT  s.counter_id, (s.new_visits + s.old_visits) as count_visits, s.date, "
-                    "coalesce(s.sign, 1) as sign FROM "
-                    "(select v.counter_id, v.new_visits, v.date, view_t.old_visits, view_t.sign from "
-                    "(select counter_id, count(visit_id) as new_visits, date "
-                    "from uniquevisits GROUP BY counter_id, date) v "
-                    "LEFT JOIN (select t.counter_id, t.old_visits, t.date, sgn.sign as sign from "
-                    "(select counter_id, count_visits as old_visits, date, "
-                    "row_number() over(partition by counter_id, date order by created_time desc, sign desc) "
-                    "as rn from visitinday where date = today()) t cross join "
-                    "(select case when number = 0 then -1 when number = 1 then 1 end as sign from numbers(2)) sgn"
-                    " where rn = 1) "
-                    "view_t on view_t.counter_id = v.counter_id and view_t.date = v.date) s) end_data"
+                    "CREATE MATERIALIZED VIEW visit_in_day_mv TO visitinday AS SELECT counter_id, "
+                    "count(visit_id) as count_visits, date as created_at FROM uniquevisits "
+                    "GROUP BY counter_id, created_at;"
                 )
                 db.raw(
                     "INSERT INTO visitinday SELECT counter_id, count(visit_id) as count_visits, "
-                    "date, now() as created_time, 1 as sign FROM uniquevisits "
-                    "GROUP BY counter_id, date;"
+                    "date as created_at FROM uniquevisits GROUP BY counter_id, created_at;"
                 )
 
             def visitors():
@@ -85,26 +58,13 @@ class Command(BaseCommand):
                     "toDate(created_at) as date FROM views;"
                 )
                 db.raw(
-                    "CREATE MATERIALIZED VIEW visitor_in_day_mv TO visitorinday AS "
-                    "select end_data.counter_id, end_data.count_visitors, end_data.date, "
-                    "toDateTime(now()) as created_time, end_data.sign "
-                    "from (SELECT  s.counter_id, (s.new_visitors + s.old_visitors) as count_visitors, s.date, "
-                    "coalesce(s.sign, 1) as sign FROM "
-                    "(select v.counter_id, v.new_visitors, v.date, view_t.old_visitors, view_t.sign from "
-                    "(select counter_id, count(visitor_unique_key) as new_visitors, date "
-                    "from uniquevisitors GROUP BY counter_id, date) v "
-                    "LEFT JOIN (select t.counter_id, t.old_visitors, t.date, sgn.sign as sign from "
-                    "(select counter_id, count_visitors as old_visitors, date, "
-                    "row_number() over(partition by counter_id, date order by created_time desc, sign desc) "
-                    "as rn from visitorinday where date = today()) t cross join "
-                    "(select case when number = 0 then -1 when number = 1 then 1 end as sign from numbers(2)) sgn"
-                    " where rn = 1) "
-                    "view_t on view_t.counter_id = v.counter_id and view_t.date = v.date) s) end_data"
+                    "CREATE MATERIALIZED VIEW visitor_in_day_mv TO visitorinday AS SELECT counter_id, "
+                    "count(visitor_unique_key) as count_visitors, date as created_at FROM uniquevisitors "
+                    "GROUP BY counter_id, created_at;"
                 )
                 db.raw(
                     "INSERT INTO visitorinday SELECT counter_id, count(visitor_unique_key) as count_visitors, "
-                    "date, now() as created_time, 1 as sign FROM uniquevisitors "
-                    "GROUP BY counter_id, date;"
+                    "date as created_at FROM uniquevisitors GROUP BY counter_id, created_at;"
                 )
 
             views()
