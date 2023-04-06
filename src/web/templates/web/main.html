@@ -17,53 +17,55 @@
 <noscript><img src="http://127.0.0.1:8000/api/getmetadata/9"/></noscript>
 <script> <img src="http://127.0.0.1:8000/api/getmetadata/9"/></script>
 
-<script>
-    function getCookieValue(key) {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            const [name, value] = cookie.split('=');
-            if (name === key) {
-                return value;
-            }
-        }
-        return null;
-    }
+{#<script>#}
+{#    function getCookieValue(key) {#}
+{#        const cookies = document.cookie.split(';');#}
+{#        for (let i = 0; i < cookies.length; i++) {#}
+{#            const cookie = cookies[i].trim();#}
+{#            const [name, value] = cookie.split('=');#}
+{#            if (name === key) {#}
+{#                return value;#}
+{#            }#}
+{#        }#}
+{#        return null;#}
+{#    }#}
+{##}
+{#    function setCookie(name, value, seconds) {#}
+{#        var max_age = "";#}
+{#        if (seconds) {#}
+{#            max_age = "; max-age=" + seconds;#}
+{#            console.log(max_age)#}
+{#        }#}
+{#        console.log(name + "=" + (value || "") + max_age + ";")#}
+{#        document.cookie = name + "=" + (value || "") + max_age + ";";#}
+{#    }#}
+{##}
+{#    const csrftoken = getCookieValue('csrftoken');#}
+{##}
+{#    const xhr = new XMLHttpRequest();#}
+{#    xhr.open('POST', 'http://127.0.0.1:8000/api/getmetadata/12', true);#}
+{#    xhr.setRequestHeader('X-CSRFToken', csrftoken); // set CSRF token#}
+{#    xhr.setRequestHeader('Content-Type', 'application/json');#}
+{#    xhr.onreadystatechange = function () {#}
+{#        if (this.readyState === 4 && this.status === 200) {#}
+{#            const response = JSON.parse(this.responseText);#}
+{#            const unique_key = response.unique_key;#}
+{#            const visit_id = response.visit_id;#}
+{#            setCookie('unique_key', unique_key)#}
+{#            setCookie('visit_id', visit_id, 1800)#}
+{#            // document.cookie = 'unique_key=' + unique_key#}
+{#            // document.cookie = 'visit_id=' + visit_id + '; max-age=1800' // Устанавливаем время жизни на 30мин#}
+{#        }#}
+{#    };#}
+{##}
+{##}
+{#    xhr.send(JSON.stringify({visitor_unique_key: getCookieValue("unique_key"), visit_id: getCookieValue("visit_id")}));#}
+{##}
+{##}
+{#</script>#}
+<script type="module" src="{% static '/src/assets/collectdata.js' %}"></script>
 
-    function setCookie(name, value, seconds) {
-        var max_age = "";
-        if (seconds) {
-            max_age = "; max-age=" + seconds;
-            console.log(max_age)
-        }
-        console.log(name + "=" + (value || "") + max_age + ";")
-        document.cookie = name + "=" + (value || "") + max_age + ";";
-    }
 
-    const csrftoken = getCookieValue('csrftoken');
-
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', 'http://127.0.0.1:8000/api/getmetadata/12', true);
-    xhr.setRequestHeader('X-CSRFToken', csrftoken); // set CSRF token
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.onreadystatechange = function () {
-        if (this.readyState === 4 && this.status === 200) {
-            const response = JSON.parse(this.responseText);
-            const unique_key = response.unique_key;
-            const visit_id = response.visit_id;
-            setCookie('unique_key', unique_key)
-            setCookie('visit_id', visit_id, 1800)
-            // document.cookie = 'unique_key=' + unique_key
-            // document.cookie = 'visit_id=' + visit_id + '; max-age=1800' // Устанавливаем время жизни на 30мин
-        }
-    };
-
-
-    xhr.send(JSON.stringify({visitor_unique_key: getCookieValue("unique_key"), visit_id: getCookieValue("visit_id")}));
-
-
-</script>
-<!--    </div>-->
 
 
 <div class="header">
