@@ -170,22 +170,21 @@ class GetMetaDataView(APIView):
 
     def post(self, request, id):
         db = create_connection()
+
         visitor_unique_key = (
             str(uuid.uuid4()) if not request.data.get("visitor_unique_key") else request.data.get("visitor_unique_key")
         )
         visit_id = str(uuid.uuid4()) if not request.data.get("visit_id") else request.data.get("visit_id")
         # visitor_unique_key = request.data.get("visitor_unique_key", str(uuid.uuid4()))
-        print(request.data)
-        print(visitor_unique_key)
-        print(visit_id)
-        metadata = request.headers["User-Agent"]
-        data_split = httpagentparser.detect(metadata, "os")
-        referer = request.META.get("HTTP_REFERER")
-        browser = data_split["browser"]["name"]
-        os_type = data_split["platform"]["name"]
-        device_type = data_split["os"]["name"]
-        ip_address = request.META["REMOTE_ADDR"]
-        language = request.META.get("HTTP_ACCEPT_LANGUAGE", "").split(",")[0][:2]
+        print(request.data.get('referer'))
+        metadata = request.data.get('user_agent')
+        #data_split = httpagentparser.detect(metadata, "os")
+        referer = request.data.get('referer')
+        browser = request.data.get('browser_type')
+        os_type = request.data.get('os_type')
+        device_type = request.data.get('device_type')
+        ip_address = request.data.get('ip')
+        language = request.data.get('language')
         print(timezone.now())
 
         notes = [
