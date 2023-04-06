@@ -17,6 +17,8 @@ export default defineConfig({
     rollupOptions: {
       input: {
           CounterPage: resolve(__dirname, join("src", "views", "CounterPage", "index.html")),
+        CounterAdd: resolve(__dirname, join("src", "views", "CounterAdd", "index.html")),
+
       },
       output: {
         entryFileNames: `assets/[name].js`,
