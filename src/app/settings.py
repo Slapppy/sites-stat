@@ -47,8 +47,8 @@ INSTALLED_APPS = [
     "rest_framework",
 ]
 
-LOGIN_REDIRECT_URL = 'counters'
-LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = "counters"
+LOGIN_URL = "login"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -59,7 +59,6 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-
 ]
 
 CORS_ORIGIN_ALLOW_ALL = False
@@ -146,11 +145,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'frontend'),
+    os.path.join(BASE_DIR, "frontend"),
 ]
-STATIC_URL = '/src/'
+STATIC_URL = "/src/"
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 
 # Default primary key field type

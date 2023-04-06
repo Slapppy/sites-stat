@@ -242,11 +242,7 @@ class StatInDay(APIView):
 
     def get_data(self, counter_id, start_date, end_date):
         db = create_connection()
-        queryset = (
-            self.model.objects_in(db)
-            .filter(date__between=(start_date, end_date), counter_id=counter_id, sign=1)
-            .order_by("-created_time")
-        )
+        queryset = self.model.objects_in(db).filter(created_at__between=(start_date, end_date), counter_id=counter_id)
 
         return list(queryset)
 
@@ -271,11 +267,11 @@ class StatInDay(APIView):
 
                 temp_date = start_date
                 while temp_date <= end_date:
-                    data = list(filter(lambda x: x.date == temp_date, dataset))
+                    data = list(filter(lambda x: x.created_at == temp_date, dataset))
                     response["data"].append(
                         {
                             "date": temp_date,
-                            self.field_name: getattr(data[0], self.field_name) if len(data) > 0 else 0,
+                            self.field_name: sum((getattr(d, self.field_name) for d in data)) if len(data) > 0 else 0,
                         }
                     )
                     temp_date += timedelta(days=1)
