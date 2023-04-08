@@ -11,11 +11,9 @@ app = Celery("app")
 app.config_from_object("django.conf:settings", namespace="CELERY")
 
 
-app.conf.beat_schedule={
-
-    'groupdb':{
-        'task':'web.tasks.groupdb',
-        'schedule': 30.0, # crontab(minute=0, hour=0)
+app.conf.beat_schedule = {
+    "groupdb": {
+        "task": "web.tasks.groupdb",
+        "schedule": 60.0,  # crontab(minute=0, hour=0)
     }
 }
-

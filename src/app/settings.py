@@ -167,4 +167,5 @@ CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL", "redis://localhost:6379/
 CELERY_BEAT_SHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 
 CELERY_IMPORTS = [
-'web.tasks',]
+    "web.tasks",
+]

@@ -107,10 +107,7 @@ class CounterCreate(CreateView):
         if self.request.user.is_authenticated:
             form.instance.user = self.request.user
             self.object = form.save()
-            response_data = {
-                'success': True,
-                'counter': self.object.id
-            }
+            response_data = {"success": True, "counter": self.object.id}
             return JsonResponse(response_data)
 
     def get_context_data(self, **kwargs):
