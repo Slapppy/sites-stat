@@ -24,6 +24,11 @@ services:
     volumes:
       - clickhouse_data:/var/lib/clickhouse
       - clickhouse_logs:/var/lib/clickhouse-server
+  redis:
+    image: redis:7-alpine
+    ports:
+      - 6379:6379
+
 
 
 
