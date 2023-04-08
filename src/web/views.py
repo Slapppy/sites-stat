@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-
+from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
@@ -106,7 +106,12 @@ class CounterCreate(CreateView):
     def form_valid(self, form):
         if self.request.user.is_authenticated:
             form.instance.user = self.request.user
-            return super(CounterCreate, self).form_valid(form)
+            self.object = form.save()
+            response_data = {
+                'success': True,
+                'counter': self.object.id
+            }
+            return JsonResponse(response_data)
 
     def get_context_data(self, **kwargs):
         ctx = super(CounterCreate, self).get_context_data(**kwargs)

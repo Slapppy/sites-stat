@@ -178,7 +178,7 @@ class GetMetaDataView(APIView):
         # visitor_unique_key = request.data.get("visitor_unique_key", str(uuid.uuid4()))
         print(request.data.get('referer'))
         metadata = request.data.get('user_agent')
-        #data_split = httpagentparser.detect(metadata, "os")
+        # data_split = httpagentparser.detect(metadata, "os")
         referer = request.data.get('referer')
         browser = request.data.get('browser_type')
         os_type = request.data.get('os_type')
