@@ -29,49 +29,55 @@ axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 axios.defaults.headers.common['X-CSRFToken'] = csrfToken;
 
 
-
 export default {
-  data() {
-    return {
+    data() {
+        return {
+            counter_id: 0,
+            showF: false,
+            name: '',
+            link: ''
+        }
+    },
+    methods: {
+        copyToClipboard() {
+            const el = document.createElement('textarea');
+            el.value = document.querySelector('#counter_script code').textContent;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            alert('Script copied to clipboard!');
+        },
+        submitForm() {
+            const form = new FormData();
 
-      name: '',
-      link: ''
+            form.append('name', this.name);
+            form.append('link', this.link);
+
+            axios.post('http://127.0.0.1:8000/counters/add', {
+                    name: this.name,
+                    link: this.link
+
+                },
+
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        'X-CSRFToken': csrfToken
+                    }
+                }
+            )
+                .then(response => {
+                    this.counter_id = response.data.counter,
+                        this.showF = true
+                    console.log(this.showF)
+
+                })
+                .catch(error => {
+                    console.log(error.response.data);
+                });
+        }
     }
-  },
-  methods: {
-    submitForm() {
-        const form = new FormData();
-
-         form.append('name', this.name);
-        form.append('link', this.link);
-
-      axios.post('http://127.0.0.1:8000/counters/add', {
-        name:this.name,
-          link:this.link
-
-      },
-
-{
-  headers: {
-    'Content-Type': 'multipart/form-data',
-    'X-CSRFToken': csrfToken
-  }
-}
-
-
-
-
-  )
-      .then(response => {
-        console.log(response.data);
-        console.log(this.name);
-
-      })
-      .catch(error => {
-        console.log(error.response.data);
-      });
-    }
-  }
 }
 </script>
 
