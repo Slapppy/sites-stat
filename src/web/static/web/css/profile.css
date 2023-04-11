@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@200;300;400;600;700&display=swap');
 
-
 body {
     font-family: 'Nunito Sans', sans-serif;
     font-size: 14px;
@@ -17,25 +16,6 @@ body {
     font-family: 'Nunito Sans', sans-serif;
 }
 
-a.logout-button {
-    display: inline-block;
-    padding: 8px 16px;
-    font-size: 14px;
-    font-weight: bold;
-    text-align: center;
-    text-decoration: none;
-    color: #ffffff;
-    background-color: #dc3545;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
-    height: 40px;
-    margin-top: -5px;
-}
-
-a.logout-button:hover {
-    background-color: #a92532;
-}
-
 .btn-counter:hover, .btn-counter:focus, .btn-counter:active {
     background-color: #9bf51d;
     text-decoration: none;
@@ -47,7 +27,7 @@ a.logout-button:hover {
 }
 
 .input-search {
-    font-size: 4px;
+    max-width: 440px;
 }
 
 .input-search:hover, .input-search:focus, .input-search:active {
@@ -103,10 +83,6 @@ th {
 
 .link-counter:hover {
     color: #79cc02;
-}
-
-.line {
-    border-bottom: 1px solid #DCDCDC;
 }
 
 .not-founded-text {
