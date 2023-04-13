@@ -14,6 +14,7 @@ RUN poetry install
 
 
 
+
 COPY .. .
 
 RUN python src/manage.py collectstatic --noinput
