@@ -22,6 +22,6 @@ COPY . .
 RUN python src/manage.py collectstatic --noinput
 
 ENV PORT 8000
-RUN whereis uwsgi
+
 #CMD python src/manage.py migrate &&
 CMD uwsgi --ini deploy/uwsgi.ini --http-socket :$PORT --static-map /static=/app/static
