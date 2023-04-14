@@ -12,14 +12,15 @@ COPY poetry.lock .
 
 RUN poetry install
 
-
-
-
 COPY .. .
+
+
+
+
 
 RUN python src/manage.py collectstatic --noinput
 
 ENV PORT 8000
-
-#CMD python src/manage.py migrate &&
-CMD uwsgi --ini deploy/app-serverless/uwsgi.ini --http-socket :$PORT --static-map /static=/app/static
+RUN chmod +x deploy/celery_worker.sh
+RUN chmod +x deploy/celery_beat.sh
+CMD python src/manage.py migrate && uwsgi --ini deploy/app-serverless/uwsgi.ini --http-socket :$PORT --static-map /static=/app/static
