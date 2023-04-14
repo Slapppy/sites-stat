@@ -49,9 +49,9 @@
                 <tr>
                     <th scope="col" class="th-name pe-5" title="Счетчик">Счетчик</th>
                     <th scope="col" class="th-name pe-5" title="Адрес сайта">Адрес сайта</th>
-                    <th scope="col" class="th-widget" title="Просмотр">Просмотры</th>
+                    <th scope="col" class="th-widget" title="Просмотры">Просмотры</th>
                     <th scope="col" class="th-widget" title="Визиты">Визиты</th>
-                    <th scope="col" class="th-widget" title="Посетитель">Посетители</th>
+                    <th scope="col" class="th-widget" title="Посетители">Посетители</th>
                     <th scope="col" class="action-counter"></th>
                 </tr>
 
@@ -64,9 +64,9 @@
                         <td class="pe-5 td-link"><a class="link-counter" href="http://{{ counter.link }}"
                                                     title="{{ counter.title }}">{{ counter.link }}</a></td>
                         {# TODO syte's address #}
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
+                        <td>{{ counter.count_views }}</td>
+                        <td>{{ counter.count_visits }}</td>
+                        <td>{{ counter.count_visitors }}</td>
                         <td class="d-flex justify-content-end">
                             <a class="link-counter" href="{% url 'edit' counter.id %}" title="Редактировать счетчик"><i
                                     class="bi bi-gear"></i></a>
