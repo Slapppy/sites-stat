@@ -65,7 +65,7 @@ MIDDLEWARE = [
 CORS_ORIGIN_ALLOW_ALL = False
 
 
-CORS_ORIGIN_WHITELIST = ("https://d5dmb75fkf3m3c1fmdh7.apigw.yandexcloud.net",)
+CORS_ORIGIN_WHITELIST = "https://d5dmb75fkf3m3c1fmdh7.apigw.yandexcloud.net"
 
 ROOT_URLCONF = "app.urls"
 
@@ -94,10 +94,10 @@ WSGI_APPLICATION = "app.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ.get("DB_NAME", "site-stats"),
-        "USER": os.environ.get("DB_USER", "site-stats"),
-        "PASSWORD": os.environ.get("DB_PASSWORD", "nDBRcasPJuTOyzmlnXe96zYv0QNhkC"),
-        "HOST": os.environ.get("DB_HOST", "a.uenv.ru"),
+        "NAME": os.environ.get("DB_NAME", "notes"),
+        "USER": os.environ.get("DB_USER", "notes"),
+        "PASSWORD": os.environ.get("DB_PASSWORD", "notes"),
+        "HOST": os.environ.get("DB_HOST", "localhost"),
         "PORT": int(os.environ.get("DB_PORT", 5432)),
     }
 }
