@@ -14,7 +14,10 @@ from django.views.generic import (
     UpdateView,
     TemplateView,
 )
+from app.clickhouse import create_connection
+from datetime import datetime
 
+from .clickhouse_models import ViewInDay, VisitInDay, VisitorInDay
 from .models import Counter
 from .forms import CreateUserForm, AddCounterForm
 
@@ -23,10 +26,32 @@ class CountersListView(ListView, LoginRequiredMixin):
     template_name = "web/profile.html"
     model = Counter
 
+    @staticmethod
+    def get_data(model, field_name, counter_id, start_date, end_date):
+        db = create_connection()
+        queryset = (
+            model.objects_in(db)
+            .filter(created_at__between=(start_date, end_date), counter_id=counter_id)
+            .aggregate("counter_id", sum_stat=f"sum({field_name})")
+        )
+        if queryset:
+            queryset = queryset[0].sum_stat
+            return queryset
+        return 0
+
+    def get_parameters(self, queryset):
+        end_date = datetime.now().strftime("%Y-%m-%d")
+        for query in queryset:
+            start_date = query.created_at.strftime("%Y-%m-%d")
+            query.count_views = self.get_data(ViewInDay, "count_views", query.id, start_date, end_date)
+            query.count_visits = self.get_data(VisitInDay, "count_visits", query.id, start_date, end_date)
+            query.count_visitors = self.get_data(VisitorInDay, "count_visitors", query.id, start_date, end_date)
+
     def get_queryset(self):
         if not self.request.user.is_authenticated:
             return Counter.objects.none()
         queryset = Counter.objects.filter(user=self.request.user).order_by("-created_at")
+        self.get_parameters(queryset)
         return self.filter_queryset(queryset)
 
     def filter_queryset(self, counters):

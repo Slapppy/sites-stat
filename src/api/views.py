@@ -1,14 +1,9 @@
 from django.utils import timezone
-from django.db import connection
-from django.http import HttpResponse
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
-from infi.clickhouse_orm import funcs
 from datetime import date, datetime, timedelta
-import httpagentparser
 import uuid
 
 from api.permissions import IsCreatorAndReadOnly
@@ -17,113 +12,21 @@ from web.clickhouse_models import Views, VisitorInDay, VisitInDay, ViewInDay
 from web.models import Counter
 
 
-class StatCounterView(APIView):
-    # пример запроса: http://127.0.0.1:8000/api/view_stat/data?id=5&start-date=2022-12-29&end-date=2022-12-31
-    @staticmethod
-    def get_data(counter_id, start_date, end_date):
+class StatCounter(APIView):
+
+    model = None
+    field_name = None
+
+    def get_data(self, counter_id, start_date, end_date):
         db = create_connection()
-        views = Views.objects_in(db).filter(created_at__between=(start_date, end_date), counter_id=counter_id)
-        return views
-
-    def get(self, request):
-        counter_id = request.GET.get("id", None)
-        date1, date2 = request.GET.get("start-date", None), request.GET.get("end-date", None)
-
-        if counter_id and date1:
-            # Проверка пользователя
-            if Counter.objects.filter(user_id=request.user.id, id=counter_id).count() != 0 or request.user.is_superuser:
-                start_date = datetime.strptime(date1, "%Y-%m-%d")
-                if not date2:
-                    end_date = datetime.now()
-                    date2 = end_date.strftime("%Y-%m-%d")
-                else:
-                    end_date = datetime.strptime(date2, "%Y-%m-%d") + timedelta(milliseconds=-1)
-
-                views = self.get_data(counter_id, start_date, end_date)
-                return Response(
-                    {
-                        "counter_id": int(counter_id),
-                        "start-date": date1,
-                        "end-date": date2,
-                        "count_views": views.count(),
-                    }
-                )
-
-            return Response(
-                {"error": [{"code": 403, "reason": "AccessError"}]},
-                status=status.HTTP_403_FORBIDDEN,
-            )
-
-        return Response(
-            {"error": [{"code": 400, "reason": "invalidParameter"}]},
-            status=status.HTTP_400_BAD_REQUEST,
-        )
-
-
-TRANSPARENT_1_PIXEL_GIF = b"\x47\x49\x46\x38\x39\x61\x01\x00\x01\x00\x80\x00\x00\xff\xff\xff\x00\x00\x00\x21\xf9\x04\x01\x00\x00\x00\x00\x2c\x00\x00\x00\x00\x01\x00\x01\x00\x00\x02\x02\x44\x01\x00\x3b"
-
-
-class StatCounterVisit(APIView):
-    # http://127.0.0.1:8000/api/visit_stat/data?id=5&start-date=2022-12-29&end-date=2022-12-31
-    @staticmethod
-    def get_data(counter_id, start_date, end_date):
-        db = create_connection()
-        end_date += timedelta(days=1)
-        views = VisitInDay.objects_in(db).filter(created_at__between=(start_date, end_date), counter_id=counter_id)
-        return views.count()
-
-    def get(self, request):
-        counter_id = request.GET.get("id", None)
-        start_date, end_date = request.GET.get("start-date", None), request.GET.get("end-date", None)
-
-        if counter_id:
-            # Проверка пользователя
-            if Counter.objects.filter(user_id=request.user.id, id=counter_id).count() != 0 or request.user.is_superuser:
-                if start_date:
-                    start_date = datetime.strptime(start_date, "%Y-%m-%d")
-                else:
-                    start_date = Counter.objects.get(id=counter_id).created_at
-                    print(start_date)
-
-                if end_date:
-                    end_date = datetime.strptime(end_date, "%Y-%m-%d")
-                else:
-                    end_date = datetime.now()
-
-                visits = self.get_data(counter_id, start_date, end_date)
-                return Response(
-                    {
-                        "counter_id": int(counter_id),
-                        "start-date": start_date.strftime("%Y-%m-%d"),
-                        "end-date": end_date.strftime("%Y-%m-%d"),
-                        "count_visits": visits,
-                    }
-                )
-
-            return Response(
-                {"error": [{"code": 403, "reason": "AccessError"}]},
-                status=status.HTTP_403_FORBIDDEN,
-            )
-
-        return Response(
-            {"error": [{"code": 400, "reason": "invalidParameter"}]},
-            status=status.HTTP_400_BAD_REQUEST,
-        )
-
-
-class StatCounterVisitor(APIView):
-    # http://127.0.0.1:8000/api/visitor_stat/data?id=5&start-date=2022-12-29&end-date=2022-12-31
-    @staticmethod
-    def get_data(counter_id, start_date, end_date):
-        db = create_connection()
-        visitors = (
-            VisitorInDay.objects_in(db)
+        queryset = (
+            self.model.objects_in(db)
             .filter(created_at__between=(start_date, end_date), counter_id=counter_id)
-            .aggregate("counter_id", sum_visitors="sum(count_visitors)")
+            .aggregate("counter_id", sum_stat=f"sum({self.field_name})")
         )
-        if visitors:
-            visitors = visitors[0].sum_visitors
-            return visitors
+        if queryset:
+            queryset = queryset[0].sum_stat
+            return queryset
         return 0
 
     def get(self, request):
@@ -136,21 +39,20 @@ class StatCounterVisitor(APIView):
                 if start_date:
                     start_date = datetime.strptime(start_date, "%Y-%m-%d")
                 else:
-                    start_date = Counter.objects.get(id=counter_id).created_at
-                    print(start_date)
+                    start_date = Counter.objects.get(id=counter_id).created_at.strftime("%Y-%m-%d")
 
                 if end_date:
-                    end_date = datetime.strptime(end_date, "%Y-%m-%d")
+                    end_date = datetime.strptime(end_date, "%Y-%m-%d").strftime("%Y-%m-%d")
                 else:
-                    end_date = datetime.now()
+                    end_date = datetime.now().strftime("%Y-%m-%d")
 
-                visitors = self.get_data(counter_id, start_date, end_date)
+                data = self.get_data(counter_id, start_date, end_date)
                 return Response(
                     {
                         "counter_id": int(counter_id),
-                        "start-date": start_date.strftime("%Y-%m-%d"),
-                        "end-date": end_date.strftime("%Y-%m-%d"),
-                        "count_visitors": visitors,
+                        "start-date": start_date,
+                        "end-date": end_date,
+                        self.field_name: data,
                     }
                 )
 
@@ -163,6 +65,30 @@ class StatCounterVisitor(APIView):
             {"error": [{"code": 400, "reason": "invalidParameter"}]},
             status=status.HTTP_400_BAD_REQUEST,
         )
+
+
+class StatCounterView(StatCounter):
+    # пример запроса: http://127.0.0.1:8000/api/view_stat/data?id=5&start-date=2022-12-29&end-date=2022-12-31
+
+    model = ViewInDay
+    field_name = "count_views"
+
+
+class StatCounterVisit(StatCounter):
+    # http://127.0.0.1:8000/api/visit_stat/data?id=5&start-date=2022-12-29&end-date=2022-12-31
+
+    model = VisitInDay
+    field_name = "count_visits"
+
+
+class StatCounterVisitor(StatCounter):
+    # http://127.0.0.1:8000/api/visitor_stat/data?id=5&start-date=2022-12-29&end-date=2022-12-31
+
+    model = VisitorInDay
+    field_name = "count_visitors"
+
+
+TRANSPARENT_1_PIXEL_GIF = b"\x47\x49\x46\x38\x39\x61\x01\x00\x01\x00\x80\x00\x00\xff\xff\xff\x00\x00\x00\x21\xf9\x04\x01\x00\x00\x00\x00\x2c\x00\x00\x00\x00\x01\x00\x01\x00\x00\x02\x02\x44\x01\x00\x3b"
 
 
 class GetMetaDataView(APIView):
@@ -176,7 +102,6 @@ class GetMetaDataView(APIView):
         )
         visit_id = str(uuid.uuid4()) if not request.data.get("visit_id") else request.data.get("visit_id")
         # visitor_unique_key = request.data.get("visitor_unique_key", str(uuid.uuid4()))
-        print(request.data.get("referer"))
         metadata = request.data.get("user_agent")
         # data_split = httpagentparser.detect(metadata, "os")
         referer = request.data.get("referer")
@@ -185,7 +110,6 @@ class GetMetaDataView(APIView):
         device_type = request.data.get("device_type")
         ip_address = request.data.get("ip")
         language = request.data.get("language")
-        print(timezone.now())
 
         notes = [
             Views(
@@ -228,8 +152,8 @@ class StatInDay(APIView):
         Обработчик  get запроса
     """
 
-    field_name = None
     model = None
+    field_name = None
     permission_classes = [IsAuthenticated, IsCreatorAndReadOnly]
 
     @staticmethod
@@ -242,7 +166,6 @@ class StatInDay(APIView):
     def get_data(self, counter_id, start_date, end_date):
         db = create_connection()
         queryset = self.model.objects_in(db).filter(created_at__between=(start_date, end_date), counter_id=counter_id)
-
         return list(queryset)
 
     def get(self, request):
@@ -282,16 +205,16 @@ class StatInDay(APIView):
         )
 
 
-class StatViewInDay(StatInDay, APIView):
+class StatViewInDay(StatInDay):
     field_name = "count_views"
     model = ViewInDay
 
 
-class StatVisitInDay(StatInDay, APIView):
+class StatVisitInDay(StatInDay):
     field_name = "count_visits"
     model = VisitInDay
 
 
-class StatVisitorInDay(StatInDay, APIView):
+class StatVisitorInDay(StatInDay):
     field_name = "count_visitors"
     model = VisitorInDay

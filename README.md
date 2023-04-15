@@ -12,7 +12,7 @@
 9. `pre-commit run -a` - запуск линтеров вручную
 
 ### **Запуск Frontend'a**
-1. `cd src/web/static/web/frontend` - перейти в папку фронтенда
+1. `cd src/frontend` - перейти в папку фронтенда
 2. `npm ci` - установить зависимости
 3. `npm run watch` - сборка для разработки
 4. `npm run build` - сборка для продакшена
