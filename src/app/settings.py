@@ -65,7 +65,7 @@ MIDDLEWARE = [
 CORS_ORIGIN_ALLOW_ALL = False
 
 
-CORS_ORIGIN_WHITELIST = ("http://127.0.0.1:8000",)
+CORS_ORIGIN_WHITELIST = "https://d5dmb75fkf3m3c1fmdh7.apigw.yandexcloud.net"
 
 ROOT_URLCONF = "app.urls"
 

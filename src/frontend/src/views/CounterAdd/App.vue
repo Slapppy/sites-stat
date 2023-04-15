@@ -27,6 +27,8 @@
 </template>
 <script>
 import axios from 'axios';
+import {API_URL} from "@/consts";
+
 
 function getCookie(name) {
   const value = `; ${document.cookie}`;
@@ -65,8 +67,8 @@ export default {
 
             form.append('name', this.name);
             form.append('link', this.link);
-
-            axios.post('http://127.0.0.1:8000/counters/add', {
+            console.log(API_URL)
+            axios.post(`${API_URL}/counters/add`, {
                     name: this.name,
                     link: this.link
 

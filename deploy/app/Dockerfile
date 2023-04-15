@@ -7,7 +7,6 @@ RUN pip install poetry==1.3.0 && poetry config virtualenvs.create false
 WORKDIR /app
 
 
-
 COPY pyproject.toml .
 COPY poetry.lock .
 COPY .pre-commit-config.yaml .
