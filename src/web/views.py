@@ -77,6 +77,8 @@ class CountersListView(ListView, LoginRequiredMixin):
 
 class RegistrationView(View):
     def get(self, request):
+        if request.user.is_authenticated:
+            return redirect("main")
         form = CreateUserForm()
         return render(request, "web/registration.html", {"form": form})
 
@@ -103,6 +105,9 @@ class RegistrationView(View):
 
 
 def auth_page(request):
+    if request.user.is_authenticated:
+        return redirect("main")
+
     if request.method == "POST":
         email = request.POST.get("email")
         password = request.POST.get("password")

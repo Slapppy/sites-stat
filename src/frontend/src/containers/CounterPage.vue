@@ -16,6 +16,7 @@
 import Highcharts from 'highcharts'
 import $ from 'jquery'
 import FilterPanel from "../containers/FilterPanel.vue";
+import {API_URL} from "@/consts";
 
 export default {
   name: 'CounterPage',
@@ -38,10 +39,10 @@ export default {
       const url = new URL(currentUrl);
       const path = url.pathname.slice(1);
       const id = path.split('/')[1];
-      const ip = '127.0.0.1';
+
 
       $.ajax({
-        url: `http://${ip}:8000/api/view/data?id=${id}&filter=${this.selectedFilter}`,
+        url: `${API_URL}/api/view/data?id=${id}&filter=${this.selectedFilter}`,
         method: 'GET',
         dataType: 'json',
         success: (response) => {
@@ -53,7 +54,7 @@ export default {
         }
       })
       $.ajax({
-        url: `http://${ip}:8000/api/visit/data?id=${id}&filter=${this.selectedFilter}`,
+        url: `${API_URL}/api/visit/data?id=${id}&filter=${this.selectedFilter}`,
         method: 'GET',
         dataType: 'json',
         success: (response) => {
@@ -65,7 +66,7 @@ export default {
         }
       })
       $.ajax({
-        url: `http://${ip}:8000/api/visitor/data?id=${id}&filter=${this.selectedFilter}`,
+        url: `${API_URL}/api/visitor/data?id=${id}&filter=${this.selectedFilter}`,
         method: 'GET',
         dataType: 'json',
         success: (response) => {
