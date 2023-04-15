@@ -16,9 +16,9 @@ a {
 
 .main-wrapper {
 	background: linear-gradient(to right top, #757F9A 0%, #D7DDE8 100%);
-	height: 100vh;
-	padding-top: 200px;
-	overflow-y: scroll;
+	/*height: 100vh;*/
+	/*padding-top: 200px;*/
+	/*overflow-y: scroll;*/
 }
 
 .container {
