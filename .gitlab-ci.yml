@@ -1,10 +1,10 @@
-image: kpfu-itis/docker:latest
+image: atnartur/docker:latest
 
 stages:
   - deploy
 
 deploy_cloud:
-  image: kpfu-itis/yc:latest
+  image: atnartur/yc:latest
   stage: deploy
   script:
     # устанавливаем ключ сервисного аккаунта
