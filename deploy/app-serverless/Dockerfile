@@ -23,4 +23,4 @@ RUN python src/manage.py collectstatic --noinput
 ENV PORT 8000
 RUN chmod +x deploy/celery_worker.sh
 RUN chmod +x deploy/celery_beat.sh
-CMD python src/manage.py migrate && uwsgi --ini deploy/app-serverless/uwsgi.ini --http-socket :$PORT --static-map /static=/app/static
+CMD uwsgi --ini deploy/app-serverless/uwsgi.ini --http-socket :$PORT --static-map /static=/app/static
