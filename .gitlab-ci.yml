@@ -13,9 +13,9 @@ deploy_cloud:
     - yc container registry configure-docker
     # собираем образ 
     # (поменяйте путь до докерфайла после флага -f, если это необходимо)
-    - docker build -t $YANDEX_CLOUD_REGISTRY/app:latest -f deploy/app-serverless/Dockerfile .
+    - docker build -t $YANDEX_CLOUD_REGISTRY/main:latest -f deploy/app-serverless/Dockerfile .
     # отправляем образ в registry
-    - docker push $YANDEX_CLOUD_REGISTRY/app:latest
+    - docker push $YANDEX_CLOUD_REGISTRY/main:latest
     # вытаскиваем service account id из ключа
     - export SERVICE_ACCOUNT_ID=$(yc config get service-account-key | grep service_account_id | awk '{print $2}')
     # запускаем миграции, чтобы не запускать их при старте контейнера
@@ -25,13 +25,13 @@ deploy_cloud:
       --env DB_USER=$DB_USER
       --env DB_HOST=$DB_HOST
       --env DB_PASSWORD=$DB_PASSWORD
-      $YANDEX_CLOUD_REGISTRY/app:latest 
+      $YANDEX_CLOUD_REGISTRY/main:latest 
       python manage.py migrate
     # обновляем контейнер и прокидываем переменные окружения с параметрами подключения к БД
     # (они должны быть также установлены в Gitlab CI Variables)
     - >
         yc serverless container revision deploy 
-        --image $YANDEX_CLOUD_REGISTRY/app:latest 
+        --image $YANDEX_CLOUD_REGISTRY/main:latest 
         --container-name $YANDEX_CONTAINER_NAME
         --service-account-id $SERVICE_ACCOUNT_ID
         --core-fraction 5
