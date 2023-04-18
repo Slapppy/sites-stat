@@ -1,5 +1,6 @@
 image: atnartur/docker:latest
 
+
 stages:
   - deploy
 
