@@ -1,3 +1,5 @@
+import httpagentparser as httpagentparser
+from django.http import HttpResponse
 from django.utils import timezone
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
@@ -93,6 +95,47 @@ TRANSPARENT_1_PIXEL_GIF = b"\x47\x49\x46\x38\x39\x61\x01\x00\x01\x00\x80\x00\x00
 
 class GetMetaDataView(APIView):
     # пример <img src="http://127.0.0.1:8000/api/getmetadata/15"/>
+    def get(self, request, id):
+        db = create_connection()
+
+        visitor_unique_key = request.COOKIES.get("visitor_unique_key")
+        visit_id = request.COOKIES.get("visit_id")
+
+        if not visitor_unique_key or not visit_id:
+            visitor_unique_key = str(uuid.uuid4())
+            visit_id = str(uuid.uuid4())
+
+        metadata = request.headers["User-Agent"]
+        data_split = httpagentparser.detect(metadata, "os")
+        referer = request.META.get("HTTP_REFERER")
+        browser = data_split["browser"]["name"]
+        os_type = data_split["platform"]["name"]
+        device_type = data_split["os"]["name"]
+        ip_address = request.META["REMOTE_ADDR"]
+        language = request.META["HTTP_ACCEPT_LANGUAGE"].split(",")[0][:2]
+
+        notes = [
+            Views(
+                counter_id=id,
+                referer=referer,
+                view_id=uuid.uuid4(),
+                visit_id=visit_id,
+                visitor_unique_key=visitor_unique_key,
+                device_type=device_type,
+                browser_type=browser,
+                user_agent=metadata,
+                os_type=os_type,
+                ip=ip_address,
+                language=language,
+                created_at=timezone.now(),
+            )
+        ]
+        db.insert(notes)
+
+        response = HttpResponse(TRANSPARENT_1_PIXEL_GIF, content_type="image/gif")
+        response.set_cookie("visitor_unique_key", visitor_unique_key, max_age=1800)
+        response.set_cookie("visit_id", visit_id, max_age=1800)
+        return response
 
     def post(self, request, id):
         db = create_connection()
