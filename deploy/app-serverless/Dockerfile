@@ -26,7 +26,8 @@ RUN poetry install
 
 COPY . .
 
-COPY --from=node /app/frontend/dist /app/src/frontend/dist
+COPY --from=node /app/src/frontend/dist /app/src/frontend/dist
+
 
 RUN python src/manage.py collectstatic --noinput
 
