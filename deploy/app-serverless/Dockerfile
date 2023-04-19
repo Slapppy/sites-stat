@@ -6,7 +6,7 @@ COPY src/frontend/package.json .
 COPY src/frontend/package-lock.json .
 RUN npm ci
 
-COPY src/web/static/web/notes-frontend .
+COPY src/frontend .
 RUN npm run build
 
 FROM python:3.11
