@@ -26,7 +26,7 @@ deploy_cloud:
       --env DB_HOST=$DB_HOST
       --env DB_PASSWORD=$DB_PASSWORD
       $YANDEX_CLOUD_REGISTRY/app:latest 
-      python manage.py migrate
+      python src/manage.py migrate
     # обновляем контейнер и прокидываем переменные окружения с параметрами подключения к БД
     # (они должны быть также установлены в Gitlab CI Variables)
     - >
