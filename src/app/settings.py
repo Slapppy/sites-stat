@@ -13,10 +13,8 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 import os
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -64,9 +62,7 @@ MIDDLEWARE = [
 
 CORS_ORIGIN_ALLOW_ALL = False
 
-
-CORS_ORIGIN_WHITELIST = "https://d5dmb75fkf3m3c1fmdh7.apigw.yandexcloud.net"
-
+CORS_ORIGIN_WHITELIST = ("http://127.0.0.1:8000", "https://d5dmb75fkf3m3c1fmdh7.apigw.yandexcloud.net")
 ROOT_URLCONF = "app.urls"
 
 TEMPLATES = [
@@ -87,7 +83,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "app.wsgi.application"
 
-
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
@@ -102,14 +97,12 @@ DATABASES = {
     }
 }
 
-
 CLICKHOUSE_DATABASE = {
     "db_url": os.environ.get("CLICKHOUSE_DB_URL", "http://localhost:8123/"),
     "username": os.environ.get("CLICKHOUSE_DB_URL", "default"),
     "db_name": os.environ.get("CLICKHOUSE_DB_URL", "django"),
     "password": os.environ.get("CLICKHOUSE_DB_URL", ""),
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -129,7 +122,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
@@ -141,7 +133,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
@@ -151,7 +142,6 @@ STATICFILES_DIRS = [
 STATIC_URL = "/src/"
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
-
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

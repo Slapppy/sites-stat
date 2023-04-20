@@ -1,6 +1,3 @@
-image: atnartur/docker:latest
-
-
 stages:
   - deploy
 
@@ -14,7 +11,7 @@ deploy_cloud:
     - yc config set folder-id $YANDEX_CLOUD_FOLDER_ID
     # настраиваем подключение к Yandex Cloud Registry
     - yc container registry configure-docker
-    # собираем образ
+    # собираем образ 
     # (поменяйте путь до докерфайла после флага -f, если это необходимо)
     - docker build -t $YANDEX_CLOUD_REGISTRY/app:latest -f deploy/app-serverless/Dockerfile .
     # отправляем образ в registry
@@ -23,12 +20,12 @@ deploy_cloud:
     - export SERVICE_ACCOUNT_ID=$(yc config get service-account-key | grep service_account_id | awk '{print $2}')
     # запускаем миграции, чтобы не запускать их при старте контейнера
     - >
-      docker run --rm
+      docker run --rm 
       --env DB_NAME=$DB_NAME
       --env DB_USER=$DB_USER
       --env DB_HOST=$DB_HOST
       --env DB_PASSWORD=$DB_PASSWORD
-      $YANDEX_CLOUD_REGISTRY/app:latest
+      $YANDEX_CLOUD_REGISTRY/app:latest 
       python src/manage.py migrate
     # обновляем контейнер и прокидываем переменные окружения с параметрами подключения к БД
     # (они должны быть также установлены в Gitlab CI Variables)
@@ -43,71 +40,9 @@ deploy_cloud:
         --environment DB_USER=$DB_USER
         --environment DB_HOST=$DB_HOST
         --environment DB_PASSWORD=$DB_PASSWORD
-        --environment AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
-        --environment AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
-        --environment AWS_DEFAULT_REGION="ru-central1"
-        --environment CELERY_BROKER_URL=sqs://message-queue.api.cloud.yandex.net:443
-        --environment CELERY_BROKER_IS_SECURE=True
-        --environment CELERY_YANDEX_SERVERLESS_KEY=$CELERY_YANDEX_SERVERLESS_KEY
-        --environment AWS_STORAGE_BUCKET_NAME=$AWS_STORAGE_BUCKET_NAME
-        --environment AWS_S3_ENDPOINT_URL=https://storage.yandexcloud.net/ 
         > /dev/null
     # если в приложении есть еще какие-нибудь переменные окружения, прокиньте их здесь
-    - yc serverless trigger delete --name celery > /dev/null || echo
-    - >
-      yc serverless trigger create message-queue
-      --name celery
-      --queue $YANDEX_MESSAGE_QUEUE_ARN
-      --queue-service-account-id $SERVICE_ACCOUNT_ID
-      --invoke-container-name $YANDEX_CONTAINER_NAME
-      --invoke-container-service-account-id $SERVICE_ACCOUNT_ID
-      --invoke-container-path /worker/$CELERY_YANDEX_SERVERLESS_KEY/
-      --batch-size 1
-      --batch-cutoff 10s
-      > /dev/null      
-
-#    - apk add nodejs npm
-#    - cd frontend
-#    - npm ci
-#    - export VITE_API_URL=/api
-#    - npm run build
-#    - export AWS_DEFAULT_REGION="ru-central1"
-#    - >
-#        aws --endpoint-url=https://storage.yandexcloud.net
-#        s3 cp --recursive dist/ s3://django-2k-11-100-frontend/
   tags:
-    # тег раннера, где будут запускаться сборки
+    # тег раннера, где будут запускаться сборки 
     # (обычно менять не нужно, но если что, он находится здесь)
-    - unienv_shared
-
-#stages:
-#  - build
-#  - test
-#  - deploy
-
-#build:
-#  stage: build
-#  script:
-#    - docker-compose -f deploy/docker-compose.prod.yml build app
-#    - docker-compose -f deploy/docker-compose.prod.yml build nginx
-#  tags:
-#    - django2k11100
-#
-#test:
-#  stage: test
-#  script:
-#    - docker-compose -f deploy/docker-compose.test.yml -p django2k_tests run app
-#  after_script:
-#    - docker-compose -f deploy/docker-compose.test.yml -p django2k_tests down -v
-#  tags:
-#    - django2k11100
-#
-#deploy_linux:
-#  stage: deploy
-#  script:
-#    - docker-compose --file deploy/docker-compose.prod.yml up
-#        --build --force-recreate --detach
-#  tags:
-#    - django2k11100
-#  only:
-#    - master
+    - unienv_shared 

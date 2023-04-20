@@ -1,4 +1,4 @@
-import {API_URL} from "@/consts";
+import {API_URL} from "../consts.js";
 function getCookieValue(key) {
     const cookies = document.cookie.split(';');
     for (let i = 0; i < cookies.length; i++) {
@@ -83,7 +83,6 @@ const metadata = {
 
 
 const csrftoken = getCookieValue('csrftoken');
-
 const xhr = new XMLHttpRequest();
 
 xhr.onreadystatechange = function() {
@@ -100,7 +99,8 @@ xhr.onreadystatechange = function() {
   }
 };
 
-xhr.open('POST', `${API_URL}/api/getmetadata/12`);
+
+xhr.open('POST', `${API_URL}/api/getmetadata/4`);
 xhr.setRequestHeader('X-CSRFToken', csrftoken);
 xhr.setRequestHeader('Content-Type', 'application/json');
 xhr.send(JSON.stringify(metadata));
