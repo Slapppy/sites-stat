@@ -14,52 +14,25 @@ from django.views.generic import (
     UpdateView,
     TemplateView,
 )
-from app.clickhouse import create_connection
-from datetime import datetime
-
-from .clickhouse_models import ViewInDay, VisitInDay, VisitorInDay
-from .models import Counter
 from .forms import CreateUserForm, AddCounterForm
+from .services import (
+    get_user_list_of_counters,
+    add_parameters_into_counters,
+    filter_counters_with_search,
+    get_user_counter,
+)
 
 
 class CountersListView(ListView, LoginRequiredMixin):
     template_name = "web/profile.html"
-    model = Counter
-
-    @staticmethod
-    def get_data(model, field_name, counter_id, start_date, end_date):
-        db = create_connection()
-        queryset = (
-            model.objects_in(db)
-            .filter(created_at__between=(start_date, end_date), counter_id=counter_id)
-            .aggregate("counter_id", sum_stat=f"sum({field_name})")
-        )
-        if queryset:
-            queryset = queryset[0].sum_stat
-            return queryset
-        return 0
-
-    def get_parameters(self, queryset):
-        end_date = datetime.now().strftime("%Y-%m-%d")
-        for query in queryset:
-            start_date = query.created_at.strftime("%Y-%m-%d")
-            query.count_views = self.get_data(ViewInDay, "count_views", query.id, start_date, end_date)
-            query.count_visits = self.get_data(VisitInDay, "count_visits", query.id, start_date, end_date)
-            query.count_visitors = self.get_data(VisitorInDay, "count_visitors", query.id, start_date, end_date)
 
     def get_queryset(self):
-        if not self.request.user.is_authenticated:
-            return Counter.objects.none()
-        queryset = Counter.objects.filter(user=self.request.user).order_by("-created_at")
-        self.get_parameters(queryset)
-        return self.filter_queryset(queryset)
-
-    def filter_queryset(self, counters):
         self.search = self.request.GET.get("search", None)
-
+        queryset = get_user_list_of_counters(self.request.user)
+        add_parameters_into_counters(queryset)
         if self.search:
-            counters = counters.filter(name__icontains=self.search)
-        return counters
+            queryset = filter_counters_with_search(queryset, self.search)
+        return queryset
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -149,9 +122,7 @@ class CounterDetailView(DetailView):
     template_name = "web/counter.html"
 
     def get_queryset(self):
-        if not self.request.user.is_authenticated:
-            return Counter.objects.none()
-        return Counter.objects.filter(user=self.request.user)
+        return get_user_list_of_counters(self.request.user)
 
 
 class MainView(TemplateView):
@@ -165,9 +136,7 @@ class CounterEditView(UpdateView):
     form_class = AddCounterForm
 
     def get_queryset(self):
-        if not self.request.user.is_authenticated:
-            return Counter.objects.none()
-        return Counter.objects.filter(user=self.request.user)
+        return get_user_list_of_counters(self.request.user)
 
     def get_success_url(self):
         return reverse("counters")
@@ -181,10 +150,9 @@ class CounterEditView(UpdateView):
 
 class CounterDeleteView(View):
     def get(self, request, pk):
-        obj = get_object_or_404(Counter, pk=pk)
-        if obj in Counter.objects.filter(user=request.user):
+        obj = get_user_counter(pk, request.user)
+        if obj:
             obj.delete()
             return redirect("counters")
-        else:
-            """TODO сделать ридерект на страницу ошибки"""
-            return redirect("counters")
+        """TODO сделать ридерект на страницу ошибки"""
+        return redirect("counters")
