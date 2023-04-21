@@ -12,28 +12,32 @@
             <button type="submit">Отправить</button>
         </div>
     </form>
-    <div id="counter_script" v-if="showF">
-        <pre>
-            <code class="language-html">
-                &lt;!-- /Auf.Metrika counter --&gt;
-                &lt;script&gt;&lt;img src="https://127.0.0.1/api/getmetadata/{{ counter_id }}" style="position:absolute; left:-9999px;" alt="" /&gt;&lt;/script&gt;
-                &lt;noscript&gt;&lt;div&gt;&lt;img src="https://127.0.0.1/api/getmetadata/{{ counter_id }}" style="position:absolute; left:-9999px;" alt="" /&gt;
-                &lt;/div&gt;&lt;/noscript&gt;
-
-            </code>
-        </pre>
-            <button @click="copyToClipboard">Copy script</button>
+    <div class="counter_script" v-if="showScript">
+        <div>
+            <pre>
+                <code class="language-html">
+                    &lt;!-- / counter --&gt;
+                    &lt;div id = "counter_id" style="transform: translateX(9999px);"&gt;{{ counter_id }} &lt;/div&gt;
+                    &lt;script src="http://127.0.0.1:8000/src/src/assets/collectdata.js"&gt;&lt;/script&gt;
+                    &lt;noscript&gt;&lt;div&gt;&lt;img src="https://127.0.0.1/api/getmetadata/{{ counter_id }}"/&gt;
+                    &lt;/div&gt;&lt;/noscript&gt;
+                </code>
+            </pre>
+        </div>
+        <div class="form__item_button">
+            <button @click="copyToClipboard">Скопировать</button>
+        </div>
     </div>
 </template>
 <script>
 import axios from 'axios';
 import {API_URL} from "@/consts";
-
+import {ElButton} from "element-plus"
 
 function getCookie(name) {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts.pop().split(';').shift();
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
 }
 
 const csrfToken = getCookie('csrftoken');
@@ -47,7 +51,7 @@ export default {
     data() {
         return {
             counter_id: 0,
-            showF: false,
+            showScript: false,
             name: '',
             link: ''
         }
@@ -60,7 +64,6 @@ export default {
             el.select();
             document.execCommand('copy');
             document.body.removeChild(el);
-            alert('Script copied to clipboard!');
         },
         submitForm() {
             const form = new FormData();
@@ -83,12 +86,11 @@ export default {
             )
                 .then(response => {
                     this.counter_id = response.data.counter,
-                        this.showF = true
-                    console.log(this.showF)
+                        this.showScript = true
 
                 })
                 .catch(error => {
-                    console.log(error.response.data);
+
                 });
         }
     }
@@ -102,12 +104,12 @@ body {
     font-family: 'Montserrat', sans-serif;
 }
 
-#counter_script {
-    background-color: #f5f5f5;
-    padding: 10px;
-    margin: 10px 0;
-    border: 2px solid #92d82f;
+.counter_script {
+    position: absolute;
+    left: 0;
+    top: 20px;
 }
+
 button {
     background-color: #4CAF50;
     border: none;
@@ -120,6 +122,7 @@ button {
     margin: 10px 0;
     cursor: pointer;
 }
+
 .language-html {
     display: block;
     font-size: 14px;
@@ -166,7 +169,7 @@ button {
 }
 
 .form__item_button {
-    width: 100%;
+    width: 150px;
     display: flex;
     justify-content: flex-end;
 }
