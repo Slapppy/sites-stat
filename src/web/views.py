@@ -4,7 +4,7 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import (
     ListView,
@@ -99,7 +99,7 @@ def auth_page(request):
 class CounterCreate(CreateView):
     form_class = AddCounterForm
     template_name = "web/add_counter.html"
-    success_url = "/counters/add"
+    success_url = reverse_lazy("add")
     info_sended = True
 
     @method_decorator(login_required)
@@ -148,7 +148,7 @@ class CounterEditView(UpdateView):
         }
 
 
-class CounterDeleteView(View):
+class CounterDeleteView(LoginRequiredMixin, View):
     def get(self, request, pk):
         obj = get_user_counter(pk, request.user)
         if obj:
