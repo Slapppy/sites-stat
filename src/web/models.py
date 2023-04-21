@@ -36,7 +36,7 @@ class User(BaseModel, AbstractBaseUser, PermissionsMixin):
     surname = models.CharField(max_length=128, null=True)
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=128)
-    role = models.CharField(choices=Role.choices, max_length=15, default=Role.user)
+    role = models.CharField(choices=Role.choices, max_length=15, default=Role.user)#TODO: как будто оо нигде и не используется, может но и не надо тогда
 
     @property
     def is_superuser(self):
