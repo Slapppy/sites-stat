@@ -3,7 +3,19 @@
     body {
         font-family: 'Montserrat', sans-serif;
     }
-
+    .counter_script {
+        width: 500px;
+        left: 0;
+        top: 20px;
+    }
+    .language-html {
+        display: block;
+        font-size: 14px;
+        font-family: monospace;
+        white-space: pre-wrap;
+        line-height: 1.5;
+        color: #333;
+    }
     .form {
         display: flex;
         flex-direction: column;
