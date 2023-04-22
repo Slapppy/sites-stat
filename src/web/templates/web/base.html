@@ -6,6 +6,9 @@
     <script src="{% static "web/js/bootstrap.bundle.min.js" %}"></script>
     <link rel="stylesheet" href="{% static "web/css/bootstrap.min.css" %}">
     <link rel="stylesheet" href="{% static 'web/css/base.css' %}">
+ {% comment %} TODO добавьте <title> c дефолтным блоком внутри, чтобы везде название было вне зависимости от переопределений
+    {% endcomment %}
+    
     {% block head %}
     {% endblock head %}
 </head>
@@ -43,6 +46,7 @@
         </nav>
         <div class="line"></div>
         <!-- Navbar -->
+ {% comment %} TODO какая разница между блоками content & breadcrumbs, если они находятся в одном месте? {% endcomment %}
         {% block content %}
             {% block breadcrumbs %}
                 <div class="breadcrumbs container-fluid">

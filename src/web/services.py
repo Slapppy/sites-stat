@@ -14,6 +14,7 @@ def get_user_list_of_counters(user):
 def add_parameters_into_counters(counters):
     """Добавляет количество просмотров, визитов и посетителей к каждому счетчику"""
     end_date = datetime.now().strftime("%Y-%m-%d")
+    # TODO запросить все данные, а потом в коде их смаппить. Сейчас на каждый объект делается запрос - это плохо.
     for counter in counters:
         start_date = counter.created_at.strftime("%Y-%m-%d")
         counter.count_views = get_sum_data_for_certain_period(
@@ -28,6 +29,7 @@ def add_parameters_into_counters(counters):
 
 
 def filter_counters_with_search(counters, search):
+    # TODO слишком простая функция. Заменить на DjangoFilter
     return counters.filter(name__icontains=search)
 
 

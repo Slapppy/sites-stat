@@ -1,7 +1,7 @@
 from django import forms
-from .models import Counter
+from .models import Counter # TODO неправильный порядок импортов
 from django.contrib.auth.forms import UserCreationForm
-from django.forms import ModelForm
+from django.forms import ModelForm # TODO неиспользуемый импорт
 from .models import User
 
 

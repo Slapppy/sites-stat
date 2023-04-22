@@ -14,7 +14,7 @@
 
 <script>
 import Highcharts from 'highcharts'
-import $ from 'jquery'
+import $ from 'jquery' // TODO зачем тут JQuery?
 import FilterPanel from "../containers/FilterPanel.vue";
 import {API_URL} from "@/consts";
 
@@ -39,8 +39,8 @@ export default {
       const url = new URL(currentUrl);
       const path = url.pathname.slice(1);
       const id = path.split('/')[1];
-
-
+      
+      // TODO работать через axios
       $.ajax({
         url: `${API_URL}/api/view/data?id=${id}&filter=${this.selectedFilter}`,
         method: 'GET',
@@ -158,6 +158,7 @@ export default {
           },
         },
         tooltip: {
+          // TODO вынести общий код
           // Tooltip options...
           positioner: function (labelWidth, labelHeight, point) {
             var tooltipX, tooltipY;
@@ -237,7 +238,7 @@ export default {
         }]
       });
     },
-
+    // TODO где отступы?
     handleFilterChanged(filter) {
     this.selectedFilter = filter;
     this.loadData();

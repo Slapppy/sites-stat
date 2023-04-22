@@ -8,9 +8,13 @@ from app.clickhouse import create_connection
 class Command(BaseCommand):
     def handle(self, *args, **options):
         db = create_connection()
+        # TODO try except можно переписать в виде декоратора над функцияим, либо вообще убрать, потому что
+        # любой exception в этом скрипте означает проблемы с запросами и нет смысла переопределять эти сообщения
         try:
-
+            # TODO для логического разделения блоков в скрипте можно использовать комментарии вместо функций
+            # TODO функции должны называться действиями, а не существительными
             def views():
+                # TODO если здесь используется db, то она должна приходить в аргументе
                 db.raw(
                     "CREATE MATERIALIZED VIEW view_in_day_mv TO viewinday AS SELECT counter_id, "
                     "count(view_id) as count_views, toDate(created_at) as created_at FROM views "

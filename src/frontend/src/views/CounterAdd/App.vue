@@ -15,6 +15,7 @@
     <div id="counter_script" v-if="showF">
         <pre>
             <code class="language-html">
+                <!--TODO сгенерировать в скрипте и вставить хост сайта -->
                 &lt;!-- /Auf.Metrika counter --&gt;
                 &lt;script&gt;&lt;img src="https://127.0.0.1/api/getmetadata/{{ counter_id }}" style="position:absolute; left:-9999px;" alt="" /&gt;&lt;/script&gt;
                 &lt;noscript&gt;&lt;div&gt;&lt;img src="https://127.0.0.1/api/getmetadata/{{ counter_id }}" style="position:absolute; left:-9999px;" alt="" /&gt;
@@ -28,7 +29,7 @@
 <script>
 import axios from 'axios';
 import {API_URL} from "@/consts";
-
+/* TODO работу с CSRF вынести в сервисы */
 
 function getCookie(name) {
   const value = `; ${document.cookie}`;
@@ -46,6 +47,7 @@ axios.defaults.headers.common['X-CSRFToken'] = csrfToken;
 export default {
     data() {
         return {
+            // TODO сделайте одинаковый подход к названию переменных
             counter_id: 0,
             showF: false,
             name: '',
@@ -54,6 +56,8 @@ export default {
     },
     methods: {
         copyToClipboard() {
+            // TODO зачем ходить напрямую в DOM? Вы же работаете во Vue и должны использовать инструменты Vue
+            // Не надо в обход менять DOM
             const el = document.createElement('textarea');
             el.value = document.querySelector('#counter_script code').textContent;
             document.body.appendChild(el);
@@ -68,6 +72,8 @@ export default {
             form.append('name', this.name);
             form.append('link', this.link);
             console.log(API_URL)
+            // TODO слишком много отступов между строками
+            // TODO почему не используется async/await?
             axios.post(`${API_URL}/counters/add`, {
                     name: this.name,
                     link: this.link
@@ -83,7 +89,7 @@ export default {
             )
                 .then(response => {
                     this.counter_id = response.data.counter,
-                        this.showF = true
+                        this.showF = true // TODO зачем здесь отступ? Что такое F?
                     console.log(this.showF)
 
                 })

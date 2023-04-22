@@ -1,5 +1,5 @@
 version: '3'
-
+# TODO убрать неиспользуемый файл
 services:
   app:
     image: django2k:latest

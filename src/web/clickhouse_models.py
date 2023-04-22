@@ -3,7 +3,7 @@ from infi.clickhouse_orm import (
     Model,
     DateTimeField,
     DateField,
-    Int8Field,
+    Int8Field,  # TODO убрать неиспользуемые импорты
     UInt8Field,
     UInt16Field,
     UInt64Field,

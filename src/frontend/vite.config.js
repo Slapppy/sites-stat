@@ -16,6 +16,7 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
+        // TODO что с отступами
           CounterPage: resolve(__dirname, join("src", "views", "CounterPage", "index.html")),
         CounterAdd: resolve(__dirname, join("src", "views", "CounterAdd", "index.html")),
 

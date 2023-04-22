@@ -1,7 +1,7 @@
 import Vuex from 'vuex';
 
 
-
+// TODO удалить лишнии файлы
 const store = new Vuex.Store({
   state: {
     period: 'year' // default filter value

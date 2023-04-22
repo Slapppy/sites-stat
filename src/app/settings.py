@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-(^$f!wh5xli6eu!vgsy=mwej3&t!-=fe3yw2y=7^pe+chthdx5
 DEBUG = True
 
 # ALLOWED_HOSTS = []
-
+# TODO можно вставлять через переменную окружения
 ALLOWED_HOSTS = ["*"] if DEBUG else ["localhost"]
 
 # Application definition
@@ -61,7 +61,7 @@ MIDDLEWARE = [
 ]
 
 CORS_ORIGIN_ALLOW_ALL = False
-
+# TODO можно вставлять через переменную окружения
 CORS_ORIGIN_WHITELIST = ("http://127.0.0.1:8000", "https://d5dmb75fkf3m3c1fmdh7.apigw.yandexcloud.net")
 ROOT_URLCONF = "app.urls"
 
@@ -89,7 +89,7 @@ WSGI_APPLICATION = "app.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ.get("DB_NAME", "notes"),
+        "NAME": os.environ.get("DB_NAME", "notes"), # TODO причем тут notes?
         "USER": os.environ.get("DB_USER", "notes"),
         "PASSWORD": os.environ.get("DB_PASSWORD", "notes"),
         "HOST": os.environ.get("DB_HOST", "localhost"),
@@ -157,5 +157,5 @@ CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL", "redis://localhost:6379/
 CELERY_BEAT_SHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 
 CELERY_IMPORTS = [
-    "web.tasks",
+    "web.tasks", # TODO зачем?
 ]

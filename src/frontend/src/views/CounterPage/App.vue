@@ -1,8 +1,8 @@
 <script setup>
 import CounterPage from "../../containers/CounterPage.vue";
 </script>
-
 <template>
+  <!--TODO где отступ?-->
 
 <CounterPage></CounterPage>
 </template>

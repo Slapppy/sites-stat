@@ -49,8 +49,10 @@
 
     </div>
 </div>
+ {% comment %} TODO привести в порядок отступы {% endcomment %}
+
     <script src="{% static 'web/js/generatecounter.js' %}"
                 defer
-                data-id-counter="{{ id_counter }}" ></script>
+                data-id-counter="{{ id_counter }}" ></script> <!--TODO вытащить из {{object.id}}-->
 
 {% endblock %}

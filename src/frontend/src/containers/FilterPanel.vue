@@ -3,6 +3,7 @@
     <div class="filter-wrapper">
       <div class="date-selector mb-3">
         <span class="date-radio-buttons">
+          <!-- TODO вывести варианты через цикл, тем более цикл уже есть -->
             <label class="radio-button">
                 <input class="input-radio-button" type="radio" name="period" value="threedays"
                        v-model="selectedFilter" @change="onFilterChange">
@@ -61,6 +62,7 @@ export default {
   },
   methods: {
     onFilterChange() {
+      // TODO это же компонент, почему он лежит в контейнерах?
       this.$emit('filter-changed', this.selectedFilter);
     }
   }
