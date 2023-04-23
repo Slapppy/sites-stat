@@ -1,4 +1,4 @@
-{% extends 'web/base.html' %}
+{% extends 'web/base_with_breadcrumbs.html' %}
 {% load static %}
 {% block head %}
     {% comment %} TODO почему на всех страницах разные стили? {% endcomment %}
@@ -8,14 +8,13 @@
 {% block title %}Личный кабинет - FreeStat{% endblock %}
 
 
+{% block breadcrumbs_context %}
+    <li class="breadcrumb-item active" aria-current="page">Список счетчиков /</li>
+{% endblock %}
 
-{% block content %}
+{% block body %}
     <div class="content mt-5">
         <div class="container-fluid">
-
-            {% block breadcrumbs_context %}
-                <li class="breadcrumb-item active" aria-current="page">Список счетчиков /</li>
-            {% endblock %}
             <div class="row mb-4">
                 <div class="add-counter col-4">
                     <button class="btn-counter"><a href="{% url 'add' %}" class="btn-link">Добавить счетчик</a></button>

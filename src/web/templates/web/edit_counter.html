@@ -1,4 +1,4 @@
-{% extends 'web/base.html' %}
+{% extends 'web/base_with_breadcrumbs.html' %}
 {% block head %}
     {% load static %}
     <link href="{% static 'web/css/style_counter.css' %}" rel="stylesheet">
@@ -11,47 +11,40 @@
     <li class="breadcrumb-item active" aria-current="page">Настройка {{ object.name }}</li>
 {% endblock %}
 
-{% block content %}
-<div class="content mt-4">
-    <div class="container">
-        <div class="title">
-            {% block breadcrumbs %}
-                {{ block.super }}
-            {% endblock %}
-            <h2 class="pb-4">Настройка счетчика </h2>
+{% block body %}
+    <div class="content mt-4">
+        <div class="container">
+            <div class="title">
+                <h2 class="pb-4">Настройка счетчика </h2>
+            </div>
+            <div class="main">
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <div class="field pb-3">
+                        <label for="name_counter">Имя счетчика</label>
+                        {{ form.name }}
+                    </div>
+                    <div class="field pb-3">
+                        <label for="site_adress">Адрес сайта</label>
+                        {{ form.link }}
+                    </div>
+                    <div class="text-center pt-4 submit_btn-wrap" style="width:50%;">
+                        <button class="btn btn-success">Сохранить</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="text-wrap">
+                <h3>Код счетчика</h3>
+                <p id="text"></p>
+            </div>
+
         </div>
-        <div class="main">
-            <form action="" method="POST">
-			{% csrf_token %}
-			<div class="field pb-3">
-				<label for="name_counter">Имя счетчика</label>
-				{{ form.name }}
-			</div>
-			<div class="field pb-3">
-				<label for="site_adress">Адрес сайта</label>
-				{{ form.link }}
-			</div>
-                <div class="text-center pt-4 submit_btn-wrap" style="width:50%;">
-				<button class="btn btn-success">Сохранить</button>
-                </div>
-
-		</form>
-
-        </div>
-
-<div class="text-wrap">
-    <h3>Код счетчика</h3>
-    <p id="text">
-
-    </p>
-  </div>
-
     </div>
-</div>
- {% comment %} TODO привести в порядок отступы {% endcomment %}
+    {% comment %} TODO привести в порядок отступы {% endcomment %}
 
     <script src="{% static 'web/js/generatecounter.js' %}"
-                defer
-                data-id-counter="{{ id_counter }}" ></script> <!--TODO вытащить из {{object.id}}-->
+            defer
+            data-id-counter="{{ id_counter }}"></script> <!--TODO вытащить из {{object.id}}-->
 
 {% endblock %}

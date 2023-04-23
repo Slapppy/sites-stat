@@ -1,4 +1,4 @@
-{% extends 'web/base.html' %}
+{% extends 'web/base_with_breadcrumbs.html' %}
 {% block head %}
     {% load static %}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
@@ -18,11 +18,7 @@
     <li class="breadcrumb-item active" aria-current="page">{{ object.name }}</li>
 {% endblock %}
 
-{% block content %}
-
-    {% block breadcrumbs %}
-        {{ block.super }}
-    {% endblock %}
+{% block body %}
 
     <div class="container-fluid">
         <p id="counter_name">
