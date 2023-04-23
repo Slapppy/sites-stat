@@ -1,7 +1,6 @@
 {% extends 'web/base.html' %}
 {% block head %}
     {% load static %}
-    <title>{{ object.name }}</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     <link rel="stylesheet" href="{% static 'web/css/font-awesome.min.css' %}">
     <script src="https://code.highcharts.com/highcharts.js"></script>
@@ -10,8 +9,9 @@
 
     <script type="module" src="{% static '/dist/assets/CounterPage.js' %}"></script>
     <link href="{% static '/dist/assets/index.css' %}" rel="stylesheet">
-
 {% endblock %}
+
+{% block title %}{{ object.name }} - статистика - FreeStat{% endblock %}
 
 {% block breadcrumbs_context %}
     <li class="breadcrumb-item"><a href="{% url 'counters' %}">Список счетчиков</a></li>

@@ -5,13 +5,25 @@
     <meta charset="UTF-8">
     <script src="{% static "web/js/bootstrap.bundle.min.js" %}"></script>
     <link rel="stylesheet" href="{% static "web/css/bootstrap.min.css" %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
     <link rel="stylesheet" href="{% static 'web/css/base.css' %}">
- {% comment %} TODO добавьте <title> c дефолтным блоком внутри, чтобы везде название было вне зависимости от переопределений
-    {% endcomment %}
-    
+
+    <title>{% block title %}FreeStat - система статистики для сайта{% endblock %}</title>
+
     {% block head %}
     {% endblock head %}
 </head>
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs container-fluid">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                {% block breadcrumbs_context %}
+                {% endblock breadcrumbs_context %}
+            </ol>
+        </nav>
+    </div>
+{% endblock breadcrumbs %}
 
 <body>
 <div id="page-container">
@@ -46,19 +58,9 @@
         </nav>
         <div class="line"></div>
         <!-- Navbar -->
- {% comment %} TODO какая разница между блоками content & breadcrumbs, если они находятся в одном месте? {% endcomment %}
-        {% block content %}
-            {% block breadcrumbs %}
-                <div class="breadcrumbs container-fluid">
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb">
-                            {% block breadcrumbs_context %}
-                            {% endblock breadcrumbs_context %}
-                        </ol>
-                    </nav>
-                </div>
-            {% endblock breadcrumbs %}
-        {% endblock content %}
+
+        {% block content %}{% endblock content %}
+
     </div>
     <footer class="footer text-center" id="footer">
         <div class="line"></div>
@@ -70,9 +72,6 @@
             </div>
         </section>
     </footer>
-
-    <script defer src="src/web/static/web/js/jquery.min.js"></script>
 </div>
-
 </body>
 </html>
