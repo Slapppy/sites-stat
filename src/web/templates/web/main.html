@@ -1,32 +1,28 @@
 {% extends 'web/base.html' %}
 {% block head %}
     {% load static %}
-    <link rel="stylesheet" href="{% static 'web/css/font-awesome.min.css' %}">
     <link rel="stylesheet" href="{% static 'web/css/main.css' %}">
 {% endblock head %}
 
 {% block content %}
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
 
     {% comment %} TODO что это? сделайте отдельную страницу для тестирования {% endcomment %}
-    <img src="http://127.0.0.1:8000/api/getmetadata/12"/>
-
-
+{#    <img src="http://127.0.0.1:8000/api/getmetadata/12"/>#}
 
     <div class="promo">
         <div class="additional-back">
             <div class="container">
                 <h1>FreeStat - бесплатная система статистики для вашего сайта</h1>
                 <div class="promo-btn">
-                    <a id="btn-redirect" class="btn btn-light" href="{% url 'counters' %}">Перейти</a>
+                    <a id="btn-redirect" class="btn btn-light mt-5" href="{% url 'counters' %}">Перейти</a>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="container">
-        <div class="description">
-            <h2>Что это такое?</h2>
+        <div class="description mt-4 mb-4">
+            <h2 class="mb-2">Что это такое?</h2>
             <p>Статистика сайта - это числовые и процентные данные, указывающие на популярность сайта
                 (количество посещений сайта), информация об источниках посещений и демографии пользователей.
                 Статистика сайта позволяет вам проверять посещаемость сайта и позволяет проводить точный анализ и

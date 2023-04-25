@@ -1,14 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap');
-
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-}
-
-body {
-    font-family: 'Nunito Sans', sans-serif;
-    font-size: 14px;
 }
 
 a {
@@ -31,7 +24,6 @@ a {
 .language-html {
     display: block;
     font-size: 14px;
-    font-family: monospace;
     white-space: pre-wrap;
     line-height: 1.5;
     color: #333;
