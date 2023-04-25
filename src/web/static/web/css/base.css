@@ -27,6 +27,10 @@ body {
     text-decoration: underline;
 }
 
+.btn-outline-dark {
+    font-weight: 500 !important;
+}
+
 .dropdown-item {
     font-size: 14px;
 }
