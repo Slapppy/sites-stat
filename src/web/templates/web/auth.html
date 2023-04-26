@@ -26,13 +26,16 @@
                                 <input type="password" id="password" name="password">
                             </label>
                         </div>
-                        <div class="button-send-wrap">
-                            <button type="submit" class="button-send mt-4">Войти</button>
+                        <div class="button-send-wrap mt-4">
+                            <button type="submit" class="button-send">Войти</button>
                         </div>
-
+                    <div class="form-message mt-3">
                         {% for message in messages %}
                             <p id="message">{{ message }}</p>
                         {% endfor %}
+                    </div>
+
+
                         <div class="link-to-register mt-4">
                             <span>Еще нет учетной записи? </span><a href="{% url 'reg' %}">Регистрация</a>
                         </div>
