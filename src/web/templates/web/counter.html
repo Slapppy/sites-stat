@@ -4,8 +4,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     <link rel="stylesheet" href="{% static 'web/css/font-awesome.min.css' %}">
     <script src="https://code.highcharts.com/highcharts.js"></script>
-    <link href="{% static 'src/assets/style_counter.css' %}" rel="stylesheet">
-    <link href="{% static 'src/assets/chart.css' %}" rel="stylesheet">
+    <link href="{% static '/web/css/counter.css' %}" rel="stylesheet">
 
     <script type="module" src="{% static '/dist/assets/CounterPage.js' %}"></script>
     <link href="{% static '/dist/assets/index.css' %}" rel="stylesheet">
@@ -21,9 +20,10 @@
 {% block body %}
 
     <div class="container-fluid">
-        <p id="counter_name">
-            Название счетчика: {{ object.name }}
-        </p>
+        <h3 id="counter_name" class="mb-4">
+            Название счетчика:
+            <span class="counter-name ms-2">{{ object.name }}</span>
+        </h3>
 
         <div id="counterpage"></div>
     </div>
