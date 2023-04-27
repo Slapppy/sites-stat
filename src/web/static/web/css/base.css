@@ -27,8 +27,18 @@ body {
     text-decoration: underline;
 }
 
-.btn-outline-dark {
-    font-weight: 500 !important;
+.btn-register {
+    border: 1px solid #1B1212;
+    border-radius: 5px;
+    font-weight: 500;
+    color: #1B1212;
+    text-decoration: none;
+}
+
+.btn-register:hover, .btn-register:focus, .btn-register:active {
+    background-color: #a7f736;
+    border: 1px solid #a7f736;
+    color: #1B1212;
 }
 
 .dropdown-item {
@@ -63,7 +73,7 @@ body {
     height: 3rem; /* Footer height */
 }
 
-.breadcrumb-item a{
+.breadcrumb-item a {
     text-decoration: none;
 }
 
