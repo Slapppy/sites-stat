@@ -3,8 +3,7 @@
     {% load static %}
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="{% static 'web/css/style_counter.css' %}" rel="stylesheet">
-    <link href="{% static 'src/assets/counteradd.css' %}" rel="stylesheet">
+    <link href="{% static 'src/assets/add_counter.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block title %}Добавление счетчика - FreeStat{% endblock %}
@@ -17,13 +16,13 @@
 {% block body %}
     <div class="content mt-4">
         <div class="container">
-            <div class="title">
-                <h2 class="pb-4">Новый счетчик</h2>
-            </div>
+                <div class="title">
+                    <h2 class="pb-4">Новый счетчик</h2>
+                </div>
+                     <div id="counteradd"></div>
+                <link href="{% static '/dist/assets/index.css' %}" rel="stylesheet">
+                <script type="module" src="{% static '/dist/assets/CounterAdd.js' %}"></script>
 
-            <div id="counteradd"></div>
-            <link href="{% static '/dist/assets/index.css' %}" rel="stylesheet">
-            <script type="module" src="{% static '/dist/assets/CounterAdd.js' %}"></script>
         </div>
     </div>
 {% endblock %}
