@@ -114,3 +114,15 @@ a {
 .register a {
 	font-weight: 600;
 }
+
+.charts {
+  display: flex;
+  width: 100%;
+}
+
+.view-chart, .visit-chart, .visitor-chart {
+  margin-right: 10px;
+  width: 450px;
+  height: 250px;
+  border: 1px solid black;
+}
