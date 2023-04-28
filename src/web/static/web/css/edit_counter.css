@@ -27,8 +27,9 @@
 .counter-code {
     max-width: 600px;
     border: 1px solid #a7f736;
+    border-radius: 5px;
 }
 
 .counter-code:hover {
-    background: linear-gradient(to right top, #e4fcc2 0%, #f5f5f0 100%);
+    background: linear-gradient(to right top, #d3fb9a 0%, #f6feea 100%);
 }

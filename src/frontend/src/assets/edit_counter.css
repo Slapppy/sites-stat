@@ -1,98 +1,35 @@
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+.form-label label{
+    width: 130px;
 }
 
-a {
-    text-decoration: none;
+.form-input input{
+    outline: none;
+    height: 36px;
+    width: 400px;
+    padding: 0.5rem 0.875rem;
+    border: 1px solid #DCDCDC;
+    border-radius: 0.375rem;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
 
-.button {
-    background-color: #4CAF50;
+.form-input input:hover, .form-input input:focus, .form-input input:active {
+    border: 1px solid #a7f736;
+}
+
+.btn-save {
     border: none;
-    color: white;
-    padding: 10px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 10px 0;
-    cursor: pointer;
+    min-width: 120px;
+    line-height: 30px;
+    background-color: #a7f736;
+    border-radius: 5px;
 }
 
-.language-html {
-    display: block;
-    font-size: 14px;
-    white-space: pre-wrap;
-    line-height: 1.5;
-    color: #333;
+.counter-code {
+    max-width: 600px;
+    border: 1px solid #a7f736;
+    border-radius: 5px;
 }
 
-
-.container {
-    margin: 0 auto;
-    padding-left: 15px;
-    max-width: 80%;
+.counter-code:hover {
+    background: linear-gradient(to right top, #d3fb9a 0%, #f6feea 100%);
 }
-
-.field {
-    width: 50%;
-    display: flex;
-    justify-content: space-between;
-}
-
-.field input {
-    font-size: 1rem;
-    width: 60%;
-    padding: 2px 0px 2px 2px;
-    border-radius: 4px;
-    border-color: #c5c5c5;
-}
-
-.submit_btn-wrap {
-    width: 50%;
-    display: flex;
-    justify-content: flex-end;
-}
-
-.submit_btn-wrap button {
-    padding: 12px 36px;
-    font-size: 14px;
-    border-radius: 4px;
-    -webkit-box-shadow: 3px 3px 10px 3px #dddddd;
-    -moz-box-shadow: 3px 3px 10px 3px #dddddd;
-    box-shadow: 3px 3px 10px 3px #dddddd;
-    border: 1px solid rgba(204, 204, 204, 0.5);
-    background-color: #A7F736FF;
-	color: black;
-}
-
-.submit_btn-wrap button:hover {
-    background-color: #7FD20BFF;
-	border-color: #7FD20BFF;
-	color: #000000;
-}
-
-.breadcrumb {
-    background-color: white;
-}
-
-#counter_name {
-    font-size: 16px;
-}
-
-.text-wrap {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
-    background: rgba(0, 0, 0, 0.4);
-    -webkit-backdrop-filter: blur(7px);
-    backdrop-filter: blur(7px);
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
-    padding: 0px 20px;
-    margin-top: 25px;
-    max-width: 500px;
-  }
