@@ -14,7 +14,7 @@
 
 <script>
 import Highcharts from 'highcharts'
-import $ from 'jquery'
+import axios from 'axios';
 import FilterPanel from "../containers/FilterPanel.vue";
 import {API_URL} from "@/consts";
 
@@ -41,42 +41,23 @@ export default {
       const id = path.split('/')[1];
 
 
-      $.ajax({
-        url: `${API_URL}/api/view/data?id=${id}&filter=${this.selectedFilter}`,
-        method: 'GET',
-        dataType: 'json',
-        success: (response) => {
-          this.apiResponseViews = response
-          this.updateChartViews()
-        },
-        error: (xhr, status, error) => {
-          console.log(error)
-        }
-      })
-      $.ajax({
-        url: `${API_URL}/api/visit/data?id=${id}&filter=${this.selectedFilter}`,
-        method: 'GET',
-        dataType: 'json',
-        success: (response) => {
-          this.apiResponseVisits = response
-          this.updateChartVisits()
-        },
-        error: (xhr, status, error) => {
-          console.log(error)
-        }
-      })
-      $.ajax({
-        url: `${API_URL}/api/visitor/data?id=${id}&filter=${this.selectedFilter}`,
-        method: 'GET',
-        dataType: 'json',
-        success: (response) => {
-          this.apiResponseVisitors = response
-          this.updateChartVisitors()
-        },
-        error: (xhr, status, error) => {
-          console.log(error)
-        }
-      })
+    axios.all([
+  axios.get(`${API_URL}/api/view/data?id=${id}&filter=${this.selectedFilter}`),
+  axios.get(`${API_URL}/api/visit/data?id=${id}&filter=${this.selectedFilter}`),
+  axios.get(`${API_URL}/api/visitor/data?id=${id}&filter=${this.selectedFilter}`)
+])
+.then(axios.spread((response1, response2, response3) => {
+  this.apiResponseViews = response1.data;
+  this.updateChartViews();
+  this.apiResponseVisits = response2.data;
+  this.updateChartVisits();
+  this.apiResponseVisitors = response3.data;
+  this.updateChartVisitors();
+}))
+.catch(error => {
+  console.log(error);
+});
+
     },
     updateChartViews() {
       const chartData = this.apiResponseViews.data.map(item => [Date.parse(item.date), item.count_views]);
