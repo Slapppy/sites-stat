@@ -140,8 +140,7 @@ class CounterEditView(UpdateView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         return {
-            **super(CounterEditView, self).get_context_data(**kwargs),
-            "id_counter": self.kwargs[self.slug_url_kwarg], # TODO возможно, лишняя переменная, см. template
+            **super(CounterEditView, self).get_context_data(**kwargs)
         }
 
 
