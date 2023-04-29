@@ -36,6 +36,7 @@ class CountersListView(ListView, LoginRequiredMixin):
             queryset = filter_counters_with_search(queryset, self.search)
         return queryset
 
+    @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return redirect("auth") # TODO заменить на login_required
