@@ -1,10 +1,10 @@
-from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import JsonResponse
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect, get_object_or_404 # TODO неиспользуемый импорт
-from django.contrib.auth import authenticate, login
 from django.urls import reverse
+from django.http import JsonResponse
+from django.contrib import messages
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views.generic import (
     ListView,
@@ -13,8 +13,9 @@ from django.views.generic import (
     DetailView,
     UpdateView,
     TemplateView,
-) # TODO нет переноса между разными видами импорта; надо использовать абсолютные импорты
-from .forms import CreateUserForm, AddCounterForm
+)
+
+from .forms import CreateUserForm, AddCounterForm, AuthForm
 from .services import (
     get_user_list_of_counters,
     add_parameters_into_counters,
