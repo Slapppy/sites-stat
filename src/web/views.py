@@ -73,33 +73,22 @@ class RegistrationView(View):
         context = {"form": form}
         return render(request, "web/registration.html", context)
 
-    def clear_messages(self, storage):
-        # TODO выгрядит костыльно
-        for _ in storage:
-            pass
-        if len(storage._loaded_messages) == 1:
-            del storage._loaded_messages[0]
-
 
 def auth_page(request):
-    if request.user.is_authenticated: # TODO заменить на login_required
-        return redirect("main")
-
+    form = AuthForm(request.POST or None)
     if request.method == "POST":
-        # TODO нужна форма
-        email = request.POST.get("email")
-        password = request.POST.get("password")
-        user = authenticate(request, email=email, password=password)
-
-        if user is not None:
-            login(request, user)
-            return redirect("counters")
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+            user = authenticate(request, email=email, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect("counters")
+            else:
+                messages.error(request, "Неверный Логин или Пароль !")
         else:
-            # TODO это error, а не info
-            messages.info(request, "Неверный Логин или Пароль")
-
-    context = {} # TODO зачем, если он пустой?
-    return render(request, "web/auth.html", context)
+            messages.error(request, "Некорректные данные !")
+    return render(request, "web/auth.html", context={'form': form})
 
 
 class CounterCreate(CreateView):

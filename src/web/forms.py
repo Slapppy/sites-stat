@@ -12,6 +12,11 @@ class AddCounterForm(forms.ModelForm):
         fields = ["name", "link"]
 
 
+class AuthForm(forms.Form):
+    email = forms.EmailField(max_length=70)
+    password = forms.CharField(widget=forms.PasswordInput)
+
+
 class CreateUserForm(UserCreationForm):
     name = forms.CharField(max_length=40)
     surname = forms.CharField(max_length=50)
