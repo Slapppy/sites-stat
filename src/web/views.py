@@ -1,5 +1,6 @@
 from django.urls import reverse
 from django.http import JsonResponse
+from django.urls import reverse_lazy
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -95,7 +96,7 @@ def auth_page(request):
 class CounterCreate(CreateView):
     form_class = AddCounterForm
     template_name = "web/add_counter.html"
-    success_url = "/counters/add" #TODO: reverse_lazy("add_counter")
+    success_url = reverse_lazy("add")
     info_sended = True
 
     @method_decorator(login_required)
