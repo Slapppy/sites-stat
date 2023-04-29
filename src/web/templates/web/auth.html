@@ -3,7 +3,7 @@
     {% load static %}
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="{% static 'web/css/auth_register.css' %}" rel="stylesheet">
+    <link href="{% static 'src/assets/auth_register.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block title %}Вход в аккаунт - FreeStat{% endblock %}
@@ -29,11 +29,11 @@
                         <div class="button-send-wrap mt-4">
                             <button type="submit" class="button-send">Войти</button>
                         </div>
-                    <div class="form-message mt-3">
-                        {% for message in messages %}
-                            <p id="message">{{ message }}</p>
-                        {% endfor %}
-                    </div>
+                        <div class="form-message mt-3">
+                            {% for message in messages %}
+                                <p id="message">{{ message }}</p>
+                            {% endfor %}
+                        </div>
 
 
                         <div class="link-to-register mt-4">

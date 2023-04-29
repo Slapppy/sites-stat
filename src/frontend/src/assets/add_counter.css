@@ -34,14 +34,6 @@
 }
 
 .form__item_button button {
-    /*padding: 12px 36px;*/
-    /*border-radius: 5px;*/
-    /*-webkit-box-shadow: 3px 3px 10px 3px #dddddd;*/
-    /*-moz-box-shadow: 3px 3px 10px 3px #dddddd;*/
-    /*box-shadow: 3px 3px 10px 3px #dddddd;*/
-    /*background-color: #a7f736;*/
-    /*border: none;*/
-    /*cursor: pointer;*/
     border: none;
     min-width: 120px;
     line-height: 30px;
