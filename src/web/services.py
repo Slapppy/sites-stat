@@ -14,19 +14,32 @@ def get_user_list_of_counters(user):
 
 def add_parameters_into_counters(counters):
     """Добавляет количество просмотров, визитов и посетителей к каждому счетчику"""
-    end_date = datetime.now().strftime("%Y-%m-%d")
-    # TODO запросить все данные, а потом в коде их смаппить. Сейчас на каждый объект делается запрос - это плохо.
+    counters_id = [counter["id"] for counter in counters.values("id")]
+
+    db = create_connection()
+    views = ViewInDay.objects_in(db).filter(ViewInDay.counter_id.isIn(counters_id))
+    visits = VisitInDay.objects_in(db).filter(VisitInDay.counter_id.isIn(counters_id))
+    visitors = VisitorInDay.objects_in(db).filter(VisitorInDay.counter_id.isIn(counters_id))
+    counters_with_params = [
+        {"id": counter_id, "count_views": 0, "count_visits": 0, "count_visitors": 0} for counter_id in counters_id
+    ]
+    for raw in views:
+        counter_with_params = list(filter(lambda x: x["id"] == raw.counter_id, counters_with_params))
+        counter_with_params[0]["count_views"] += raw.count_views
+
+    for raw in visits:
+        counter_with_params = list(filter(lambda x: x["id"] == raw.counter_id, counters_with_params))
+        counter_with_params[0]["count_visits"] += raw.count_visits
+
+    for raw in visitors:
+        counter_with_params = list(filter(lambda x: x["id"] == raw.counter_id, counters_with_params))
+        counter_with_params[0]["count_visitors"] += raw.count_visitors
+
     for counter in counters:
-        start_date = counter.created_at.strftime("%Y-%m-%d")
-        counter.count_views = get_sum_data_for_certain_period(
-            ViewInDay, "count_views", counter.id, start_date, end_date
-        )
-        counter.count_visits = get_sum_data_for_certain_period(
-            VisitInDay, "count_visits", counter.id, start_date, end_date
-        )
-        counter.count_visitors = get_sum_data_for_certain_period(
-            VisitorInDay, "count_visitors", counter.id, start_date, end_date
-        )
+        counter_with_params = list(filter(lambda x: x["id"] == counter.id, counters_with_params))[0]
+        counter.count_views = counter_with_params["count_views"]
+        counter.count_visits = counter_with_params["count_visits"]
+        counter.count_visitors = counter_with_params["count_visitors"]
 
 
 def filter_counters_with_search(counters, search):
