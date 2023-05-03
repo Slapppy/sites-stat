@@ -1,7 +1,4 @@
-from datetime import datetime
-
 from .clickhouse_models import ViewInDay, VisitInDay, VisitorInDay
-from api.servises import get_sum_data_for_certain_period
 from app.clickhouse import create_connection
 from .models import Counter
 
@@ -40,11 +37,6 @@ def add_parameters_into_counters(counters):
         counter.count_views = counter_with_params["count_views"]
         counter.count_visits = counter_with_params["count_visits"]
         counter.count_visitors = counter_with_params["count_visitors"]
-
-
-def filter_counters_with_search(counters, search):
-    # TODO слишком простая функция. Заменить на DjangoFilter
-    return counters.filter(name__icontains=search)
 
 
 def get_user_counter(counter_id, user):
