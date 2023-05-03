@@ -1,5 +1,3 @@
-from django.conf import settings
-
 import os
 from celery import Celery
 from celery.schedules import crontab
@@ -12,8 +10,8 @@ app.config_from_object("django.conf:settings", namespace="CELERY")
 
 
 app.conf.beat_schedule = {
-    "groupdb": {
-        "task": "web.tasks.groupdb",
+    "group_db": {
+        "task": "web.tasks.group_db",
         "schedule": crontab(minute=0, hour=0),
     }
 }

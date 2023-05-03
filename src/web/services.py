@@ -2,6 +2,7 @@ from datetime import datetime
 
 from .clickhouse_models import ViewInDay, VisitInDay, VisitorInDay
 from api.servises import get_sum_data_for_certain_period
+from app.clickhouse import create_connection
 from .models import Counter
 
 
@@ -35,3 +36,10 @@ def filter_counters_with_search(counters, search):
 
 def get_user_counter(counter_id, user):
     return Counter.objects.filter(pk=counter_id, user=user)
+
+
+def group_clickhouse_tables():
+    db = create_connection()
+    db.raw("OPTIMIZE TABLE viewinday FINAL;")
+    db.raw("OPTIMIZE TABLE visitinday FINAL;")
+    db.raw("OPTIMIZE TABLE visitorinday FINAL;")
