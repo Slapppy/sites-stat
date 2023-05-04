@@ -39,13 +39,13 @@
                         <button type="submit" class="button-send">Зарегистрироваться</button>
                     </div>
 
-                        <div class="register">
-                            <span>Есть учетная запись? </span><a href={% url 'auth' %}>Войти</a>
-                        </div>
-                    </form>
-                    {{ form.errors }}
-                </div>
+                    <div class="register">
+                        <span>Есть учетная запись? </span><a href={% url 'auth' %}>Войти</a>
+                    </div>
+                </form>
+                {{ form.errors }}
             </div>
         </div>
-    </main>
+    </div>
+</main>
 {% endblock %}
