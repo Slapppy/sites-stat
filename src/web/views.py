@@ -131,9 +131,9 @@ class CounterEditView(UpdateView):
 
 class CounterDeleteView(View):
     def get(self, request, pk):
-        obj = get_user_counter(pk, request.user)#TODO: get_object_or_404
-        if obj:
-            obj.delete()
+        counter = get_object_or_404(Counter, pk=pk)
+        if counter and counter.user == request.user:
+            counter.delete()
             return redirect("counters")
         # TODO однострочный комментарий должен начинаться с решетки
         """TODO сделать ридерект на страницу ошибки"""
