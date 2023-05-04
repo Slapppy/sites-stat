@@ -55,16 +55,8 @@ class RegistrationView(View):
         if form.is_valid():
             form.save()
             storage = messages.get_messages(request)
-            # TODO очистка сообщений выглядит лишней, потому что до этого им неоткуда взяться. 
-            #  Форма сама по себе хранит ошибки внутри себя, а не в messages framework, поэтому непонятно, что тут очищается.
-            #  Скорее всего код очистки лишний и его нужно убрать
-            self.clear_messages(storage) 
             messages.success(request, "Вы успешно зарегистрировались")
             return redirect("auth")
-        else:
-            storage = messages.get_messages(request)
-            self.clear_messages(storage)
-            messages.error(request, "Ошибка регистрации") # TODO убрать это. В темплейте нет вывода этих ошибок.
         context = {"form": form}
         return render(request, "web/registration.html", context)
 
