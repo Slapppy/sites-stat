@@ -35,10 +35,7 @@ class CountersListView(ListView, LoginRequiredMixin):
             queryset = queryset.filter(name__icontains=search)
         return queryset
 
-    @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            return redirect("auth") # TODO заменить на login_required
         return super(CountersListView, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -52,8 +49,6 @@ class CountersListView(ListView, LoginRequiredMixin):
 
 class RegistrationView(View):
     def get(self, request):
-        if request.user.is_authenticated: # TODO заменить на login_required
-            return redirect("main")
         form = CreateUserForm()
         return render(request, "web/registration.html", {"form": form})
 
@@ -99,7 +94,6 @@ class CounterCreate(CreateView):
     success_url = reverse_lazy("add")
     info_sended = True
 
-    @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         return super(self.__class__, self).dispatch(request, *args, **kwargs)
 
