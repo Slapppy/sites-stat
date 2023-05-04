@@ -1,8 +1,9 @@
 from django.urls import path, include, reverse_lazy
 from django.conf import settings
 from django.conf.urls.static import static
-
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LogoutView
+
 from . import views
 from .views import (
     CounterCreate,
