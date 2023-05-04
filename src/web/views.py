@@ -39,8 +39,6 @@ class CountersListView(ListView, LoginRequiredMixin):
         return super(CountersListView, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, *, object_list=None, **kwargs):
-        if not self.request.user.is_authenticated: # TODO заменить на login_required
-            return {}
         return {
             **super(CountersListView, self).get_context_data(**kwargs),
             "search": self.search, # TODO вытащить из гет запроса здесь, а get_queryset() использовать данные из контекста
