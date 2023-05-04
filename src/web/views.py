@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views.generic import (
@@ -15,13 +16,11 @@ from django.views.generic import (
     UpdateView,
     TemplateView,
 )
-
+from .models import Counter
 from .forms import CreateUserForm, AddCounterForm, AuthForm
 from .services import (
     get_user_list_of_counters,
     add_parameters_into_counters,
-    filter_counters_with_search,
-    get_user_counter,
 )
 
 
