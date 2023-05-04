@@ -28,10 +28,3 @@ def add_parameters_into_counters(counters):
         )
 
 
-def filter_counters_with_search(counters, search):
-    # TODO слишком простая функция. Заменить на DjangoFilter
-    return counters.filter(name__icontains=search)
-
-
-def get_user_counter(counter_id, user):
-    return Counter.objects.filter(pk=counter_id, user=user)

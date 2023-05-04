@@ -31,8 +31,8 @@ class CountersListView(ListView, LoginRequiredMixin):
         self.search = self.request.GET.get("search", None) # TODO зачем записывать в объект?
         queryset = get_user_list_of_counters(self.request.user)
         add_parameters_into_counters(queryset)
-        if self.search:
-            queryset = filter_counters_with_search(queryset, self.search)
+        if search:
+            queryset = queryset.filter(name__icontains=search)
         return queryset
 
     @method_decorator(login_required)
