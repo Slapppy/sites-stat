@@ -135,7 +135,6 @@ class CounterDeleteView(View):
         if counter and counter.user == request.user:
             counter.delete()
             return redirect("counters")
-        # TODO однострочный комментарий должен начинаться с решетки
-        """TODO сделать ридерект на страницу ошибки"""
+        # TODO сделать ридерект на страницу ошибки
         return redirect("counters")
 #TODO: как будто мало docstrings и комментов
