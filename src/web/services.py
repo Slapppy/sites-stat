@@ -39,10 +39,6 @@ def add_parameters_into_counters(counters):
         counter.count_visitors = counter_with_params["count_visitors"]
 
 
-def get_user_counter(counter_id, user):
-    return Counter.objects.filter(pk=counter_id, user=user)
-
-
 def group_clickhouse_tables():
     db = create_connection()
     db.raw("OPTIMIZE TABLE viewinday FINAL;")

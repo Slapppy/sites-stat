@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect, get_object_or_404 # TODO неиспользуемый импорт
+from django.shortcuts import render, redirect, get_object_or_404  # TODO неиспользуемый импорт
 from django.contrib.auth import authenticate, login
 from django.urls import reverse
 from django.utils.decorators import method_decorator
@@ -13,13 +13,11 @@ from django.views.generic import (
     DetailView,
     UpdateView,
     TemplateView,
-) # TODO нет переноса между разными видами импорта; надо использовать абсолютные импорты
+)  # TODO нет переноса между разными видами импорта; надо использовать абсолютные импорты
 from .forms import CreateUserForm, AddCounterForm
 from .services import (
     get_user_list_of_counters,
     add_parameters_into_counters,
-    filter_counters_with_search,
-    get_user_counter,
 )
 
 
@@ -27,30 +25,30 @@ class CountersListView(ListView, LoginRequiredMixin):
     template_name = "web/profile.html"
 
     def get_queryset(self):
-        self.search = self.request.GET.get("search", None) # TODO зачем записывать в объект?
+        self.search = self.request.GET.get("search", None)  # TODO зачем записывать в объект?
         queryset = get_user_list_of_counters(self.request.user)
         add_parameters_into_counters(queryset)
         if self.search:
-            queryset = filter_counters_with_search(queryset, self.search)
+            queryset = queryset.filter(name__icontains=self.search)
         return queryset
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect("auth") # TODO заменить на login_required
+            return redirect("auth")  # TODO заменить на login_required
         return super(CountersListView, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, *, object_list=None, **kwargs):
-        if not self.request.user.is_authenticated: # TODO заменить на login_required
+        if not self.request.user.is_authenticated:  # TODO заменить на login_required
             return {}
         return {
             **super(CountersListView, self).get_context_data(**kwargs),
-            "search": self.search, # TODO вытащить из гет запроса здесь, а get_queryset() использовать данные из контекста
+            "search": self.search,  # TODO вытащить из гет запроса здесь, а get_queryset() использовать данные из контекста
         }
 
 
 class RegistrationView(View):
     def get(self, request):
-        if request.user.is_authenticated: # TODO заменить на login_required
+        if request.user.is_authenticated:  # TODO заменить на login_required
             return redirect("main")
         form = CreateUserForm()
         return render(request, "web/registration.html", {"form": form})
@@ -60,16 +58,16 @@ class RegistrationView(View):
         if form.is_valid():
             form.save()
             storage = messages.get_messages(request)
-            # TODO очистка сообщений выглядит лишней, потому что до этого им неоткуда взяться. 
+            # TODO очистка сообщений выглядит лишней, потому что до этого им неоткуда взяться.
             #  Форма сама по себе хранит ошибки внутри себя, а не в messages framework, поэтому непонятно, что тут очищается.
             #  Скорее всего код очистки лишний и его нужно убрать
-            self.clear_messages(storage) 
+            self.clear_messages(storage)
             messages.success(request, "Вы успешно зарегистрировались")
             return redirect("auth")
         else:
             storage = messages.get_messages(request)
             self.clear_messages(storage)
-            messages.error(request, "Ошибка регистрации") # TODO убрать это. В темплейте нет вывода этих ошибок.
+            messages.error(request, "Ошибка регистрации")  # TODO убрать это. В темплейте нет вывода этих ошибок.
         context = {"form": form}
         return render(request, "web/registration.html", context)
 
@@ -82,7 +80,7 @@ class RegistrationView(View):
 
 
 def auth_page(request):
-    if request.user.is_authenticated: # TODO заменить на login_required
+    if request.user.is_authenticated:  # TODO заменить на login_required
         return redirect("main")
 
     if request.method == "POST":
@@ -98,14 +96,14 @@ def auth_page(request):
             # TODO это error, а не info
             messages.info(request, "Неверный Логин или Пароль")
 
-    context = {} # TODO зачем, если он пустой?
+    context = {}  # TODO зачем, если он пустой?
     return render(request, "web/auth.html", context)
 
 
 class CounterCreate(CreateView):
     form_class = AddCounterForm
     template_name = "web/add_counter.html"
-    success_url = "/counters/add" #TODO: reverse_lazy("add_counter")
+    success_url = "/counters/add"  # TODO: reverse_lazy("add_counter")
     info_sended = True
 
     @method_decorator(login_required)
@@ -113,12 +111,12 @@ class CounterCreate(CreateView):
         return super(self.__class__, self).dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
-        if self.request.user.is_authenticated:# TODO:login required тут есть, непонятно, зачем эта проверка
+        if self.request.user.is_authenticated:  # TODO:login required тут есть, непонятно, зачем эта проверка
             form.instance.user = self.request.user
             self.object = form.save()
             response_data = {"success": True, "counter": self.object.id}
             # TODO почему тут json response, если это сайт? Либо сделать редирект или перейти на api view
-            return JsonResponse(response_data) 
+            return JsonResponse(response_data)
 
     def get_context_data(self, **kwargs):
         ctx = super(CounterCreate, self).get_context_data(**kwargs)
@@ -151,17 +149,19 @@ class CounterEditView(UpdateView):
     def get_context_data(self, *, object_list=None, **kwargs):
         return {
             **super(CounterEditView, self).get_context_data(**kwargs),
-            "id_counter": self.kwargs[self.slug_url_kwarg], # TODO возможно, лишняя переменная, см. template
+            "id_counter": self.kwargs[self.slug_url_kwarg],  # TODO возможно, лишняя переменная, см. template
         }
 
 
 class CounterDeleteView(View):
     def get(self, request, pk):
-        obj = get_user_counter(pk, request.user)#TODO: get_object_or_404
+        obj = get_user_counter(pk, request.user)  # TODO: get_object_or_404
         if obj:
             obj.delete()
             return redirect("counters")
         # TODO однострочный комментарий должен начинаться с решетки
         """TODO сделать ридерект на страницу ошибки"""
         return redirect("counters")
-#TODO: как будто мало docstrings и комментов
+
+
+# TODO: как будто мало docstrings и комментов
