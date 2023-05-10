@@ -19,7 +19,7 @@
                     &lt;!-- / counter --&gt;
                     &lt;div id = "counter_id" style="transform: translateX(9999px);"&gt;{{ counter_id }} &lt;/div&gt;
                     &lt;script src="http://127.0.0.1:8000/src/src/assets/collectdata.js"&gt;&lt;/script&gt;
-                    &lt;noscript&gt;&lt;div&gt;&lt;img src="https://127.0.0.1/api/getmetadata/{{ counter_id }}"/&gt;
+                    &lt;noscript&gt;&lt;div&gt;&lt;img src="http://127.0.0.1:8000/api/getmetadata/{{ counter_id }}"/&gt;
                     &lt;/div&gt;&lt;/noscript&gt;
                 </code>
             </pre>
@@ -32,7 +32,6 @@
 <script>
 import axios from 'axios';
 import {API_URL} from "@/consts";
-import {ElButton} from "element-plus"
 
 function getCookie(name) {
     const value = `; ${document.cookie}`;
@@ -76,7 +75,6 @@ export default {
                     link: this.link
 
                 },
-
                 {
                     headers: {
                         'Content-Type': 'multipart/form-data',
@@ -100,15 +98,17 @@ export default {
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap');
 
+
+#counteradd {
+        display: flex;
+        gap: 20px;
+
+    }
+
 body {
     font-family: 'Montserrat', sans-serif;
 }
 
-.counter_script {
-    position: absolute;
-    left: 0;
-    top: 20px;
-}
 
 button {
     background-color: #4CAF50;
