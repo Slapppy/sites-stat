@@ -15,7 +15,7 @@
 <script>
 import Highcharts from 'highcharts'
 import $ from 'jquery' // TODO зачем тут JQuery?
-import FilterPanel from "../containers/FilterPanel.vue";
+import FilterPanel from "../components/FilterPanel.vue";
 import {API_URL} from "@/consts";
 
 export default {

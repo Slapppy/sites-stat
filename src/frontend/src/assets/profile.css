@@ -1,19 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@200;300;400;600;700&display=swap');
-
-body {
-    font-family: 'Nunito Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 400;
-    color: #1B1212;
-}
-
 .btn-counter {
     border: none;
     min-width: 160px;
     line-height: 30px;
     background-color: #a7f736;
     border-radius: 5px;
-    font-family: 'Nunito Sans', sans-serif;
 }
 
 .btn-counter:hover, .btn-counter:focus, .btn-counter:active {

@@ -1,18 +1,18 @@
-{% extends 'web/base.html' %}
+{% extends 'web/base_with_breadcrumbs.html' %}
 {% load static %}
 {% block head %}
- {% comment %} TODO почему на всех страницах разные стили? {% endcomment %}
-    <title>Личный кабинет</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="{% static "web/css/profile.css" %}">
+    <link href="{% static 'src/assets/profile.css' %}" rel="stylesheet">
 {% endblock %}
+
+{% block title %}Личный кабинет - FreeStat{% endblock %}
+
 
 {% block breadcrumbs_context %}
     <li class="breadcrumb-item active" aria-current="page">Список счетчиков /</li>
 {% endblock %}
 
-{% block content %}
-    <div class="content mt-5">
+{% block body %}
+    <div class="content">
         <div class="container-fluid">
             <div class="row mb-4">
                 <div class="add-counter col-4">
@@ -31,10 +31,6 @@
                     </form>
                 </div>
             </div>
-
-            {% block breadcrumbs %}
-                {{ block.super }}
-            {% endblock %}
 
             {% if counter_list %}
                 <table class="table">

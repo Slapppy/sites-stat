@@ -1,56 +1,28 @@
-{% extends 'web/base.html' %}
+{% extends 'web/base_with_breadcrumbs.html' %}
 {% block head %}
     {% load static %}
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Counter</title>
-    <link rel="stylesheet" href="{% static "web/css/bootstrap.min.css" %}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
-	<link href="{% static 'web/css/style_counter.css' %}" rel="stylesheet">
-      <link href="{% static 'src/assets/counteradd.css' %}" rel="stylesheet">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{% static 'src/assets/add_counter.css' %}" rel="stylesheet">
 {% endblock %}
+
+{% block title %}Добавление счетчика - FreeStat{% endblock %}
 
 {% block breadcrumbs_context %}
     <li class="breadcrumb-item"><a href="{% url 'counters' %}">Список счетчиков</a></li>
     <li class="breadcrumb-item active" aria-current="page">Добавление счетчика</li>
 {% endblock %}
 
-{% block content %}
-<div class="content mt-4">
-    <div class="container">
-        <div class="title">
-            {% block breadcrumbs %}
-                {{ block.super }}
-            {% endblock %}
-            <h2 class="pb-4">Новый счетчик</h2>
-
-
-
-
-
+{% block body %}
+    <div class="content mt-4">
+        <div class="container">
+                <div class="title">
+                    <h2 class="pb-4">Новый счетчик</h2>
+                </div>
+                     <div id="counteradd"></div>
+                <link href="{% static '/dist/assets/index.css' %}" rel="stylesheet">
+                <script type="module" src="{% static '/dist/assets/CounterAdd.js' %}"></script>
 
         </div>
-     <div id="counteradd"></div>
-    <link href="{% static '/dist/assets/index.css' %}" rel="stylesheet">
-    <script type="module" src="{% static '/dist/assets/CounterAdd.js' %}"></script>
-{#        <div class="main">#}
-{#            <form action="" method="POST">#}
-{#			{% csrf_token %}#}
-{#			<div class="field pb-3">#}
-{#				<label for="name_counter">Имя счетчика</label>#}
-{#				{{ form.name }}#}
-{#			</div>#}
-{#			<div class="field pb-3">#}
-{#				<label for="site_adress">Адрес сайта</label>#}
-{#				{{ form.link }}#}
-{#			</div>#}
-{#            <div class="text-center pt-4 submit_btn-wrap" style="width:50%;">#}
-{#                <button class="btn btn-success">Отправить</button>#}
-{#            </div>#}
-{#		</form>#}
-{#        </div>#}
-{#    </div>#}
-</div>
-
-
+    </div>
 {% endblock %}
