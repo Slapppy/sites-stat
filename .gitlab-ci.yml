@@ -27,10 +27,10 @@ deploy_cloud:
       --env DB_USER=$DB_USER
       --env DB_HOST=$DB_HOST
       --env DB_PASSWORD=$DB_PASSWORD
-      --environment CLICKHOUSE_DB_URL=$CLICKHOUSE_DB_URL
-      --environment CLICKHOUSE_DB_USERNAME=$CLICKHOUSE_DB_USERNAME
-      --environment CLICKHOUSE_DB_NAME=$CLICKHOUSE_DB_NAME
-      --environment CLICKHOUSE_DB_PASSWORD=$CLICKHOUSE_DB_PASSWORD
+      --env CLICKHOUSE_DB_URL=$CLICKHOUSE_DB_URL
+      --env CLICKHOUSE_DB_USERNAME=$CLICKHOUSE_DB_USERNAME
+      --envCLICKHOUSE_DB_NAME=$CLICKHOUSE_DB_NAME
+      --env CLICKHOUSE_DB_PASSWORD=$CLICKHOUSE_DB_PASSWORD
       $YANDEX_CLOUD_REGISTRY/app:latest
       python src/manage.py migrate      
     # обновляем контейнер и прокидываем переменные окружения с параметрами подключения к БД
