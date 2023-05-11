@@ -32,7 +32,7 @@ deploy_cloud:
       --env CLICKHOUSE_DB_NAME=$CLICKHOUSE_DB_NAME
       --env CLICKHOUSE_DB_PASSWORD=$CLICKHOUSE_DB_PASSWORD
       $YANDEX_CLOUD_REGISTRY/app:latest
-      python src/manage.py migrate  
+      python src/manage.py migrate
       python src/manage.py clickhouse_migrate
       python src/manage.py create_mview
     # обновляем контейнер и прокидываем переменные окружения с параметрами подключения к БД
