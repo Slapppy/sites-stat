@@ -88,12 +88,12 @@ class CounterCreate(CreateView):
         return super(self.__class__, self).dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
-        if self.request.user.is_authenticated:# TODO:login required тут есть, непонятно, зачем эта проверка
-            form.instance.user = self.request.user
-            self.object = form.save()
-            response_data = {"success": True, "counter": self.object.id}
-            # TODO почему тут json response, если это сайт? Либо сделать редирект или перейти на api view
-            return JsonResponse(response_data) 
+        form.instance.user = self.request.user
+        response = super(CounterCreate, self).form_valid(form)
+        data = {
+            'id': self.object.id,
+        }
+        return JsonResponse(data)
 
     def get_context_data(self, **kwargs):
         ctx = super(CounterCreate, self).get_context_data(**kwargs)
