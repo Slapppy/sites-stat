@@ -17,7 +17,7 @@
             <code class="language-html" ref="counterScript">
             </code>
         </pre>
-            <button @click="copyToClipboard">Copy script</button>
+        <button @click="copyToClipboard">Скопировать</button>
     </div>
 </template>
 <script>
@@ -55,9 +55,9 @@ export default {
             document.body.removeChild(el);
             alert('Script copied to clipboard!');
         },
+
         submitForm() {
             const form = new FormData();
-
             form.append('name', this.name);
             form.append('link', this.link);
             this.addCounter();
