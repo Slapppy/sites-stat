@@ -60,31 +60,27 @@ export default {
 
             form.append('name', this.name);
             form.append('link', this.link);
-            console.log(API_URL)
-            // TODO слишком много отступов между строками
-            // TODO почему не используется async/await?
-            axios.post(`${API_URL}/counters/add`, {
+            this.addCounter();
+        },
+        async updateScript(counter_id) {
+            this.$refs.counterScript.innerHTML = generateCounterScript(counter_id);
+            this.showScript = true;
+        },
+        async addCounter() {
+            try {
+                const response = await axios.post(`${window.location.origin}/counters/add`, {
                     name: this.name,
                     link: this.link
-
-                },
-
-                {
+                }, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         'X-CSRFToken': csrfToken
                     }
-                }
-            )
-                .then(response => {
-                    this.counter_id = response.data.counter,
-                        this.showF = true // TODO зачем здесь отступ? Что такое F?
-                    console.log(this.showF)
-
-                })
-                .catch(error => {
-                    console.log(error.response.data);
                 });
+                this.counter_id = await this.updateScript(response.data.id);
+            } catch (error) {
+                console.log(error.response);
+            }
         }
     }
 }
