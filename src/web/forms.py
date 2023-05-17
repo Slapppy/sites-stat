@@ -1,7 +1,7 @@
 from django import forms
-from .models import Counter # TODO неправильный порядок импортов
 from django.contrib.auth.forms import UserCreationForm
-from django.forms import ModelForm # TODO неиспользуемый импорт
+
+from .models import Counter
 from .models import User
 
 
@@ -9,6 +9,11 @@ class AddCounterForm(forms.ModelForm):
     class Meta:
         model = Counter
         fields = ["name", "link"]
+
+
+class AuthForm(forms.Form):
+    email = forms.EmailField(max_length=70)
+    password = forms.CharField(widget=forms.PasswordInput)
 
 
 class CreateUserForm(UserCreationForm):

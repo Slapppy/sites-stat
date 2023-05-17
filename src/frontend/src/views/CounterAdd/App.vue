@@ -12,30 +12,20 @@
             <button type="submit">Отправить</button>
         </div>
     </form>
-    <div id="counter_script" v-if="showF">
+    <div id="counter_script" v-if="showScript">
         <pre>
-            <code class="language-html">
-                <!--TODO сгенерировать в скрипте и вставить хост сайта -->
-                &lt;!-- /Auf.Metrika counter --&gt;
-                &lt;script&gt;&lt;img src="https://127.0.0.1/api/getmetadata/{{ counter_id }}" style="position:absolute; left:-9999px;" alt="" /&gt;&lt;/script&gt;
-                &lt;noscript&gt;&lt;div&gt;&lt;img src="https://127.0.0.1/api/getmetadata/{{ counter_id }}" style="position:absolute; left:-9999px;" alt="" /&gt;
-                &lt;/div&gt;&lt;/noscript&gt;
-
+            <code class="language-html" ref="counterScript">
             </code>
         </pre>
-            <button @click="copyToClipboard">Copy script</button>
+        <button @click="copyToClipboard">Скопировать</button>
     </div>
 </template>
 <script>
 import axios from 'axios';
 import {API_URL} from "@/consts";
-/* TODO работу с CSRF вынести в сервисы */
+import generateCounterScript from '@/services';
+import getCookie from '@/services'
 
-function getCookie(name) {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts.pop().split(';').shift();
-}
 
 const csrfToken = getCookie('csrftoken');
 
@@ -47,9 +37,8 @@ axios.defaults.headers.common['X-CSRFToken'] = csrfToken;
 export default {
     data() {
         return {
-            // TODO сделайте одинаковый подход к названию переменных
             counter_id: 0,
-            showF: false,
+            showScript: false,
             name: '',
             link: ''
         }
@@ -66,36 +55,32 @@ export default {
             document.body.removeChild(el);
             alert('Script copied to clipboard!');
         },
+
         submitForm() {
             const form = new FormData();
-
             form.append('name', this.name);
             form.append('link', this.link);
-            console.log(API_URL)
-            // TODO слишком много отступов между строками
-            // TODO почему не используется async/await?
-            axios.post(`${API_URL}/counters/add`, {
+            this.addCounter();
+        },
+        async updateScript(counter_id) {
+            this.$refs.counterScript.innerHTML = generateCounterScript(counter_id);
+            this.showScript = true;
+        },
+        async addCounter() {
+            try {
+                const response = await axios.post(`${window.location.origin}/counters/add`, {
                     name: this.name,
                     link: this.link
-
-                },
-
-                {
+                }, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         'X-CSRFToken': csrfToken
                     }
-                }
-            )
-                .then(response => {
-                    this.counter_id = response.data.counter,
-                        this.showF = true // TODO зачем здесь отступ? Что такое F?
-                    console.log(this.showF)
-
-                })
-                .catch(error => {
-                    console.log(error.response.data);
                 });
+                this.counter_id = await this.updateScript(response.data.id);
+            } catch (error) {
+                console.log(error.response);
+            }
         }
     }
 }
@@ -114,6 +99,7 @@ body {
     margin: 10px 0;
     border: 2px solid #92d82f;
 }
+
 button {
     background-color: #4CAF50;
     border: none;
@@ -126,6 +112,7 @@ button {
     margin: 10px 0;
     cursor: pointer;
 }
+
 .language-html {
     display: block;
     font-size: 14px;
