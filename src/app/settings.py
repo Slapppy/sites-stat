@@ -99,9 +99,9 @@ DATABASES = {
 
 CLICKHOUSE_DATABASE = {
     "db_url": os.environ.get("CLICKHOUSE_DB_URL", "http://localhost:8123/"),
-    "username": os.environ.get("CLICKHOUSE_DB_URL", "default"),
-    "db_name": os.environ.get("CLICKHOUSE_DB_URL", "django"),
-    "password": os.environ.get("CLICKHOUSE_DB_URL", ""),
+    "username": os.environ.get("CLICKHOUSE_DB_USERNAME", "default"),
+    "db_name": os.environ.get("CLICKHOUSE_DB_NAME", "django"),
+    "password": os.environ.get("CLICKHOUSE_DB_PASSWORD", ""),
 }
 
 # Password validation
@@ -159,3 +159,15 @@ CELERY_BEAT_SHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 CELERY_IMPORTS = [
     "web.tasks",
 ]
+
+CELERY_BROKER_TRANSPORT_OPTIONS = {"is_secure": os.environ.get("CELERY_BROKER_IS_SECURE", "false").lower() == "true"}
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "loggers": {
+        "celery_yandex_serverless.django": {
+            "level": "INFO",
+        },
+    },
+}
