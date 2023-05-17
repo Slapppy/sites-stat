@@ -25,7 +25,7 @@ class CountersListView(ListView, LoginRequiredMixin):
     template_name = "web/profile.html"
 
     def get_queryset(self):
-        self.search = self.request.GET.get("search", None) # TODO зачем записывать в объект?
+        self.search = self.request.GET.get("search", None)  # TODO зачем записывать в объект?
         queryset = get_user_list_of_counters(self.request.user)
         add_parameters_into_counters(queryset)
         if search:
@@ -38,7 +38,7 @@ class CountersListView(ListView, LoginRequiredMixin):
     def get_context_data(self, *, object_list=None, **kwargs):
         return {
             **super(CountersListView, self).get_context_data(**kwargs),
-            "search": self.search, # TODO вытащить из гет запроса здесь, а get_queryset() использовать данные из контекста
+            "search": self.search,  # TODO вытащить из гет запроса здесь, а get_queryset() использовать данные из контекста
         }
 
 
@@ -134,4 +134,6 @@ class CounterDeleteView(View):
             return redirect("counters")
         # TODO сделать ридерект на страницу ошибки
         return redirect("counters")
-#TODO: как будто мало docstrings и комментов
+
+
+# TODO: как будто мало docstrings и комментов

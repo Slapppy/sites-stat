@@ -16,3 +16,6 @@
 2. `npm ci` - установить зависимости
 3. `npm run watch` - сборка для разработки
 4. `npm run build` - сборка для продакшена
+
+### **Работа с ClickHouse**
+1. `python src/manage.py clickhouse_group_tables` - группировка данных в таблице

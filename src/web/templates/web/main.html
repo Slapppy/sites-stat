@@ -1,14 +1,13 @@
 {% extends 'web/base.html' %}
 {% block head %}
-{% load static %}
-<title>FreeStat</title>
-<link rel="stylesheet" href="{% static 'web/css/font-awesome.min.css' %}">
-<link rel="stylesheet" href="{% static 'web/css/main.css' %}">
+    {% load static %}
+    <link href="{% static 'src/assets/main.css' %}" rel="stylesheet">
 {% endblock head %}
 
 {% block content %}
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
 
+    {% comment %} TODO что это? сделайте отдельную страницу для тестирования {% endcomment %}
+{#    <img src="http://127.0.0.1:8000/api/getmetadata/12"/>#}
 
 {#<script type="module" src="{% static '/src/assets/collectdata.js' %}"></script>#}
 
@@ -30,19 +29,15 @@
             </div>
         </div>
     </div>
-</div>
 
-<div class="container">
-    <div class="description">
-        <h2>Что это такое?</h2>
-        <p>Статистика сайта - это числовые и процентные данные, указывающие на популярность сайта (количество
-            посещений
-            сайта),
-            информация об источниках посещений и демографии пользователей.
-            Статистика сайта позволяет вам проверять посещаемость сайта и позволяет проводить точный анализ и
-            распознавать явления,
-            происходящие во время посещения определенного домена.
-        </p>
+    <div class="container">
+        <div class="description mt-4 mb-4">
+            <h2 class="mb-2">Что это такое?</h2>
+            <p>Статистика сайта - это числовые и процентные данные, указывающие на популярность сайта
+                (количество посещений сайта), информация об источниках посещений и демографии пользователей.
+                Статистика сайта позволяет вам проверять посещаемость сайта и позволяет проводить точный анализ и
+                распознавать явления, происходящие во время посещения определенного домена.
+            </p>
+        </div>
     </div>
-</div>
 {% endblock content %}

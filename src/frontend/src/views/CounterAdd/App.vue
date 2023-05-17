@@ -5,7 +5,7 @@
             <input type="text" id="name" v-model="name">
         </div>
         <div class="form__item">
-            <label for="link">Ссылка:</label>
+            <label for="link">Адрес сайта:</label>
             <input type="text" id="link" v-model="link">
         </div>
         <div class="form__item_button">
