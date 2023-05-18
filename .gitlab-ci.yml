@@ -99,15 +99,7 @@ deploy_cloud:
       --batch-cutoff 10s
       > /dev/null
 
-    - apk add nodejs npm
-    - cd frontend
-    - npm ci
-    - export VITE_API_URL=/api
-    - npm run build
-    - export AWS_DEFAULT_REGION="ru-central1"
-    - >
-        aws --endpoint-url=https://storage.yandexcloud.net
-        s3 cp --recursive dist/ s3://django-2k-11-100-frontend/
+
   tags:
     # тег раннера, где будут запускаться сборки
     # (обычно менять не нужно, но если что, он находится здесь)
