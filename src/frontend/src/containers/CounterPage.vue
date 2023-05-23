@@ -15,7 +15,7 @@
 <script>
 import Highcharts from 'highcharts'
 import axios from 'axios';
-import FilterPanel from "../containers/FilterPanel.vue";
+import FilterPanel from "../components/FilterPanel.vue";
 import {API_URL} from "@/consts";
 
 export default {
