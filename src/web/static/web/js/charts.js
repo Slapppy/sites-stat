@@ -17,6 +17,7 @@ radioButton.forEach(radio => radio.addEventListener('change', function () {
         updateChartData();
     }
 ))
+// TODO удалить неиспользуемый файл
 
 // Update the chart data based on the selected filter
 function updateChartData() {

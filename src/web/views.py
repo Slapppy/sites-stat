@@ -1,11 +1,10 @@
-from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse
 from django.http import JsonResponse
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse_lazy
+from django.contrib import messages
 from django.contrib.auth import authenticate, login
-from django.urls import reverse, reverse_lazy
-from django.utils.decorators import method_decorator
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import (
     ListView,
     CreateView,
@@ -14,12 +13,11 @@ from django.views.generic import (
     UpdateView,
     TemplateView,
 )
-from .forms import CreateUserForm, AddCounterForm
+from .models import Counter
+from .forms import CreateUserForm, AddCounterForm, AuthForm
 from .services import (
     get_user_list_of_counters,
     add_parameters_into_counters,
-    filter_counters_with_search,
-    get_user_counter,
 )
 
 
@@ -27,31 +25,25 @@ class CountersListView(ListView, LoginRequiredMixin):
     template_name = "web/profile.html"
 
     def get_queryset(self):
-        self.search = self.request.GET.get("search", None)
+        self.search = self.request.GET.get("search", None)  # TODO зачем записывать в объект?
         queryset = get_user_list_of_counters(self.request.user)
         add_parameters_into_counters(queryset)
-        if self.search:
-            queryset = filter_counters_with_search(queryset, self.search)
+        if search:
+            queryset = queryset.filter(name__icontains=search)
         return queryset
 
     def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            return redirect("auth")
         return super(CountersListView, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, *, object_list=None, **kwargs):
-        if not self.request.user.is_authenticated:
-            return {}
         return {
             **super(CountersListView, self).get_context_data(**kwargs),
-            "search": self.search,
+            "search": self.search,  # TODO вытащить из гет запроса здесь, а get_queryset() использовать данные из контекста
         }
 
 
 class RegistrationView(View):
     def get(self, request):
-        if request.user.is_authenticated:
-            return redirect("main")
         form = CreateUserForm()
         return render(request, "web/registration.html", {"form": form})
 
@@ -60,40 +52,27 @@ class RegistrationView(View):
         if form.is_valid():
             form.save()
             storage = messages.get_messages(request)
-            self.clear_messages(storage)
             messages.success(request, "Вы успешно зарегистрировались")
             return redirect("auth")
-        else:
-            storage = messages.get_messages(request)
-            self.clear_messages(storage)
-            messages.error(request, "Ошибка регистрации")
         context = {"form": form}
         return render(request, "web/registration.html", context)
 
-    def clear_messages(self, storage):
-        for _ in storage:
-            pass
-        if len(storage._loaded_messages) == 1:
-            del storage._loaded_messages[0]
-
 
 def auth_page(request):
-    if request.user.is_authenticated:
-        return redirect("main")
-
+    form = AuthForm(request.POST or None)
     if request.method == "POST":
-        email = request.POST.get("email")
-        password = request.POST.get("password")
-        user = authenticate(request, email=email, password=password)
-
-        if user is not None:
-            login(request, user)
-            return redirect("counters")
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+            user = authenticate(request, email=email, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect("counters")
+            else:
+                messages.error(request, "Неверный Логин или Пароль !")
         else:
-            messages.info(request, "Неверный Логин или Пароль")
-
-    context = {}
-    return render(request, "web/auth.html", context)
+            messages.error(request, "Некорректные данные !")
+    return render(request, "web/auth.html", context={'form': form})
 
 
 class CounterCreate(CreateView):
@@ -102,16 +81,16 @@ class CounterCreate(CreateView):
     success_url = reverse_lazy("add")
     info_sended = True
 
-    @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         return super(self.__class__, self).dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
-        if self.request.user.is_authenticated:# TODO:login required
-            form.instance.user = self.request.user
-            self.object = form.save()
-            response_data = {"success": True, "counter": self.object.id}
-            return JsonResponse(response_data)
+        form.instance.user = self.request.user
+        response = super(CounterCreate, self).form_valid(form)
+        data = {
+            'id': self.object.id,
+        }
+        return JsonResponse(data)
 
     def get_context_data(self, **kwargs):
         ctx = super(CounterCreate, self).get_context_data(**kwargs)
@@ -143,17 +122,18 @@ class CounterEditView(UpdateView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         return {
-            **super(CounterEditView, self).get_context_data(**kwargs),
-            "id_counter": self.kwargs[self.slug_url_kwarg],
+            **super(CounterEditView, self).get_context_data(**kwargs)
         }
 
 
-class CounterDeleteView(LoginRequiredMixin, View):
+class CounterDeleteView(View):
     def get(self, request, pk):
-        obj = get_user_counter(pk, request.user)#TODO: get_object_or_404
-        if obj:
-            obj.delete()
+        counter = get_object_or_404(Counter, pk=pk)
+        if counter and counter.user == request.user:
+            counter.delete()
             return redirect("counters")
-        """TODO сделать ридерект на страницу ошибки"""
+        # TODO сделать ридерект на страницу ошибки
         return redirect("counters")
-#TODO: как будто мало docstrings и комментов
+
+
+# TODO: как будто мало docstrings и комментов

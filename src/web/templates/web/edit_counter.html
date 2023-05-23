@@ -1,56 +1,51 @@
-{% extends 'web/base.html' %}
+{% extends 'web/base_with_breadcrumbs.html' %}
 {% block head %}
     {% load static %}
-    <title>Настройка счетчика</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="{% static "web/css/bootstrap.min.css" %}">
-    <link href="{% static 'web/css/style_counter.css' %}" rel="stylesheet">
+    <link href="{% static 'src/assets/edit_counter.css' %}" rel="stylesheet">
 {% endblock %}
+
+{% block title %}Настройка счетчика - {{ object.name }} - FreeStat{% endblock %}
 
 {% block breadcrumbs_context %}
     <li class="breadcrumb-item"><a href="{% url 'counters' %}">Список счетчиков</a></li>
     <li class="breadcrumb-item active" aria-current="page">Настройка {{ object.name }}</li>
 {% endblock %}
 
-{% block content %}
-<div class="content mt-4">
-    <div class="container">
-        <div class="title">
-            {% block breadcrumbs %}
-                {{ block.super }}
-            {% endblock %}
-            <h2 class="pb-4">Настройка счетчика </h2>
-        </div>
-        <div class="main">
-            <form action="" method="POST">
-			{% csrf_token %}
-			<div class="field pb-3">
-				<label for="name_counter">Имя счетчика</label>
-				{{ form.name }}
-			</div>
-			<div class="field pb-3">
-				<label for="site_adress">Адрес сайта</label>
-				{{ form.link }}
-			</div>
-                <div class="text-center pt-4 submit_btn-wrap" style="width:50%;">
-				<button class="btn btn-success">Сохранить</button>
+{% block body %}
+    <div class="content mt-4">
+        <div class="container">
+            <div class="title">
+                <h2 class="pb-4">Настройка счетчика</h2>
+            </div>
+            <div class="main">
+                <form action="" method="POST" class="">
+                    {% csrf_token %}
+                    <div class="mb-3 d-flex">
+                        <div class="form-label mt-2">
+                            <label class="form-label" for="counter-name">Имя счетчика</label>
+                        </div>
+                        <div id="counter-name" class="form-input ms-4">{{ form.name }}</div>
+                    </div>
+                    <div class="mb-3 d-flex">
+                        <div class="form-label mt-2">
+                            <label for="counter-link" class="form-label">Адрес сайта</label>
+                        </div>
+                        <div id="counter-link" class="form-input ms-4">{{ form.link }}</div>
+                    </div>
+                    <div class="pt-4">
+                        <button type="submit" class="btn-save">Сохранить</button>
+                    </div>
+                </form>
+                <div class="mt-5 mb-5">
+                    <h3 class="pb-3">Код счетчика</h3>
+                    <p id="text" class="counter-code p-4 pb-5"></p>
                 </div>
-
-		</form>
-
+            </div>
         </div>
-
-<div class="text-wrap">
-    <h3>Код счетчика</h3>
-    <p id="text">
-
-    </p>
-  </div>
-
     </div>
-</div>
+
     <script src="{% static 'web/js/generatecounter.js' %}"
-                defer
-                data-id-counter="{{ id_counter }}" ></script>
+            defer
+            data-id-counter="{{ object.id }}"></script>
 
 {% endblock %}

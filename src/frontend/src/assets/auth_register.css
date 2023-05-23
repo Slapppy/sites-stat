@@ -1,0 +1,73 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+.main-wrapper {
+    background: linear-gradient(to right top, #d3fb9a 0%, #f6feea 100%);
+}
+
+.container {
+    width: 380px;
+    margin-bottom: 64px;
+}
+
+.auth-form {
+    background: white;
+    border: 1px solid #DCDCDC;
+    border-radius: 0.5rem;
+    box-shadow: 0 5px 10px rgb(0 0 0 / 5%);
+}
+
+.user-input {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 10px
+}
+
+.user-input label {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.user-input input {
+    outline: none;
+    display: block;
+    width: 100%;
+    height: calc(1.4285714286em + 1rem + 2px);
+    padding: 0.5rem 0.875rem;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.4285714286;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #DCDCDC;
+    border-radius: 0.375rem;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+.button-send {
+    cursor: pointer;
+    width: 100%;
+    border: none;
+    background: #a7f736;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    transition: all .2s ease-in-out;
+}
+
+.link-to-register, .link-to-auth {
+    font-size: 0.75rem;
+    text-align: center;
+}
+
+.link-to-register a, .link-to-auth a {
+    font-weight: 500;
+    color: #92d82f;
+}

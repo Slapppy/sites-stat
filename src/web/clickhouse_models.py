@@ -3,8 +3,6 @@ from infi.clickhouse_orm import (
     Model,
     DateTimeField,
     DateField,
-    Int8Field,
-    UInt8Field,
     UInt16Field,
     UInt64Field,
     UUIDField,

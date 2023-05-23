@@ -5,39 +5,27 @@
             <input type="text" id="name" v-model="name">
         </div>
         <div class="form__item">
-            <label for="link">Ссылка:</label>
+            <label for="link">Адрес сайта:</label>
             <input type="text" id="link" v-model="link">
         </div>
         <div class="form__item_button">
             <button type="submit">Отправить</button>
         </div>
     </form>
-    <div class="counter_script" v-if="showScript">
-        <div>
-            <pre>
-                <code class="language-html">
-                    &lt;!-- / counter --&gt;
-                    &lt;div id = "counter_id" style="transform: translateX(9999px);"&gt;{{ counter_id }} &lt;/div&gt;
-                    &lt;script src="http://127.0.0.1:8000/src/src/assets/collectdata.js"&gt;&lt;/script&gt;
-                    &lt;noscript&gt;&lt;div&gt;&lt;img src="http://127.0.0.1:8000/api/getmetadata/{{ counter_id }}"/&gt;
-                    &lt;/div&gt;&lt;/noscript&gt;
-                </code>
-            </pre>
-        </div>
-        <div class="form__item_button">
-            <button @click="copyToClipboard">Скопировать</button>
-        </div>
+    <div id="counter_script" v-if="showScript">
+        <pre>
+            <code class="language-html" ref="counterScript">
+            </code>
+        </pre>
+        <button @click="copyToClipboard">Скопировать</button>
     </div>
 </template>
 <script>
 import axios from 'axios';
 import {API_URL} from "@/consts";
+import generateCounterScript from '@/services';
+import getCookie from '@/services'
 
-function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
-}
 
 const csrfToken = getCookie('csrftoken');
 
@@ -57,39 +45,42 @@ export default {
     },
     methods: {
         copyToClipboard() {
+            // TODO зачем ходить напрямую в DOM? Вы же работаете во Vue и должны использовать инструменты Vue
+            // Не надо в обход менять DOM
             const el = document.createElement('textarea');
             el.value = document.querySelector('#counter_script code').textContent;
             document.body.appendChild(el);
             el.select();
             document.execCommand('copy');
             document.body.removeChild(el);
+            alert('Script copied to clipboard!');
         },
+
         submitForm() {
             const form = new FormData();
-
             form.append('name', this.name);
             form.append('link', this.link);
-            console.log(API_URL)
-            axios.post(`${API_URL}/counters/add`, {
+            this.addCounter();
+        },
+        async updateScript(counter_id) {
+            this.$refs.counterScript.innerHTML = generateCounterScript(counter_id);
+            this.showScript = true;
+        },
+        async addCounter() {
+            try {
+                const response = await axios.post(`${window.location.origin}/counters/add`, {
                     name: this.name,
                     link: this.link
-
-                },
-                {
+                }, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         'X-CSRFToken': csrfToken
                     }
-                }
-            )
-                .then(response => {
-                    this.counter_id = response.data.counter,
-                        this.showScript = true
-
-                })
-                .catch(error => {
-
                 });
+                this.counter_id = await this.updateScript(response.data.id);
+            } catch (error) {
+                console.log(error.response);
+            }
         }
     }
 }
@@ -98,17 +89,16 @@ export default {
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap');
 
-
-#counteradd {
-        display: flex;
-        gap: 20px;
-
-    }
-
 body {
     font-family: 'Montserrat', sans-serif;
 }
 
+#counter_script {
+    background-color: #f5f5f5;
+    padding: 10px;
+    margin: 10px 0;
+    border: 2px solid #92d82f;
+}
 
 button {
     background-color: #4CAF50;
@@ -169,7 +159,7 @@ button {
 }
 
 .form__item_button {
-    width: 150px;
+    width: 100%;
     display: flex;
     justify-content: flex-end;
 }
