@@ -7,5 +7,5 @@ from app.clickhouse import create_connection
 def groupdb():
     db = create_connection()
     db.raw("OPTIMIZE TABLE viewinday final;")
-    db.raw("OPTIMIZE table visitinday final;")
-    db.raw("OPTIMIZE table visitorinday final;")
+    db.raw("OPTIMIZE TABLE visitinday final;")
+    db.raw("OPTIMIZE TABLE visitorinday final;")

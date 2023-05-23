@@ -1,5 +1,7 @@
 from datetime import datetime
 
+from django.shortcuts import get_object_or_404
+
 from .clickhouse_models import ViewInDay, VisitInDay, VisitorInDay
 from api.servises import get_sum_data_for_certain_period
 from .models import Counter
@@ -31,5 +33,5 @@ def filter_counters_with_search(counters, search):
     return counters.filter(name__icontains=search)
 
 
-def get_user_counter(counter_id, user):
-    return Counter.objects.filter(pk=counter_id, user=user)
+def get_user_counter(pk, user):
+    return get_object_or_404(Counter, pk=pk, user=user)

@@ -3,6 +3,9 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from django.contrib.auth.views import LogoutView
+from celery_yandex_serverless.django import worker_view_factory
+
+from app.celery import app
 from . import views
 from .views import (
     CounterCreate,
@@ -22,4 +25,5 @@ urlpatterns = [
     path("counters/<int:pk>", CounterDetailView.as_view(), name="counter"),
     path("counters/edit/<int:id>", CounterEditView.as_view(), name="edit"),
     path("counters/delete/<int:pk>", CounterDeleteView.as_view(), name="delete"),
+    path("worker/<str:key>/", worker_view_factory(app)),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

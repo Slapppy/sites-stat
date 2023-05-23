@@ -27,7 +27,7 @@ DEBUG = True
 
 # ALLOWED_HOSTS = []
 
-ALLOWED_HOSTS = ["*"] if DEBUG else ["localhost"]
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -62,7 +62,9 @@ MIDDLEWARE = [
 
 CORS_ORIGIN_ALLOW_ALL = False
 
-CORS_ORIGIN_WHITELIST = ("http://127.0.0.1:8000", "https://d5dmb75fkf3m3c1fmdh7.apigw.yandexcloud.net")
+CORS_ORIGIN_WHITELIST = os.getenv(
+    "CORS_ORIGIN_WHITELIST", "http://127.0.0.1:8000,https://d5dmb75fkf3m3c1fmdh7.apigw.yandexcloud.net"
+).split(",")
 ROOT_URLCONF = "app.urls"
 
 TEMPLATES = [
@@ -89,9 +91,9 @@ WSGI_APPLICATION = "app.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ.get("DB_NAME", "notes"),
-        "USER": os.environ.get("DB_USER", "notes"),
-        "PASSWORD": os.environ.get("DB_PASSWORD", "notes"),
+        "NAME": os.environ.get("DB_NAME", "sitesstat"),
+        "USER": os.environ.get("DB_USER", "sitesstat"),
+        "PASSWORD": os.environ.get("DB_PASSWORD", "cfqncnfnbcnbrb"),
         "HOST": os.environ.get("DB_HOST", "localhost"),
         "PORT": int(os.environ.get("DB_PORT", 5432)),
     }
@@ -99,9 +101,9 @@ DATABASES = {
 
 CLICKHOUSE_DATABASE = {
     "db_url": os.environ.get("CLICKHOUSE_DB_URL", "http://localhost:8123/"),
-    "username": os.environ.get("CLICKHOUSE_DB_URL", "default"),
-    "db_name": os.environ.get("CLICKHOUSE_DB_URL", "django"),
-    "password": os.environ.get("CLICKHOUSE_DB_URL", ""),
+    "username": os.environ.get("CLICKHOUSE_DB_USERNAME", "default"),
+    "db_name": os.environ.get("CLICKHOUSE_DB_NAME", "django"),
+    "password": os.environ.get("CLICKHOUSE_DB_PASSWORD", ""),
 }
 
 # Password validation
@@ -159,3 +161,15 @@ CELERY_BEAT_SHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 CELERY_IMPORTS = [
     "web.tasks",
 ]
+
+CELERY_BROKER_TRANSPORT_OPTIONS = {"is_secure": os.environ.get("CELERY_BROKER_IS_SECURE", "false").lower() == "true"}
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "loggers": {
+        "celery_yandex_serverless.django": {
+            "level": "INFO",
+        },
+    },
+}
