@@ -2,8 +2,8 @@
 import CounterPage from "../../containers/CounterPage.vue";
 </script>
 
-<template>
 
+<template>
 <CounterPage></CounterPage>
 </template>
 

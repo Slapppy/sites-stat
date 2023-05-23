@@ -27,7 +27,7 @@ DEBUG = True
 
 # ALLOWED_HOSTS = []
 
-ALLOWED_HOSTS = ["*"] if DEBUG else ["localhost"]
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -62,7 +62,9 @@ MIDDLEWARE = [
 
 CORS_ORIGIN_ALLOW_ALL = False
 
-CORS_ORIGIN_WHITELIST = ("http://127.0.0.1:8000", "https://d5dmb75fkf3m3c1fmdh7.apigw.yandexcloud.net")
+CORS_ORIGIN_WHITELIST = os.getenv(
+    "CORS_ORIGIN_WHITELIST", "http://127.0.0.1:8000,https://d5dmb75fkf3m3c1fmdh7.apigw.yandexcloud.net"
+).split(",")
 ROOT_URLCONF = "app.urls"
 
 TEMPLATES = [
