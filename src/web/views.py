@@ -107,7 +107,7 @@ class CounterCreate(CreateView):
         return super(self.__class__, self).dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
-        if self.request.user.is_authenticated:
+        if self.request.user.is_authenticated:# TODO:login required
             form.instance.user = self.request.user
             self.object = form.save()
             response_data = {"success": True, "counter": self.object.id}
@@ -150,9 +150,10 @@ class CounterEditView(UpdateView):
 
 class CounterDeleteView(LoginRequiredMixin, View):
     def get(self, request, pk):
-        obj = get_user_counter(pk, request.user)
+        obj = get_user_counter(pk, request.user)#TODO: get_object_or_404
         if obj:
             obj.delete()
             return redirect("counters")
         """TODO сделать ридерект на страницу ошибки"""
         return redirect("counters")
+#TODO: как будто мало docstrings и комментов
