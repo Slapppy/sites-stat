@@ -8,6 +8,7 @@
       <label for="link">Адрес сайта:</label>
       <input type="text" id="link" v-model="link">
     </div>
+    <div class="error-message" v-if="message">{{message}}</div>
     <div class="form__item_button">
       <button type="submit">Отправить</button>
     </div>
@@ -43,7 +44,8 @@ export default {
       showScript: false,
       script: '',
       name: '',
-      link: ''
+      link: '',
+      message: ''
     }
   },
   methods: {
@@ -80,7 +82,12 @@ export default {
             'X-CSRFToken': csrfToken
           }
         });
-        await this.updateScript(response.data.id);
+        if (response.data.id) {
+          this.message = '';
+          await this.updateScript(response.data.id);
+        } else {
+          this.message = 'Не получилось создать счетчик. Проверьте, что все поля заполнены, или поменяйте название счетчика'
+        }
       } catch (error) {
         console.log(error.response);
       }
