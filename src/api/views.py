@@ -8,7 +8,8 @@ from rest_framework.views import APIView
 import uuid
 
 from api.permissions import IsCreatorAndReadOnly
-from web.clickhouse_models import VisitorInDay, VisitInDay, ViewInDay
+from app.clickhouse import create_connection
+from web.clickhouse_models import VisitorInDay, VisitInDay, ViewInDay, Views
 from api.servises import (
     does_user_has_counters,
     get_sum_data_for_certain_period,
