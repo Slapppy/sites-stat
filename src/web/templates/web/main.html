@@ -11,21 +11,13 @@
 
 {#<script type="module" src="{% static '/src/assets/collectdata.js' %}"></script>#}
 
- {% comment %} TODO что это? сделайте отдельную страницу для тестирования {% endcomment %}
-<img src="http://127.0.0.1:8000/api/getmetadata/15"/> 
-
-
-
-<div class="promo">
-    <div class="additional-back">
-        <div class="container">
-            <h1>FreeStat - бесплатная система статистики для вашего сайта</h1>
-            <div class="promo-btn">
-                {% if request.user.is_authenticated %}
-                    <a id="btn-redirect" class="btn btn-light" href="{% url 'counters' %}">Перейти</a>
-                {% else %}
-                    <a id="btn-redirect" class="btn btn-light" href="{% url 'reg' %}">Перейти</a>
-                {% endif %}
+ <div class="promo">
+        <div class="additional-back">
+            <div class="container">
+                <h1>FreeStat - бесплатная система статистики для вашего сайта</h1>
+                <div class="promo-btn">
+                    <a id="btn-redirect" class="btn btn-light mt-5" href="{% url 'counters' %}">Перейти</a>
+                </div>
             </div>
         </div>
     </div>
@@ -40,4 +32,5 @@
             </p>
         </div>
     </div>
+
 {% endblock content %}
