@@ -29,7 +29,7 @@ class CountersListView(ListView, LoginRequiredMixin):
         queryset = get_user_list_of_counters(self.request.user)
         add_parameters_into_counters(queryset)
         if self.search:
-            queryset = queryset.filter(name__icontains=search)
+            queryset = queryset.filter(name__icontains=self.search)
         return queryset
 
     def dispatch(self, request, *args, **kwargs):
@@ -62,8 +62,8 @@ def auth_page(request):
     form = AuthForm(request.POST or None)
     if request.method == "POST":
         if form.is_valid():
-            email = form.cleaned_data['email']
-            password = form.cleaned_data['password']
+            email = form.cleaned_data["email"]
+            password = form.cleaned_data["password"]
             user = authenticate(request, email=email, password=password)
             if user is not None:
                 login(request, user)
@@ -72,7 +72,7 @@ def auth_page(request):
                 messages.error(request, "Неверный Логин или Пароль !")
         else:
             messages.error(request, "Некорректные данные !")
-    return render(request, "web/auth.html", context={'form': form})
+    return render(request, "web/auth.html", context={"form": form})
 
 
 class CounterCreate(CreateView):
@@ -88,7 +88,7 @@ class CounterCreate(CreateView):
         form.instance.user = self.request.user
         response = super(CounterCreate, self).form_valid(form)
         data = {
-            'id': self.object.id,
+            "id": self.object.id,
         }
         return JsonResponse(data)
 
@@ -121,9 +121,7 @@ class CounterEditView(UpdateView):
         return reverse("counters")
 
     def get_context_data(self, *, object_list=None, **kwargs):
-        return {
-            **super(CounterEditView, self).get_context_data(**kwargs)
-        }
+        return {**super(CounterEditView, self).get_context_data(**kwargs)}
 
 
 class CounterDeleteView(View):
