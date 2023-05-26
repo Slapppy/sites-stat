@@ -1,4 +1,4 @@
-import {API_URL} from "../consts.js";
+//import {API_URL} from "../consts.js";
 function getCookieValue(key) {
     const cookies = document.cookie.split(';');
     for (let i = 0; i < cookies.length; i++) {
@@ -99,8 +99,10 @@ xhr.onreadystatechange = function() {
   }
 };
 
-
-xhr.open('POST', `${API_URL}/api/getmetadata/4`);
+let counter = document.getElementById("counter_id"); // получить элемент с идентификатором "counter_id"
+let value = counter.textContent; // получить текстовое значение элемента
+console.log(value)
+xhr.open('POST', `http://127.0.0.1:8000/api/getmetadata/${value}`);
 xhr.setRequestHeader('X-CSRFToken', csrftoken);
 xhr.setRequestHeader('Content-Type', 'application/json');
 xhr.send(JSON.stringify(metadata));
