@@ -10,44 +10,51 @@
 {% block title %}Регистрация - FreeStat{% endblock %}
 
 {% block content %}
-<main class="main-wrapper p-4">
-    <div class="container">
-        <div class="auth-form">
-            <h1>Регистрация</h1>
-            <div class="form-inputs">
-                <form action="registration" method="POST">
-                    {% csrf_token %}
-                    <div class="user-input">
-                        <label>Имя</label>
-                        {{ form.name }}
-                    </div>
-                    <div class="user-input">
-                        <label>Фамилия</label>
-                        {{ form.surname }}
-                    </div>
-                    <div class="user-input">
-                        <label>E-mail</label>
-                        {{ form.email }}
-                    </div>
-                    <div class="user-input">
-                        <label>Пароль</label>
-                        {{ form.password1 }}
-                    </div>
-                    <div class="user-input">
-                        <label>Повторите пароль</label>
-                        {{ form.password2 }}
-                    </div>
-                    <div class="button-send-wrap">
-                        <button type="submit" class="button-send">Зарегистрироваться</button>
-                    </div>
+    <main class="main-wrapper p-3">
+        <div class="container">
+            <div class="auth-form p-4 ps-5 pe-5">
+                <h1>Регистрация</h1>
+                <div class="form-inputs">
+                    <form action="registration" method="POST">
+                        {% csrf_token %}
+                        <div class="user-input">
+                            <label>Имя
+                                <input type="text" name="name" id="name"></label>
+                        </div>
+                        <div class="user-input">
+                            <label>Фамилия
+                                <input type="text" name="surname" id="surname">
+                            </label>
+                        </div>
+                        <div class="user-input">
+                            <label>E-mail
+                                <input type="email" name="email" id="email">
+                            </label>
+                        </div>
+                        <div class="user-input">
+                            <label>Пароль
+                                <input type="password" name="password1" id="password1">
+                            </label>
+                        </div>
+                        <div class="user-input">
+                            <label>Повторите пароль
+                                <input type="password" name="password2" id="password2">
+                            </label>
+                        </div>
+                        <div class="button-send-wrap mt-4">
+                            <button type="submit" class="button-send">Зарегистрироваться</button>
+                        </div>
 
-                    <div class="register">
-                        <span>Есть учетная запись? </span><a href={% url 'auth' %}>Войти</a>
-                    </div>
-                </form>
-                {{ form.errors }}
+                        <div class="form-errors mt-2">
+                            {{ form.errors }}
+                        </div>
+
+                        <div class="link-to-auth mt-4">
+                            <span>Есть учетная запись? </span><a href={% url 'auth' %}>Войти</a>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-</main>
+    </main>
 {% endblock %}

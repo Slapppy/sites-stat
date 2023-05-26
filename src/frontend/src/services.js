@@ -1,5 +1,4 @@
-export default function generateCounterScript(counterId) {
-    console.log('скрипт')
+export function generateCounterScript(counterId) {
     return `
     &lt;!-- /Auf.Metrika counter --&gt;
                     &lt;script&gt;&lt;img src="${window.location.origin}/api/getmetadata/${counterId}" style="position:absolute; left:-9999px;" alt="" /&gt;&lt;/script&gt;

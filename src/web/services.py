@@ -13,6 +13,9 @@ def add_parameters_into_counters(counters):
     """Добавляет количество просмотров, визитов и посетителей к каждому счетчику"""
     counters_id = [counter["id"] for counter in counters.values("id")]
 
+    if not counters_id:
+        return
+
     db = create_connection()
     views = ViewInDay.objects_in(db).filter(ViewInDay.counter_id.isIn(counters_id))
     visits = VisitInDay.objects_in(db).filter(VisitInDay.counter_id.isIn(counters_id))
