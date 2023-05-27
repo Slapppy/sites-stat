@@ -1,15 +1,17 @@
+import {API_URL} from "../../../../frontend/src/consts.js";
+
 var matrika = document.getElementById("text");
+
 const data = document.currentScript.dataset;
 const idCounter = data.idCounter
 // TODO вставлять хост на основе request из Django
 // TODO переписать на vue, раз вы его используете
 function innerTextScript(idCounter) {
-  var domain = window.location.hostname;
   var script = `
   <!-- / counter -->
   <div id="counter_id" style="transform: translateX(9999px);">${idCounter}</div>
-  <script src="https://${domain}/src/src/assets/collectdata.js"></script>
-  <noscript><div><img src="https://${domain}/api/getmetadata/${idCounter}"/></div></noscript>`;
+  <script src="${API_URL}/src/src/assets/collectdata.js"></script>
+  <noscript><div><img src="${API_URL}/api/getmetadata/${idCounter}"/></div></noscript>`;
 
   matrika.innerText = script;
 
