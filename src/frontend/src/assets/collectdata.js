@@ -65,11 +65,7 @@ let ipAddress = null; // Use a third-party API to get the IP address
 fetch('https://api.db-ip.com/v2/free/self')
   .then(response => response.json())
   .then(data => {
-    console.log(data.ipAddress);
     const ipAddress = data.ipAddress;
-
-    console.log(ipAddress);
-
     // Create data object
     const metadata = {
       'referer': referer,
