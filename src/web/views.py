@@ -22,7 +22,7 @@ from .services import (
 
 
 class CountersListView(ListView, LoginRequiredMixin):
-    template_name = "web/profile.html"
+    template_name = "web/counters_list.html"
 
     def get_queryset(self):
         self.search = self.request.GET.get("search", None)  # TODO зачем записывать в объект?
