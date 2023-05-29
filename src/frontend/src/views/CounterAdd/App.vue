@@ -13,21 +13,10 @@
       <button type="submit">Отправить</button>
     </div>
   </form>
-  <div id="counter_script" v-if="showScript">
-        <pre>
-            <code class="language-html" ref="counterScript">
-              {{ script }}
-            </code>
-        </pre>
-    <div class="form__item_button">
-      <button @click="copyToClipboard">Скопировать</button>
-    </div>
-  </div>
 </template>
 
 <script>
 import axios from 'axios';
-import {generateCounterScript} from '@/services';
 import {getCookie} from '@/services'
 
 
@@ -41,35 +30,17 @@ axios.defaults.headers.common['X-CSRFToken'] = csrfToken;
 export default {
   data() {
     return {
-      showScript: false,
-      script: '',
       name: '',
       link: '',
       message: ''
     }
   },
   methods: {
-    copyToClipboard() {
-      // TODO зачем ходить напрямую в DOM? Вы же работаете во Vue и должны использовать инструменты Vue
-      // Не надо в обход менять DOM
-      const el = document.createElement('textarea');
-      el.value = document.querySelector('#counter_script code').textContent;
-      document.body.appendChild(el);
-      el.select();
-      document.execCommand('copy');
-      document.body.removeChild(el);
-      alert('Скрипт скопирован!');
-    },
-
     submitForm() {
       const form = new FormData();
       form.append('name', this.name);
       form.append('link', this.link);
       this.addCounter();
-    },
-    updateScript(counter_id) {
-      this.script = generateCounterScript(counter_id);
-      this.showScript = true;
     },
     async addCounter() {
       try {
@@ -84,7 +55,7 @@ export default {
         });
         if (response.data.id) {
           this.message = '';
-          await this.updateScript(response.data.id);
+          window.location.href = `http://localhost:8000/counters/edit/${response.data.id}`;
         } else {
           this.message = 'Не получилось создать счетчик. Проверьте, что все поля заполнены, или поменяйте название счетчика'
         }
