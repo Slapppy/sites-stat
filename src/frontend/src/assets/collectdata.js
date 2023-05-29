@@ -62,25 +62,27 @@ const language = navigator.language || navigator.userLanguage;
 
 const referer = window.location.hostname;
 let ipAddress = null; // Use a third-party API to get the IP address
-$.getJSON('https://api.db-ip.com/v2/free/self', function(data) {
-     ipAddress = data.ipAddress;
+fetch('https://api.db-ip.com/v2/free/self')
+  .then(response => response.json())
+  .then(data => {
+    console.log(data.ipAddress);
+    const ipAddress = data.ipAddress;
 
-console.log(ipAddress)
-// Create data object
-const metadata = {
-  'referer': referer,
-  'device_type': deviceType,
-  'browser_type': browserType,
-  'user_agent': userAgent,
-  'os_type': osType,
-  'ip': ipAddress,
-  'language': language.slice(0,2),
-  'created_at': new Date().toISOString(),
-   visitor_unique_key: getCookieValue("unique_key"),
-   visit_id: getCookieValue("visit_id")
-};
+    console.log(ipAddress);
 
-
+    // Create data object
+    const metadata = {
+      'referer': referer,
+      'device_type': deviceType,
+      'browser_type': browserType,
+      'user_agent': userAgent,
+      'os_type': osType,
+      'ip': ipAddress,
+      'language': language.slice(0, 2),
+      'created_at': new Date().toISOString(),
+      visitor_unique_key: getCookieValue("unique_key"),
+      visit_id: getCookieValue("visit_id")
+    };
 
 const csrftoken = getCookieValue('csrftoken');
 const xhr = new XMLHttpRequest();
