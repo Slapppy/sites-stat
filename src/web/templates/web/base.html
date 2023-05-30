@@ -3,8 +3,8 @@
 {% load static %}
 <head>
     <meta charset="UTF-8">
-    <script src="{% static "web/js/bootstrap.bundle.min.js" %}"></script>
-    <link rel="stylesheet" href="{% static "src/assets/bootstrap.min.css" %}">
+    <script src="{% static 'web/js/bootstrap.bundle.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'src/assets/bootstrap.min.css' %}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
     <link href="{% static 'src/assets/base.css' %}" rel="stylesheet">
 
@@ -51,16 +51,6 @@
         {% block content %}{% endblock content %}
 
     </div>
-    <footer class="footer text-center" id="footer">
-        <div class="line"></div>
-        <section class="mb-4">
-            <div class="info-links text-center text-muted p-3">
-                <a class="info-link text-muted me-4" href="#">О нас</a>
-                <a class="info-link text-muted me-4" href="#">Связаться с поддержкой</a>
-                <a class="info-link text-muted" href="#">Лицензия</a>
-            </div>
-        </section>
-    </footer>
 </div>
 </body>
 </html>
