@@ -46,26 +46,19 @@
     background-color: #9bf51d;
 }
 
-.error-message {
+.error-message, .success-message {
     padding: 10px;
     margin-top: 10px;
-    border: 1px solid #fdaa9e;
     border-radius: 5px;
+
+}
+
+.error-message {
     background: #fee3df;
+    border: 2px solid #fec6be;
 }
 
-#counter_script {
-    background-color: #f5f5f5;
-    padding: 10px;
-    margin: 10px 0;
-    border: 2px solid #92d82f;
-}
-
-.language-html {
-    display: block;
-    font-size: 14px;
-    font-family: monospace;
-    white-space: pre-wrap;
-    line-height: 1.5;
-    color: #333;
+.success-message {
+    background: #e5f6d3;
+    border: 2px solid #c8eba0;
 }

@@ -8,7 +8,8 @@
       <label for="link">Адрес сайта:</label>
       <input type="text" id="link" v-model="link">
     </div>
-    <div class="error-message" v-if="message">{{message}}</div>
+    <div class="error-message" v-if="errorMessage">{{ errorMessage }}</div>
+    <div class="success-message" v-if="successMessage">{{ successMessage }}</div>
     <div class="form__item_button">
       <button type="submit">Отправить</button>
     </div>
@@ -32,11 +33,14 @@ export default {
     return {
       name: '',
       link: '',
-      message: ''
+      errorMessage: '',
+      successMessage: '',
     }
   },
   methods: {
     submitForm() {
+      this.errorMessage = '';
+      this.successMessage = '';
       const form = new FormData();
       form.append('name', this.name);
       form.append('link', this.link);
@@ -54,10 +58,13 @@ export default {
           }
         });
         if (response.data.id) {
-          this.message = '';
-          window.location.href = `http://localhost:8000/counters/edit/${response.data.id}`;
+          this.successMessage = 'Счетчик создан. Сейчас вы будете перенаправлены на страницу настройки.';
+          setTimeout(function () {
+            window.location.href = window.location.href.replace('add', `edit/${response.data.id}`);
+          }, 5000);
         } else {
-          this.message = 'Не получилось создать счетчик. Проверьте, что все поля заполнены, или поменяйте название счетчика'
+          this.errorMessage = 'Не получилось создать счетчик. Проверьте, что все поля заполнены, ' +
+              'или поменяйте название счетчика.'
         }
       } catch (error) {
         console.log(error.response);
