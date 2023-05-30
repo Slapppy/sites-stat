@@ -6,7 +6,7 @@
     </div>
     <div class="form__item">
       <label for="link">Адрес сайта:</label>
-      <input type="text" id="link" v-model="link">
+      <input type="text" id="link" v-model="link" placeholder="Введите домен или полный путь сайта">
     </div>
     <div class="error-message" v-if="errorMessage">{{ errorMessage }}</div>
     <div class="success-message" v-if="successMessage">{{ successMessage }}</div>
@@ -38,36 +38,51 @@ export default {
     }
   },
   methods: {
+    isValidUrl() {
+      const regex = /^(?:https?:\/\/)?(?:www\.)?([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})(?:\/|$)/;
+      return regex.test(this.link);
+    },
+    getDomain() {
+      const regex = /^(?:https?:\/\/)?(?:www\.)?([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})(?:\/|$)/;
+      let match = this.link.match(regex);
+      if (match && match.length > 1) {
+        return match[1];
+      } else {
+        return null;
+      }
+    },
     submitForm() {
       this.errorMessage = '';
       this.successMessage = '';
-      const form = new FormData();
-      form.append('name', this.name);
-      form.append('link', this.link);
-      this.addCounter();
+      if (this.isValidUrl()) {
+        const formData = new FormData();
+        formData.append('name', this.name);
+        formData.append('link', this.getDomain());
+        this.addCounter(formData);
+      } else {
+        this.errorMessage = 'Неверный формат адреса сайта'
+      }
     },
-    async addCounter() {
+    async addCounter(formData) {
       try {
-        const response = await axios.post(`${window.location.origin}/counters/add`, {
-          name: this.name,
-          link: this.link
-        }, {
+        const response = await axios.post(`${window.location.origin}/counters/add`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
             'X-CSRFToken': csrfToken
           }
         });
-        if (response.data.id) {
+        const counterId = response.data.id
+        if (counterId) {
           this.successMessage = 'Счетчик создан. Сейчас вы будете перенаправлены на страницу настройки.';
           setTimeout(function () {
-            window.location.href = window.location.href.replace('add', `edit/${response.data.id}`);
-          }, 5000);
+            window.location.href = window.location.href.replace('add', `edit/${counterId}`);
+          }, 3000);
         } else {
           this.errorMessage = 'Не получилось создать счетчик. Проверьте, что все поля заполнены, ' +
               'или поменяйте название счетчика.'
         }
       } catch (error) {
-        console.log(error.response);
+        console.log(error);
       }
     }
   }

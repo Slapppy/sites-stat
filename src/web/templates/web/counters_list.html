@@ -50,9 +50,8 @@
                         <tr>
                             <td class="pe-5 td-name"><a class="link-counter" href="{% url 'counter' counter.id %}"
                                                         title="{{ counter.name }}">{{ counter.name }}</a></td>
-                            <td class="pe-5 td-link"><a class="link-counter" href="http://{{ counter.link }}"
+                            <td class="pe-5 td-link"><a class="link-counter" href="http://{{ counter.link }}" target="_blank"
                                                         title="{{ counter.title }}">{{ counter.link }}</a></td>
-                            {# TODO syte's address #}
                             <td>{{ counter.count_views }}</td>
                             <td>{{ counter.count_visits }}</td>
                             <td>{{ counter.count_visitors }}</td>
