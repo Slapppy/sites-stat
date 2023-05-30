@@ -132,6 +132,3 @@ class CounterDeleteView(View):
             return redirect("counters")
         # TODO сделать ридерект на страницу ошибки
         return redirect("counters")
-
-
-# TODO: как будто мало docstrings и комментов
