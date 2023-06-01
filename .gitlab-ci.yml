@@ -76,6 +76,8 @@ deploy_cloud:
         --environment CLICKHOUSE_DB_USERNAME=$CLICKHOUSE_DB_USERNAME
         --environment CLICKHOUSE_DB_NAME=$CLICKHOUSE_DB_NAME
         --environment CLICKHOUSE_DB_PASSWORD=$CLICKHOUSE_DB_PASSWORD
+        --environment REDIS_PASSWORD=$REDIS_PASSWORD
+        --environment REDIS_DB_HOST=$REDIS_DB_HOST
         --environment AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
         --environment AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
         --environment AWS_DEFAULT_REGION="ru-central1"
