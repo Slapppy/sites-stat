@@ -22,3 +22,6 @@ urlpatterns = [
     path("api/", include("api.urls")),
     path("", include("web.urls")),
 ]
+
+handler404 = "web.views.handle_not_found"
+handler500 = "web.views.handle_server_error"

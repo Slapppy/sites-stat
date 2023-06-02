@@ -1,0 +1,25 @@
+{% extends 'web/base.html' %}
+{% block head %}
+{% load static %}
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="{% static 'src/assets/errors.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block title %}500 - FreeStat{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-10 col-md-8">
+                <h1 class="display-6">500 - Внутренняя ошибка сервера</h1>
+                <hr>
+                <p class="mb-0">Нам очень жаль, но наш сервер столкнулся с
+                    проблемой при обработке вашего запроса. Мы уже поделились этим сообщением с нашей командой
+                    технической
+                    поддержки и работаем над решением этой проблемы.
+                </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

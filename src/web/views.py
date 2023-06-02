@@ -130,5 +130,11 @@ class CounterDeleteView(View):
         if counter and counter.user == request.user:
             counter.delete()
             return redirect("counters")
-        # TODO сделать ридерект на страницу ошибки
-        return redirect("counters")
+
+
+def handle_not_found(request, exception):
+    return render(request, "web/404.html", status=404)
+
+
+def handle_server_error(request):
+    return render(request, "web/500.html", status=500)
