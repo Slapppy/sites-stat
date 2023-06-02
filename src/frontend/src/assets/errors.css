@@ -1,0 +1,17 @@
+body {
+    background-color: #fafce9;
+}
+
+.container {
+    margin-top: 100px;
+}
+
+.return-link {
+    color: #1B1212;
+    text-decoration: underline;
+}
+
+.return-link:hover, .return-link:focus, .return-link:active {
+    color: #92d82f;
+    text-decoration: none;
+}
