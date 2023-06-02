@@ -93,7 +93,7 @@ class GetMetaDataView(APIView):
 
         metadata = request.headers["User-Agent"]
         data_split = httpagentparser.detect(metadata, "os")
-        referer = request.META.get("HTTP_REFERER")
+        referer = "http"
         browser = data_split["browser"]["name"]
         os_type = data_split["platform"]["name"]
         device_type = data_split["os"]["name"]
