@@ -25,5 +25,4 @@ urlpatterns = [
     path("counters/<int:pk>", CounterDetailView.as_view(), name="counter"),
     path("counters/edit/<int:id>", CounterEditView.as_view(), name="edit"),
     path("counters/delete/<int:pk>", CounterDeleteView.as_view(), name="delete"),
-    path("worker/<str:key>/", worker_view_factory(app)),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
