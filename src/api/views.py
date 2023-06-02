@@ -93,7 +93,7 @@ class GetMetaDataView(APIView):
 
         metadata = request.headers["User-Agent"]
         data_split = httpagentparser.detect(metadata, "os")
-        referer = "http"
+        referer = request.META["REMOTE_ADDR"]
         browser = data_split["browser"]["name"]
         os_type = data_split["platform"]["name"]
         device_type = data_split["os"]["name"]
@@ -127,7 +127,9 @@ class GetMetaDataView(APIView):
         visitor_unique_key = (
             str(uuid.uuid4()) if not request.data.get("visitor_unique_key") else request.data.get("visitor_unique_key")
         )
+        print(f'ключик {visitor_unique_key}')
         visit_id = str(uuid.uuid4()) if not request.data.get("visit_id") else request.data.get("visit_id")
+        print(f'визит {visit_id}')
         metadata = request.data.get("user_agent")
         referer = request.data.get("referer")
         browser = request.data.get("browser_type")
