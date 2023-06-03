@@ -76,7 +76,7 @@ fetch('https://api.db-ip.com/v2/free/self')
       'ip': ipAddress,
       'language': language.slice(0, 2),
       'created_at': new Date().toISOString(),
-      visitor_unique_key: getCookieValue("unique_key"),
+      visitor_unique_key: getCookieValue("visitor_unique_key"),
       visit_id: getCookieValue("visit_id")
     };
 
@@ -89,7 +89,7 @@ xhr.onreadystatechange = function() {
       const response = JSON.parse(xhr.responseText);
       const unique_key = response.unique_key;
       const visit_id = response.visit_id;
-      setCookie('unique_key', unique_key);
+      setCookie('visitor_unique_key', unique_key);
       setCookie('visit_id', visit_id, 1800);
     } else {
       console.log('Error sending data: ' + xhr.status);
