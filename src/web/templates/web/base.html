@@ -20,27 +20,30 @@
         <!-- Navbar -->
         <nav class="header navbar navbar-expand-lg">
             <div class="container-fluid">
-                <a class="navbar-brand brand-title me-2" href="{% url 'main' %}">FreeStat</a>
+                <a class="navbar-brand brand-title me-2"
+                   {% if user.is_authenticated %} href="{% url 'counters' %}"
+                   {% else %} href="{% url 'main' %}"{% endif %}>FreeStat</a>
+
                 <div class="d-flex align-items-center">
                     {% if user.is_authenticated %}
-                        <div class="dropstart">
-                            <a href="#" class="nav-link px-3 me-2 dropdown-toggle" id="navbarDropdownMenuLink"
-                               role="button"
-                               data-bs-toggle="dropdown" aria-expanded="false">
-                                {{ user.email }}
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start"
-                                aria-labelledby="navbarDropdownMenuLink">
-                                <li><a class="dropdown-item" href="{% url 'logout' %}">Выйти</a></li>
-                            </ul>
-                        </div>
+                    <div class="dropstart">
+                        <a href="#" class="nav-link px-3 me-2 dropdown-toggle" id="navbarDropdownMenuLink"
+                           role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            {{ user.email }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start"
+                            aria-labelledby="navbarDropdownMenuLink">
+                            <li><a class="dropdown-item" href="{% url 'logout' %}">Выйти</a></li>
+                        </ul>
+                    </div>
                     {% else %}
-                        <a href="{% url 'auth' %}" class="nav-link px-3 me-2">
-                            Войти
-                        </a>
-                        <a href="{% url 'reg' %}" class="btn-register btn-sm me-3 ps-3 pe-3 pt-1 pb-1">
-                            Регистрация
-                        </a>
+                    <a href="{% url 'auth' %}" class="nav-link px-3 me-2">
+                        Войти
+                    </a>
+                    <a href="{% url 'reg' %}" class="btn-register btn-sm me-3 ps-3 pe-3 pt-1 pb-1">
+                        Регистрация
+                    </a>
                     {% endif %}
                 </div>
             </div>
