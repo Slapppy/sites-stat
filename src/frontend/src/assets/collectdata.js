@@ -87,9 +87,9 @@ xhr.onreadystatechange = function() {
   if (xhr.readyState === XMLHttpRequest.DONE) {
     if (xhr.status === 200) {
       const response = JSON.parse(xhr.responseText);
-      const unique_key = response.unique_key;
+      const visitor_unique_key = response.visitor_unique_key;
       const visit_id = response.visit_id;
-      setCookie('visitor_unique_key', unique_key);
+      setCookie('visitor_unique_key', visitor_unique_key);
       setCookie('visit_id', visit_id, 1800);
     } else {
       console.log('Error sending data: ' + xhr.status);
