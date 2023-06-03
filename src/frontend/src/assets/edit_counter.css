@@ -24,6 +24,10 @@
     border-radius: 5px;
 }
 
+.code-title {
+    max-width: 600px;
+}
+
 .counter-code {
     max-width: 600px;
     border: 1px solid #a7f736;

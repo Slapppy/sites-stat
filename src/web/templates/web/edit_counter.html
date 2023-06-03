@@ -36,19 +36,10 @@
                         <button type="submit" class="btn-save">Сохранить</button>
                     </div>
                 </form>
-                <div class="mt-5 mb-5">
-                    <h3 class="pb-3">Код счетчика</h3>
-                    <p id="text" class="counter-code p-4 pb-5"></p>
-                </div>
+                <div id="counter_edit" data-counter-id="{{ object.id }}"></div>
+                <link href="{% static '/dist/assets/index.css' %}" rel="stylesheet">
+                <script type="module" src="{% static '/dist/assets/CounterEdit.js' %}"></script>
             </div>
         </div>
     </div>
-
-
-<script src="{% static 'web/js/generatecounter.js' %}" defer data-id-counter="{{ object.id }}"></script>
-
-
-
-
-
 {% endblock %}
