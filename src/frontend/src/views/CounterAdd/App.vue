@@ -76,7 +76,7 @@ export default {
           this.successMessage = 'Счетчик создан. Сейчас вы будете перенаправлены на страницу настройки.';
           setTimeout(function () {
             window.location.href = window.location.href.replace('add', `edit/${counterId}`);
-          }, 3000);
+          }, 1000);
         } else {
           this.errorMessage = 'Не получилось создать счетчик. Проверьте, что все поля заполнены, ' +
               'или поменяйте название счетчика.'
