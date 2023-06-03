@@ -21,6 +21,9 @@
         <h3 id="counter_name" class="mb-4">
             Название счетчика:
             <span class="counter-name ms-2">{{ object.name }}</span>
+             <a class="link-counter ms-2" href="{% url 'edit' counter.id %}"
+                                   title="Редактировать счетчик"><i
+                                        class="bi bi-gear"></i></a>
         </h3>
 
         <div id="counterpage"></div>
