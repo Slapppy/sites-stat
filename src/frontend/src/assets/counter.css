@@ -62,3 +62,15 @@
   border: 1px solid black;
 }
 
+.link-counter {
+    color: #1B1212;
+    text-decoration: none;
+    font-size: 20px;
+}
+
+.link-counter:hover {
+    color: #79cc02;
+}
+
+
+
