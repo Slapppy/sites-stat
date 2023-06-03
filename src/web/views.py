@@ -132,3 +132,7 @@ class CounterDeleteView(View):
             return redirect("counters")
         # TODO сделать ридерект на страницу ошибки
         return redirect("counters")
+
+
+def test_func(request):
+    return render(request, "web/test.html")
