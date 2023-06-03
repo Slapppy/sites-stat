@@ -25,3 +25,6 @@ urlpatterns = [
     path("", include("web.urls")),
     path("worker/<str:key>/", worker_view_factory(app)),
 ]
+
+handler404 = "web.views.handle_not_found"
+handler500 = "web.views.handle_server_error"
