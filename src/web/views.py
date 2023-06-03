@@ -136,3 +136,11 @@ class CounterDeleteView(View):
 
 def test_func(request):
     return render(request, "web/test.html")
+
+
+def handle_not_found(request, exception):
+    return render(request, "web/404.html", status=404)
+
+
+def handle_server_error(request):
+    return render(request, "web/500.html", status=500)
