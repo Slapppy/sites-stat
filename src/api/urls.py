@@ -1,5 +1,3 @@
-from celery_yandex_serverless.django import worker_view_factory
-
 from api.views import (
     StatCounterView,
     GetMetaDataView,
@@ -11,7 +9,6 @@ from api.views import (
 )
 from django.urls import path
 
-from app.celery import app
 
 urlpatterns = [
     path("view/data", StatViewInDay.as_view(), name="view_in_day"),

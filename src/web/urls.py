@@ -1,11 +1,8 @@
-from django.urls import path, include, reverse_lazy
+from django.urls import path, reverse_lazy
 from django.conf import settings
 from django.conf.urls.static import static
-
 from django.contrib.auth.views import LogoutView
-from celery_yandex_serverless.django import worker_view_factory
 
-from app.celery import app
 from . import views
 from .views import (
     CounterCreate,
