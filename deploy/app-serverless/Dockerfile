@@ -35,8 +35,6 @@ ENV PORT 8000
 
 WORKDIR /app/src
 
-RUN celery -A app worker --detach
-RUN celery -A app beat --detach
 
 WORKDIR /app
 
