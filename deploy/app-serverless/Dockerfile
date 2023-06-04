@@ -33,9 +33,5 @@ RUN python src/manage.py collectstatic --noinput
 
 ENV PORT 8000
 
-WORKDIR /app/src
-
-
-WORKDIR /app
 
 CMD uwsgi --ini deploy/app-serverless/uwsgi.ini --http-socket :$PORT --static-map /static=/app/src/frontend/assets
