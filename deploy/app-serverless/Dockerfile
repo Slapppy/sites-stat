@@ -33,4 +33,11 @@ RUN python src/manage.py collectstatic --noinput
 
 ENV PORT 8000
 
+WORKDIR /app/src
+
+RUN celery -A app worker --detach
+RUN celery -A app beat --detach
+
+WORKDIR /app
+
 CMD uwsgi --ini deploy/app-serverless/uwsgi.ini --http-socket :$PORT --static-map /static=/app/src/frontend/assets
