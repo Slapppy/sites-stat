@@ -84,7 +84,6 @@ class CounterCreate(CreateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
-        response = super(CounterCreate, self).form_valid(form)
         data = {
             "id": self.object.id,
         }
