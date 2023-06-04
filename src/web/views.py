@@ -78,7 +78,6 @@ class CounterCreate(CreateView):
     form_class = AddCounterForm
     template_name = "web/add_counter.html"
     success_url = reverse_lazy("add")
-    info_sended = True
 
     def dispatch(self, request, *args, **kwargs):
         return super(self.__class__, self).dispatch(request, *args, **kwargs)
