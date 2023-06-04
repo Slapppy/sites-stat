@@ -51,7 +51,6 @@ class RegistrationView(View):
         form = CreateUserForm(request.POST)
         if form.is_valid():
             form.save()
-            storage = messages.get_messages(request)
             messages.success(request, "Вы успешно зарегистрировались")
             return redirect("auth")
         context = {"form": form}
