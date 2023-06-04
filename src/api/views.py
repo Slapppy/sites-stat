@@ -85,7 +85,9 @@ class GetMetaDataView(APIView):
         db = create_connection()
 
         visitor_unique_key = (
-            str(uuid.uuid4()) if not request.COOKIES.get("visitor_unique_key") else request.COOKIES.get("visitor_unique_key")
+            str(uuid.uuid4())
+            if not request.COOKIES.get("visitor_unique_key")
+            else request.COOKIES.get("visitor_unique_key")
         )
         visit_id = str(uuid.uuid4()) if not request.COOKIES.get("visit_id") else request.COOKIES.get("visit_id")
 
@@ -119,16 +121,13 @@ class GetMetaDataView(APIView):
         response = HttpResponse(TRANSPARENT_1_PIXEL_GIF, content_type="image/gif")
         response.set_cookie("visitor_unique_key", visitor_unique_key, max_age=1800)
         response.set_cookie("visit_id", visit_id, max_age=1800)
-        print(response.cookies)
         return response
 
     def post(self, request, id):
         visitor_unique_key = (
             str(uuid.uuid4()) if not request.data.get("visitor_unique_key") else request.data.get("visitor_unique_key")
         )
-        print(f'ключик {visitor_unique_key}')
         visit_id = str(uuid.uuid4()) if not request.data.get("visit_id") else request.data.get("visit_id")
-        print(f'визит {visit_id}')
         metadata = request.data.get("user_agent")
         referer = request.data.get("referer")
         browser = request.data.get("browser_type")
